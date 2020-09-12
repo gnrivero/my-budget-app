@@ -31,15 +31,13 @@ export default class CuentasScreen extends React.Component {
 
   renderCuentas = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-      <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-        <View style={styles.CuentasItemContainer}>
-
-        <Text style={styles.title}>cuenta</Text>
-        <Text>{item.entidad}}</Text>
-        <Text>{item.alias}}</Text>
-        </View>
-      </TouchableHighlight>
+      <View style={styles.CuentasItemContainer}>
+        <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
+        <Text style={styles.CuentaItemText}>{item.alias}</Text>
+        <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
+      </View>
     </TouchableHighlight>
+
   );
   FlatListItemSeparator = () => {
     return (
@@ -67,7 +65,7 @@ export default class CuentasScreen extends React.Component {
             data={cuentasArray}
             renderItem={this.renderCuentas}
             keyExtractor={item => `${item.id}`}
-             ItemSeparatorComponent={this.FlatListItemSeparator}
+            ItemSeparatorComponent={this.FlatListItemSeparator}
           />
         </View>
       </ScrollView>
