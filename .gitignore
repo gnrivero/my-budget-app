@@ -87,6 +87,7 @@ dist
 
 .expo/packager-info.json
 .expo/settings.json
+.expo/web
 package-lock.json
 
 .idea
