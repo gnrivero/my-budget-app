@@ -4,17 +4,33 @@ import { RecipeCard } from '../../AppStyles';
 const styles = StyleSheet.create({
   CuentasItemContainer: {
     flex: 1,
+    flexDirection:'row',
+    justifyContent:'flex-start',
+    marginLeft:15,
     margin: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 215,
+    height: 40,
     borderColor: '#cccccc',
     borderWidth: 0.5,
     borderRadius: 20,
   },
-  titleCuentas: {
+  CuentasItemIcon: {
+    margin:5,
+    width:30,
+    height:30,
+    borderRadius:15,
+    backgroundColor:'#2cd18a',
+  },
+  CuentaItemText: {
     fontWeight: 'bold',
     fontSize: 20
+  },
+  CuentaItemTextDetail: {
+    fontWeight: 'normal',
+    fontStyle: 'italic',
+    fontSize: 16,
+    marginLeft:5,
+    marginTop:5
+
   },
   photoCuentas: {
     width: '100%',
