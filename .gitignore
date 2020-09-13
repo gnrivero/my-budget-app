@@ -91,3 +91,4 @@ dist
 package-lock.json
 
 .idea
+.expo

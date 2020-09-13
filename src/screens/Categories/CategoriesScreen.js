@@ -39,7 +39,7 @@ export default class CategoriesScreen extends React.Component {
       default:
         titleImg= nombre;
       }
-    
+
     return titleImg;
   }
 
