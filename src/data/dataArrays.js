@@ -23,7 +23,36 @@ export const cuentas = [
     entidad:'aaa XXXX',
     saldo: '450', 
   },
-  
+  {
+    id: 5,
+    alias: 'Cuentas a5 ',
+    entidad:'banco XXXX',
+    saldo: '2450', 
+  },
+  {
+    id: 6,
+    alias: 'Cua6 ',
+    entidad:'banco XXXX',
+    saldo: '20', 
+  },
+  {
+    id: 7,
+    alias: 'Cuentas 77 ',
+    entidad:'banco Xdsdsd',
+    saldo: '2450', 
+  },
+  {
+    id: 8,
+    alias: 'Cuentas 8 ',
+    entidad:'aaa XXXX',
+    saldo: '450', 
+  },
+  {
+    id: 9,
+    alias: 'Cuentas 9a ',
+    entidad:'banco XXXX',
+    saldo: '2450', 
+  }
 ];
 
 
@@ -31,34 +60,48 @@ export const categories = [
   {
     id: 11,
     name: 'Cuentas',
-    photo_url:'banco'
+    title: 'Cuentas',
+    photo_url:'bank'
   },
+  /*
+  {
+    id: 12,
+    name: 'Tarjetas',
+    title: 'Cards',
+    photo_url:'cards'
+  },
+  */
   {
   id: 3,
   name: 'Cookies',
+  title: 'RecipesList',
   photo_url:
   'https://www.telegraph.co.uk/content/dam/Travel/2019/January/france-food.jpg?imwidth=1400'
 },
 {
   id: 1,
   name: 'Mexican Food',
+  title: 'RecipesList',
   photo_url: 'https://ak1.picdn.net/shutterstock/videos/19498861/thumb/1.jpg'
 },
 {
   id: 2,
   name: 'Italian Food',
+  title: 'RecipesList',
   photo_url:
     'https://images.unsplash.com/photo-1533777324565-a040eb52facd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
 },
 {
   id: 4,
   name: 'Smoothies',
+  title: 'RecipesList',
   photo_url:
   'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/still-life-of-three-fresh-smoothies-in-front-of-royalty-free-image-561093647-1544042068.jpg?crop=0.715xw:0.534xh;0.0945xw,0.451xh&resize=768:*'
 },
 {
   id: 0,
   name: 'Pizza',
+  title: 'RecipesList',
   photo_url: 'https://amp.businessinsider.com/images/5c084bf7bde70f4ea53f0436-750-563.jpg'
 },
   

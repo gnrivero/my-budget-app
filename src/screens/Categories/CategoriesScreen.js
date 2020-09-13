@@ -20,24 +20,22 @@ export default class CategoriesScreen extends React.Component {
   }
 
   onPressCategory = item => {
-    const title = item.name;
+    const title = item.title;
     const category = item;
-    //despues borrar
-    if(item.name='cuenta'){
-      this.props.navigation.navigate('Cuentas', { category, title });
-    }else{
-      this.props.navigation.navigate('RecipesList', { category, title });
-  }
+    this.props.navigation.navigate(title, { category, title });
+    
   };
 
   getCategoriaUrl(nombre) {
     var titleImg;
 
     switch (nombre) {
-      case 'banco':
+      case 'bank':
           titleImg = require('../../data/banco.jpg');
           break;
-     
+      case 'cards':
+        titleImg = require('../../data/cards.jpg');
+        break;
       default:
         titleImg= nombre;
       }
