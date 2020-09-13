@@ -11,12 +11,11 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getIngredientUrl,
   getCuentas,
   getCategoryName
 } from '../../data/MockDataAPI';
 
-export default class CuentasScreen extends React.Component {
+export default class CuentaScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('title')
@@ -27,11 +26,10 @@ export default class CuentasScreen extends React.Component {
     super(props);
   }
 
-  onPressCuenta = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Cuenta');
+  onPressRecipe = item => {
+    this.props.navigation.navigate('Recipe', { item });
   };
-
+/*
   renderCuentas = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
       <View style={styles.CuentasItemContainer}>
@@ -48,7 +46,7 @@ export default class CuentasScreen extends React.Component {
       <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
     );
   };
-
+*/
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
@@ -60,24 +58,17 @@ export default class CuentasScreen extends React.Component {
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
             <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
           </View>
-          <Text style={styles.cuentasInfo}>Mis {categoryName}:</Text>
+          <Text style={styles.cuentasInfo}>Agregar {categoryName}:</Text>
           <View style={{marginBottom: 40}}>
-            <FlatList
-              vertical
-              showsVerticalScrollIndicator={false}
-              numColumns={1}
-              data={cuentasArray}
-              renderItem={this.renderCuentas}
-              keyExtractor={item => `${item.id}`}
-              ItemSeparatorComponent={this.FlatListItemSeparator}
-            />
+            <Text>CAMPOS CUENTA</Text>
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
         <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
+          
+          onPress={() => Alert.alert('Right button pressed')}
         >
-          <Text style={{fontSize: 30, color: 'white', textAlign:'center'}}>Agregar +</Text>
+          <Text style={{fontSize: 40, color: 'white', textAlign:'center'}}>Guardar</Text>
         </TouchableHighlight>
         </View>
      </View>
