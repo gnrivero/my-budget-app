@@ -34,6 +34,14 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
             }}
           />
+          <MenuButton
+              title="MIS TARJETAS"
+              source={require('../../../assets/icons/search.png')}
+              onPress={() => {
+                navigation.navigate('Cards');
+                navigation.closeDrawer();
+              }}
+            />
         </View>
       </View>
     );

@@ -37,11 +37,11 @@ export default class CategoriesScreen extends React.Component {
       case 'banco':
           titleImg = require('../../data/banco.jpg');
           break;
-     
+
       default:
         titleImg= nombre;
       }
-    
+
     return titleImg;
   }
 
