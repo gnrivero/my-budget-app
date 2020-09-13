@@ -15,6 +15,7 @@ import SearchScreen from '../screens/Search/SearchScreen';
 import IngredientsDetailsScreen from '../screens/IngredientsDetails/IngredientsDetailsScreen';
 import CardScreen from '../screens/Cards/CardScreen';
 import ModifyCardScreen from '../screens/Cards/ModifyCardScreen';
+import CuentasScreen from '../screens/Cuentas/CuentasScreen';
 import CuentaScreen from '../screens/Cuenta/CuentaScreen';
 
 const MainNavigator = createStackNavigator(
@@ -26,6 +27,7 @@ const MainNavigator = createStackNavigator(
     Ingredient: IngredientScreen,
     Search: SearchScreen,
     IngredientsDetails: IngredientsDetailsScreen,
+    Cuentas: CuentasScreen,
     Cuenta: CuentaScreen,
     Cards: CardScreen,
     ModifyCard: ModifyCardScreen
