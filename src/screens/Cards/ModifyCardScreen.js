@@ -3,18 +3,24 @@ import {
   ScrollView,
   Text,
   View,
-  TextInput
+  TextInput,
+  Dimensions
 } from 'react-native';
 import styles from './styles';
-import AddCardButton from '../../components/AddCardButton/AddCardButton';
+import SaveCardButton from '../../components/CardButton/SaveCardButton';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
-export default class CardScreen extends React.Component {
+export default class ModifyCardScreen extends React.Component {
 
-  static navigationOptions = {
-      title: 'Edicion de tarjeta'
-  };
+  static navigationOptions = ({ navigation }) => {
+      return {
+        title: navigation.getParam('title'),
+        headerTitleStyle: {
+          fontSize: 16
+        }
+      };
+    };
 
   constructor(props) {
     super(props);
@@ -26,35 +32,39 @@ export default class CardScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View style={styles.cardItemContainer}>
-          <Text style={styles.cardName}><TextInput style={styles.mediumInput}></TextInput></Text>
-          <View style={styles.infoContainer}>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Emisor:</Text><TextInput style={styles.mediumInput}></TextInput>
+        <View style={{alignItems: 'center'}}>
+            <View style={styles.cardItemContainer}>
+              <TextInput style={styles.largeInput}
+                placeholder="Elegí un nombre para tu tarjeta"
+              ></TextInput>
+              <View style={styles.infoContainer}>
+                <View style={styles.info}>
+                  <Text style={styles.infoCard}>Emisor</Text><TextInput style={styles.mediumInput}></TextInput>
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.infoCard}>Ultimos 4 digitos</Text><TextInput style={styles.smallInput}></TextInput>
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.infoCard}>Vencimiento</Text><TextInput style={styles.mediumInput}></TextInput>
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.infoCard}>Cierre</Text><TextInput style={styles.mediumInput}></TextInput>
+                </View>
+                <View style={styles.info}>
+                  <Text style={styles.infoCard}>Vencimiento</Text><TextInput style={styles.mediumInput}></TextInput>
+                </View>
+              </View>
             </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Ultimos 4 digitos:</Text><TextInput style={styles.mediumInput}></TextInput>
+            <View style={styles.infoContainer}>
+             <SaveCardButton
+               onPress={() => {
+                 //let ingredients = item.ingredients;
+                 let title = 'Guardar';
+                 //navigation.navigate('IngredientsDetails', { ingredients, title });
+               }}
+             />
             </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Vencimiento:</Text><TextInput style={styles.mediumInput}></TextInput>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Cierre:</Text><TextInput style={styles.mediumInput}></TextInput>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Vencimiento:</Text><TextInput style={styles.mediumInput}></TextInput>
-            </View>
-          </View>
-        </View>
-        <View style={styles.infoContainer}>
-         <AddCardButton
-           onPress={() => {
-             //let ingredients = item.ingredients;
-             let title = 'Guardar';
-             //navigation.navigate('IngredientsDetails', { ingredients, title });
-           }}
-         />
-        </View>
+           </View>
       </ScrollView>
     );
   }

@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   },
   info: {
       flex: 1,
-      flexDirection: 'row'
+      flexDirection: 'row',
+      height: 30
   },
   cardName: {
       flex: .2,
@@ -69,12 +70,28 @@ const styles = StyleSheet.create({
   infoCard: {
     fontSize: 14,
     fontWeight: 'bold',
-    marginLeft: 5,
-  }
-  mediumInput: {
-    height: 20,
+    marginLeft: 5
+  },
+  smallInput: {
+    height: 25,
+    width: 40,
     borderColor: 'gray',
-    borderWidth: 1
+    borderWidth: 1,
+    marginLeft: 10
+  },
+  mediumInput: {
+    height: 25,
+    width: 100,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginLeft: 10
+  },
+  largeInput: {
+    height: 30,
+    width: 300,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10
   }
 });
 

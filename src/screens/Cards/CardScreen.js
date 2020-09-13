@@ -12,7 +12,7 @@ import {
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
 import { cards } from '../../data/cards/cardsDataArray';
-import AddCardButton from '../../components/AddCardButton/AddCardButton';
+import AddCardButton from '../../components/CardButton/AddCardButton';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -55,14 +55,14 @@ export default class CardScreen extends React.Component {
     );
 
   render() {
+
     return (
       <ScrollView>
         <View style={styles.infoContainer}>
          <AddCardButton
            onPress={() => {
-             //let ingredients = item.ingredients;
-             let title = 'Agregar Tarjeta';
-             //navigation.navigate('IngredientsDetails', { ingredients, title });
+             let title = 'Nueva Tarjeta';
+             this.props.navigation.navigate('ModifyCard', {title});
            }}
          />
         </View>
