@@ -15,6 +15,8 @@ import {
   getCategoryName
 } from '../../data/MockDataAPI';
 import { Dropdown } from 'react-native-material-dropdown';
+import SwitchSelector from 'react-native-switch-selector';
+
 
 export default class CuentaScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -31,40 +33,61 @@ export default class CuentaScreen extends React.Component {
                   saldoInicial: '',
                   numerosTarjeta: '',
                   vencimientoTarjeta:'',
-                  entidad: ''};
+                  entidad: '',
+                  agregarTarjeta: false};
   }
 
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
   };
+  onChangeCard = ({ value }) =>{
+    let agregarTarjeta = value
+    //Alert.alert('Call onPress with value:' + {agregarTarjeta}    );
+    this.setState({agregarTarjeta});
+    if(agregarTarjeta){
+      this.setState({vencimientoTarjeta:'',
+                        numerosTarjeta:''});
+    }
+  }
 
 buttonPressed(){
-  Alert.alert(this.state.entidad +" - "+this.state.cbu +" - " +this.state.nombreCuenta +" - "+this.state.saldoInicial +" - " + this.state.numerosTarjeta +" - " +this.state.vencimientoTarjeta); 
+  //Alert.alert(this.state.entidad +" - "+this.state.cbu +" - " +this.state.nombreCuenta +" - "+this.state.saldoInicial +" - " + this.state.numerosTarjeta +" - " +this.state.vencimientoTarjeta); 
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbu|| this.state.cbu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldoInicial || this.state.saldoInicial=='') || (!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta==''))
+  (!this.state.saldoInicial || this.state.saldoInicial==''))
   {
-    Alert.alert("Complete los campos faltantes")
-  }else{
-    if(!decimalreg.test(this.state.saldoInicial))
-    Alert.alert("ingrese un valor valido en el saldo");  
-    else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
-      Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-    else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
-      Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
-    else 
-    Alert.alert("Grabar");
-    
+    Alert.alert("Complete los campos faltantes de la cuenta")
   }
-
-} 
+   else if(!decimalreg.test(this.state.saldoInicial))
+    Alert.alert("ingrese un valor valido en el saldo"); 
+   
+    else if(this.state.agregarTarjeta){
+       if((!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')){
+        Alert.alert("Complete los campos faltantes de la cuenta")
+      }
+      else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
+        Alert.alert("ingrese un valor valido en el numero de tarjeta");  
+      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
+        Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
+      else
+        Alert.alert("Grabar con tarjeta");
+    }  
+    else 
+      Alert.alert("Grabar");
+ }
+  
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const categoryName = navigation.getParam('title');
     const entitiesArray = getEntities();
-   
+    const options = [
+      { label: 'SI', value: true},
+      { label: 'NO', value: false }
+  ];
+  
+
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
@@ -101,20 +124,26 @@ buttonPressed(){
               value={this.state.saldoInicial}
             />
             <TextInput style={{height:30}}>Tarjeta de debito</TextInput>
-            <TextInput keyboardType='decimal-pad'
-              maxLength ={4}
-              style ={styles.input}
-              placeholder="Ultimos 4 numeros de la tarjeta de debito"
-              onChangeText={(numerosTarjeta) => this.setState({numerosTarjeta})}
-              value={this.state.numerosTarjeta}
-            />
-            <TextInput keyboardType='decimal-pad'
-              maxLength ={6}
-              style ={styles.input}
-              placeholder="Vencimiento MMAAAA"
-              onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
-              value={this.state.vencimientoTarjeta}
-            />
+            <SwitchSelector options={options} initial={1} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+           
+            {this.state.agregarTarjeta ? (
+            <View style={{padding:10}}>
+              <TextInput keyboardType='decimal-pad'
+                maxLength ={4}
+                style ={styles.input}
+                placeholder="Ultimos 4 numeros de la tarjeta de debito"
+                onChangeText={(numerosTarjeta) => this.setState({numerosTarjeta})}
+                value={this.state.numerosTarjeta}
+              />
+              <TextInput keyboardType='decimal-pad'
+                maxLength ={6}
+                style ={styles.input}
+                placeholder="Vencimiento MMAAAA"
+                onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
+                value={this.state.vencimientoTarjeta}
+              />
+            </View>
+            ) : null}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
