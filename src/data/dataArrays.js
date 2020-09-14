@@ -58,6 +58,12 @@ export const cuentas = [
 
 export const categories = [
   {
+    id: 12,
+    name: 'Presupuesto',
+    title: 'Presupuesto',
+    photo_url:'bank'
+  },
+  {
     id: 11,
     name: 'Cuentas',
     title: 'Cuentas',
