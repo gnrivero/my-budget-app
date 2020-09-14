@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import React, { Component } from 'react';
-import { recipes, categories, ingredients, cuentas } from './dataArrays';
+import { recipes, categories, ingredients, cuentas, entities } from './dataArrays';
 
 export function getCategoryById(categoryId) {
   let category;
@@ -65,6 +65,13 @@ export function getRecipesByIngredient(ingredientId) {
   return recipesArray;
 }
 
+export function getEntities() {
+  const entitiesArray = [];
+  entities.map(data => {
+    entitiesArray.push(data);
+    });
+  return entitiesArray;
+}
 
 export function getCuentas() {
   const cuentasArray = [];
