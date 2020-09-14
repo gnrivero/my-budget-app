@@ -69,14 +69,13 @@ export const categories = [
     title: 'Cuentas',
     photo_url:'bank'
   },
-  /*
   {
     id: 12,
     name: 'Tarjetas',
     title: 'Cards',
     photo_url:'cards'
   },
-  */
+
   {
   id: 3,
   name: 'Cookies',
