@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
-import { cards } from '../../data/cards/cardsDataArray';
+import { cards } from '../../data/cards/dataArrays';
 import AddCardButton from '../../components/CardButton/AddCardButton';
 
 const { width: viewportWidth } = Dimensions.get('window');
