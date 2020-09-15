@@ -11,11 +11,13 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getCuentas,
+  getIncome
+} from '../../data/income/incomeAPI';
+import {
   getCategoryName
 } from '../../data/MockDataAPI';
 
-export default class CuentasScreen extends React.Component {
+export default class ExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('title')
@@ -28,16 +30,16 @@ export default class CuentasScreen extends React.Component {
 
   onPressCuenta = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Cuenta');
+    this.props.navigation.navigate('AnIncome');
   };
 
   renderCuentas = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
       <View style={styles.CuentasItemContainer}>
-        <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.alias}</Text>
-        <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
+        <Image source={require('../../../assets/icons/income.png')} style={styles.incomeItemIcon} /> 
+        <Text style={styles.incomeItemText}>{item.alias}</Text>
+        <Text style={styles.incomeItemTextDetail}>{item.entidad}</Text>
+        <Text style={styles.incomeItemText}>$ {item.saldo}</Text>
       </View>
     </TouchableHighlight>
 

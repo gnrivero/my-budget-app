@@ -75,12 +75,7 @@ export const entities = [
 ]
 
 export const categories = [
-  {
-    id: 12,
-    name: 'Presupuesto',
-    title: 'Presupuesto',
-    photo_url:'bank'
-  },
+
   {
     id: 11,
     name: 'Cuentas',
@@ -93,7 +88,24 @@ export const categories = [
     title: 'Cards',
     photo_url:'cards'
   },
-
+ /* {
+    id: 13,
+    name: 'Egresos',
+    title: 'Expenses',
+    photo_url:'expenses'
+  },*/
+  {
+    id: 14,
+    name: 'Presupuesto',
+    title: 'Presupuesto',
+    photo_url:'bank'
+  },
+  {
+    id: 15,
+    name: 'Ingresos',
+    title: 'Income',
+    photo_url:'income'
+  },
   {
   id: 3,
   name: 'Cookies',
