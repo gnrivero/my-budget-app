@@ -42,14 +42,22 @@ export default class DrawerContainer extends React.Component {
                 navigation.closeDrawer();
               }}
             />
-            <MenuButton
-              title="INVERSIONES"
-              source={require('../../../assets/icons/search.png')}
-              onPress={() => {
-                navigation.navigate('Investments');
+          <MenuButton
+            title="MIS PRESUPUESTOS"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+                navigation.navigate('Presupuesto');
                 navigation.closeDrawer();
-              }}
-            />
+            }}
+          />
+          <MenuButton
+            title="INVERSIONES"
+            source={require('../../../assets/icons/search.png')}
+            onPress={() => {
+             navigation.navigate('Investments');
+             navigation.closeDrawer();
+            }}
+          />
         </View>
       </View>
     );

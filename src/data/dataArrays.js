@@ -54,7 +54,25 @@ export const cuentas = [
     saldo: '2450', 
   }
 ];
+export const entities = [
+  {
+    value: 1,
+    label: 'Banco Nacion'
+  },
+  {
+    value: 2,
+    label: 'Banco Provincia'
+  },
+  {
+    value: 3,
+    label: 'Banco Galicia'
+  },
+  {
+    value: 4,
+    label: 'Mercado Pago'
+  },
 
+]
 
 export const categories = [
   {

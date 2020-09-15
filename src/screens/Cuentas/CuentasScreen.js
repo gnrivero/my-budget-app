@@ -38,6 +38,7 @@ export default class CuentasScreen extends React.Component {
         <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
         <Text style={styles.CuentaItemText}>{item.alias}</Text>
         <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
+        <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
       </View>
     </TouchableHighlight>
 
