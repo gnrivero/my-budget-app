@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { RecipeCard } from '../../AppStyles';
 
+
 const styles = StyleSheet.create({
   datosAgregar: {
     marginBottom: 40,
@@ -8,6 +9,36 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     padding: 30,
   },
+  cardItemContainer: {
+    flex: 1,
+    margin: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    height: 215,
+    borderColor: '#cccccc',
+    borderWidth: 0.5,
+    borderRadius: 20
+},
+infoContainer: {
+  flex: 1,
+  flexDirection: 'column',
+  alignItems: 'flex-start',
+  justifyContent: 'flex-start',
+  margin: 15
+},
+cardName: {
+  flex: .2,
+  fontSize: 20,
+  fontWeight: 'bold',
+  textAlign: 'center',
+  color: '#333333',
+  marginTop: 8
+},
+info: {
+  flex: 1,
+  flexDirection: 'row',
+  height: 30
+},
   CuentasItemContainer: {
     flex: 1,
     flexDirection:'row',
