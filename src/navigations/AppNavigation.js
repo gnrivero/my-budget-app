@@ -18,6 +18,7 @@ import ModifyCardScreen from '../screens/Cards/ModifyCardScreen';
 import CuentasScreen from '../screens/Cuentas/CuentasScreen';
 import CuentaScreen from '../screens/Cuenta/CuentaScreen';
 import PresupuestoScreen from '../screens/Presupuesto/PresupuestoScreen';
+import InvestmentScreen from '../screens/Investments/InvestmentScreen';
 import PresupuestoDashboardScreen from '../screens/Presupuesto/PresupuestoDashboardScreen';
 
 const MainNavigator = createStackNavigator(
@@ -33,8 +34,10 @@ const MainNavigator = createStackNavigator(
     Cuenta: CuentaScreen,
     Cards: CardScreen,
     ModifyCard: ModifyCardScreen,
+    Presupuesto: PresupuestoScreen,
+    Investments: InvestmentScreen,
     Presupuesto: PresupuestoDashboardScreen,
-    PresupuestoInfo: PresupuestoScreen,
+    PresupuestoInfo: PresupuestoScreen
   },
   {
     initialRouteName: 'Home',
