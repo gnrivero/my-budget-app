@@ -107,6 +107,12 @@ export const categories = [
     photo_url:'income'
   },
   {
+    id: 15,
+    name: 'Egresos',
+    title: 'Expenses',
+    photo_url:'expenses'
+  },
+  {
   id: 3,
   name: 'Cookies',
   title: 'RecipesList',

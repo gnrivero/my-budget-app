@@ -14,7 +14,7 @@ import {
   getAllIncome
 } from '../../data/income/incomeAPI';
 
-export default class ExpensesScreen extends React.Component {
+export default class IncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('name')
@@ -27,7 +27,7 @@ export default class ExpensesScreen extends React.Component {
 
   onPressIncome = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('AddIncome');
+    this.props.navigation.navigate('AddIncome',{name: 'Ingreso'});
   };
 
   renderIncome = ({ item }) => (
@@ -38,7 +38,8 @@ export default class ExpensesScreen extends React.Component {
         <Text style={styles.incomeItemTextDetail}> - </Text>
         <Text style={styles.incomeItemText}>{item.typeIncomeName}</Text>
         <Text style={styles.incomeItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.incomeItemText}>$ {item.value}</Text>
+        <Text style={styles.incomeItemText}> {item.currency}</Text>
+        <Text style={styles.incomeItemText}> {item.value}</Text>
       </View>
     </TouchableHighlight>
 

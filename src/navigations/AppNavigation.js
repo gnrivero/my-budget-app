@@ -22,7 +22,7 @@ import InvestmentScreen from '../screens/Investments/InvestmentScreen';
 import PresupuestoDashboardScreen from '../screens/Presupuesto/PresupuestoDashboardScreen';
 import IncomeScreen from '../screens/Income/IncomeScreen';
 import AddIncomeScreen from '../screens/Income/AddIncomeScreen';
-
+import ExpensesScreen  from '../screens/Expenses/ExpensesScreen';
 
 const MainNavigator = createStackNavigator(
   {
@@ -42,7 +42,8 @@ const MainNavigator = createStackNavigator(
     Presupuesto: PresupuestoDashboardScreen,
     PresupuestoInfo: PresupuestoScreen,
     Income: IncomeScreen,
-    AddIncome: AddIncomeScreen
+    AddIncome: AddIncomeScreen,
+    Expenses: ExpensesScreen
   },
   {
     initialRouteName: 'Home',

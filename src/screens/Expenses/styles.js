@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { RecipeCard } from '../../AppStyles';
 
 const styles = StyleSheet.create({
-  CuentasItemContainer: {
+  expensesItemContainer: {
     flex: 1,
     flexDirection:'row',
     justifyContent:'flex-start',
@@ -13,18 +13,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 20,
   },
-  CuentasItemIcon: {
+  expensesItemIcon: {
     margin:5,
     width:30,
     height:30,
     borderRadius:15,
-    backgroundColor:'#2cd18a',
+    backgroundColor:'#d1382c',
   },
-  CuentaItemText: {
+  expensesItemText: {
     fontWeight: 'bold',
     fontSize: 20
   },
-  CuentaItemTextDetail: {
+  expensesItemTextDetail: {
     fontWeight: 'normal',
     fontStyle: 'italic',
     fontSize: 16,
@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
     marginTop:5
 
   },
-  photoCuentas: {
+  photoExpenses: {
     width: '100%',
-    height: 250,
+    height: 200,
     alignSelf: 'center'
   },
-  cuentasInfo: {
+  expensesInfo: {
     color: 'black',
     margin: 10,
     fontSize: 19,
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
   container: RecipeCard.container,
   photo: RecipeCard.photo,
   title: RecipeCard.title,
-  category: RecipeCard.category
+  category: RecipeCard.category,
+  input: RecipeCard.input,
 }
 
 );

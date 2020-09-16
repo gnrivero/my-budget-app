@@ -12,7 +12,7 @@ import { categories } from '../../data/dataArrays';
 
 export default class CategoriesScreen extends React.Component {
   static navigationOptions = {
-    title: 'Categories'
+    title: 'Categorias'
   };
 
   constructor(props) {
@@ -35,13 +35,16 @@ export default class CategoriesScreen extends React.Component {
           titleImg = require('../../data/banco.jpg');
           break;
       case 'cards':
-        titleImg = require('../../data/cards.jpg');
+        titleImg = require('../../data/cards.png');
         break;
         case 'expenses':
         titleImg = require('../../data/expenses.jpg');
         break;
         case 'income':
         titleImg = require('../../data/income.jpg');
+        break;
+        case 'expenses':
+        titleImg = require('../../data/expenses.jpg');
         break;
       default:
         titleImg= nombre;
