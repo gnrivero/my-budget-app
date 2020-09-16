@@ -11,11 +11,10 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getCuentas,
   getCategoryName
 } from '../../data/MockDataAPI';
 
-export default class CuentasScreen extends React.Component {
+export default class ExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('title')
@@ -53,7 +52,7 @@ export default class CuentasScreen extends React.Component {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const cuentasArray = getCuentas();
-    const categoryName = navigation.getParam('name');
+    const categoryName = navigation.getParam('title');
     return (
       <View>
         <ScrollView style={styles.mainContainer}>

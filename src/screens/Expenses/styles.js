@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   photoCuentas: {
     width: '100%',
-    height: 200,
+    height: 250,
     alignSelf: 'center'
   },
   cuentasInfo: {

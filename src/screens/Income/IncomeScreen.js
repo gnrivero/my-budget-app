@@ -11,14 +11,13 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getCuentas,
-  getCategoryName
-} from '../../data/MockDataAPI';
+  getAllIncome
+} from '../../data/income/incomeAPI';
 
-export default class CuentasScreen extends React.Component {
+export default class ExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('title')
+      title: navigation.getParam('name')
     };
   };
 
@@ -26,18 +25,20 @@ export default class CuentasScreen extends React.Component {
     super(props);
   }
 
-  onPressCuenta = item => {
+  onPressIncome = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Cuenta');
+    this.props.navigation.navigate('AddIncome');
   };
 
-  renderCuentas = ({ item }) => (
+  renderIncome = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-      <View style={styles.CuentasItemContainer}>
-        <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.nombreCuenta}</Text>
-        <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
+      <View style={styles.incomeItemContainer}>
+        {<Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} />}
+        <Text style={styles.incomeItemText}>{item.date}</Text>
+        <Text style={styles.incomeItemTextDetail}> - </Text>
+        <Text style={styles.incomeItemText}>{item.typeIncomeName}</Text>
+        <Text style={styles.incomeItemTextDetail}>{item.entidad}</Text>
+        <Text style={styles.incomeItemText}>$ {item.value}</Text>
       </View>
     </TouchableHighlight>
 
@@ -52,22 +53,22 @@ export default class CuentasScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const cuentasArray = getCuentas();
+    const incomeArray = getAllIncome();
     const categoryName = navigation.getParam('name');
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
+            <Image style={styles.photoIncome} source={require('../../data/income.jpg')} />
           </View>
-          <Text style={styles.cuentasInfo}>Mis {categoryName}:</Text>
+          <Text style={styles.incomeInfo}>Mis {categoryName}:</Text>
           <View style={{marginBottom: 40}}>
             <FlatList
               vertical
               showsVerticalScrollIndicator={false}
               numColumns={1}
-              data={cuentasArray}
-              renderItem={this.renderCuentas}
+              data={incomeArray}
+              renderItem={this.renderIncome}
               keyExtractor={item => `${item.id}`}
               ItemSeparatorComponent={this.FlatListItemSeparator}
             />
@@ -75,7 +76,7 @@ export default class CuentasScreen extends React.Component {
         </ScrollView>
         <View style={[styles.footer]}>
         <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
+          onPress={() => this.onPressIncome()}
         >
           <Text style={{fontSize: 30, color: 'white', textAlign:'center'}}>Agregar +</Text>
         </TouchableHighlight>

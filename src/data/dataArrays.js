@@ -1,55 +1,55 @@
 export const cuentas = [
   {
     id: 1,
-    alias: 'Cuentas a ',
+    nombreCuenta: 'Cuentas a ',
     entidad:'banco XXXX',
     saldo: '2450', 
   },
   {
     id: 2,
-    alias: 'Cua ',
+    nombreCuenta: 'Cua ',
     entidad:'banco XXXX',
     saldo: '20', 
   },
   {
     id: 3,
-    alias: 'Cuentas 3 ',
+    nombreCuenta: 'Cuentas 3 ',
     entidad:'banco Xdsdsd',
     saldo: '2450', 
   },
   {
     id: 4,
-    alias: 'Cuentas 4 ',
+    nombreCuenta: 'Cuentas 4 ',
     entidad:'aaa XXXX',
     saldo: '450', 
   },
   {
     id: 5,
-    alias: 'Cuentas a5 ',
+    nombreCuenta: 'Cuentas a5 ',
     entidad:'banco XXXX',
     saldo: '2450', 
   },
   {
     id: 6,
-    alias: 'Cua6 ',
+    nombreCuenta: 'Cua6 ',
     entidad:'banco XXXX',
     saldo: '20', 
   },
   {
     id: 7,
-    alias: 'Cuentas 77 ',
+    nombreCuenta: 'Cuentas 77 ',
     entidad:'banco Xdsdsd',
     saldo: '2450', 
   },
   {
     id: 8,
-    alias: 'Cuentas 8 ',
+    nombreCuenta: 'Cuentas 8 ',
     entidad:'aaa XXXX',
     saldo: '450', 
   },
   {
     id: 9,
-    alias: 'Cuentas 9a ',
+    nombreCuenta: 'Cuentas 9a ',
     entidad:'banco XXXX',
     saldo: '2450', 
   }
@@ -75,12 +75,7 @@ export const entities = [
 ]
 
 export const categories = [
-  {
-    id: 12,
-    name: 'Presupuesto',
-    title: 'Presupuesto',
-    photo_url:'bank'
-  },
+
   {
     id: 11,
     name: 'Cuentas',
@@ -93,7 +88,24 @@ export const categories = [
     title: 'Cards',
     photo_url:'cards'
   },
-
+ /* {
+    id: 13,
+    name: 'Egresos',
+    title: 'Expenses',
+    photo_url:'expenses'
+  },*/
+  {
+    id: 14,
+    name: 'Presupuesto',
+    title: 'Presupuesto',
+    photo_url:'bank'
+  },
+  {
+    id: 15,
+    name: 'Ingresos',
+    title: 'Income',
+    photo_url:'income'
+  },
   {
   id: 3,
   name: 'Cookies',

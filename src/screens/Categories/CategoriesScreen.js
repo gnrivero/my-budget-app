@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import { categories } from '../../data/dataArrays';
-import { getNumberOfRecipes } from '../../data/MockDataAPI';
+//import { getNumberOfRecipes } from '../../data/MockDataAPI';
 
 export default class CategoriesScreen extends React.Component {
   static navigationOptions = {
@@ -22,7 +22,8 @@ export default class CategoriesScreen extends React.Component {
   onPressCategory = item => {
     const title = item.title;
     const category = item;
-    this.props.navigation.navigate(title, { category, title });
+    const name = item.name;
+    this.props.navigation.navigate(title, { category, title, name });
     
   };
 
@@ -36,6 +37,12 @@ export default class CategoriesScreen extends React.Component {
       case 'cards':
         titleImg = require('../../data/cards.jpg');
         break;
+        case 'expenses':
+        titleImg = require('../../data/expenses.jpg');
+        break;
+        case 'income':
+        titleImg = require('../../data/income.jpg');
+        break;
       default:
         titleImg= nombre;
       }
@@ -48,7 +55,7 @@ export default class CategoriesScreen extends React.Component {
       <View style={styles.categoriesItemContainer}>
         <Image style={styles.categoriesPhoto} source={this.getCategoriaUrl(item.photo_url)} />
         <Text style={styles.categoriesName}>{item.name}</Text>
-        <Text style={styles.categoriesInfo}>{getNumberOfRecipes(item.id)} recipes</Text>
+        {/*<Text style={styles.categoriesInfo}>{getNumberOfRecipes(item.id)} recipes</Text>*/}
       </View>
     </TouchableHighlight>
   );
