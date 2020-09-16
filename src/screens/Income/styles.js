@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   photoIncome: {
     width: '100%',
-    height: 250,
+    height: 200,
     alignSelf: 'center'
   },
   incomeInfo: {
@@ -57,7 +57,8 @@ const styles = StyleSheet.create({
   container: RecipeCard.container,
   photo: RecipeCard.photo,
   title: RecipeCard.title,
-  category: RecipeCard.category
+  category: RecipeCard.category,
+  input: RecipeCard.input,
 }
 
 );

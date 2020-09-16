@@ -34,7 +34,7 @@ export default class ExpensesScreen extends React.Component {
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
       <View style={styles.CuentasItemContainer}>
         <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.alias}</Text>
+        <Text style={styles.CuentaItemText}>{item.nombreCuenta}</Text>
         <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
         <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
       </View>

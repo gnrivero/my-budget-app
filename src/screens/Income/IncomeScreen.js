@@ -11,16 +11,13 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getIncome
+  getAllIncome
 } from '../../data/income/incomeAPI';
-import {
-  getCategoryName
-} from '../../data/MockDataAPI';
 
 export default class ExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('title')
+      title: navigation.getParam('name')
     };
   };
 
@@ -28,18 +25,20 @@ export default class ExpensesScreen extends React.Component {
     super(props);
   }
 
-  onPressCuenta = item => {
+  onPressIncome = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('AnIncome');
+    this.props.navigation.navigate('AddIncome');
   };
 
-  renderCuentas = ({ item }) => (
+  renderIncome = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-      <View style={styles.CuentasItemContainer}>
-        <Image source={require('../../../assets/icons/income.png')} style={styles.incomeItemIcon} /> 
-        <Text style={styles.incomeItemText}>{item.alias}</Text>
+      <View style={styles.incomeItemContainer}>
+        {<Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} />}
+        <Text style={styles.incomeItemText}>{item.date}</Text>
+        <Text style={styles.incomeItemTextDetail}> - </Text>
+        <Text style={styles.incomeItemText}>{item.typeIncomeName}</Text>
         <Text style={styles.incomeItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.incomeItemText}>$ {item.saldo}</Text>
+        <Text style={styles.incomeItemText}>$ {item.value}</Text>
       </View>
     </TouchableHighlight>
 
@@ -54,22 +53,22 @@ export default class ExpensesScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const cuentasArray = getCuentas();
-    const categoryName = navigation.getParam('title');
+    const incomeArray = getAllIncome();
+    const categoryName = navigation.getParam('name');
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
+            <Image style={styles.photoIncome} source={require('../../data/income.jpg')} />
           </View>
-          <Text style={styles.cuentasInfo}>Mis {categoryName}:</Text>
+          <Text style={styles.incomeInfo}>Mis {categoryName}:</Text>
           <View style={{marginBottom: 40}}>
             <FlatList
               vertical
               showsVerticalScrollIndicator={false}
               numColumns={1}
-              data={cuentasArray}
-              renderItem={this.renderCuentas}
+              data={incomeArray}
+              renderItem={this.renderIncome}
               keyExtractor={item => `${item.id}`}
               ItemSeparatorComponent={this.FlatListItemSeparator}
             />
@@ -77,7 +76,7 @@ export default class ExpensesScreen extends React.Component {
         </ScrollView>
         <View style={[styles.footer]}>
         <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
+          onPress={() => this.onPressIncome()}
         >
           <Text style={{fontSize: 30, color: 'white', textAlign:'center'}}>Agregar +</Text>
         </TouchableHighlight>

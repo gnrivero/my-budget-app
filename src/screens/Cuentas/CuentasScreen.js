@@ -35,7 +35,7 @@ export default class CuentasScreen extends React.Component {
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
       <View style={styles.CuentasItemContainer}>
         <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.alias}</Text>
+        <Text style={styles.CuentaItemText}>{item.nombreCuenta}</Text>
         <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
         <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
       </View>
@@ -53,7 +53,7 @@ export default class CuentasScreen extends React.Component {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const cuentasArray = getCuentas();
-    const categoryName = navigation.getParam('title');
+    const categoryName = navigation.getParam('name');
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
