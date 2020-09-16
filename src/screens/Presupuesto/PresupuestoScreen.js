@@ -29,9 +29,12 @@ export default class PresupuestoScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      activeSlide: 0
-    };
+
+    this.state = {periodo: '',
+                  movimiento: '',
+                  rubro: '',
+                  monto: '',
+                }
   }
 
   onPressCuenta = item => {
@@ -51,33 +54,6 @@ export default class PresupuestoScreen extends React.Component {
 );
 
 
-renderPresupuesto = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
-      <View style={styles.cardItemContainer}>
-        <Text style={styles.cardName}>{item.Periodo}</Text>
-        <View style={styles.infoContainer}>
-          {/* <View style={styles.info}>
-            <Text style={styles.infoCard}>{item.mes}</Text>
-          </View> */}
-          <View style={styles.info}>
-            <Text style={styles.infoCard}>Periodo:</Text><Text>{item.presupuestoTotal}</Text>
-          </View>
-          <View style={styles.info}>
-            <Text style={styles.infoCard}>Movimiento:</Text><Text>{item.presupuestoConsumido}</Text>
-          </View>
-          <View style={styles.info}>
-            <Text style={styles.infoCard}>Rubro:</Text><Text>{item.startDate}</Text>
-          </View>
-          <View style={styles.info}>
-            <Text style={styles.infoCard}>Monto:</Text><Text>{item.closeDate}</Text>
-          </View>
-          {/* <View style={styles.info}>
-            <Text style={styles.infoCard}>Balance:</Text><Text>{item.balance}</Text>
-          </View> */}
-        </View>
-      </View>
-    </TouchableHighlight>
-  );
 
 
   FlatListItemSeparator = () => {
@@ -100,24 +76,24 @@ renderPresupuesto = ({ item }) => (
           </View>
          
           <View style={{marginBottom: 40, padding: 10}}>
-          <Text style={styles.cuentasInfo}>Nuevo Presupuesto:</Text>
+          <Text >Nuevo Presupuesto:</Text>
+          </View>
+          <View>
+          <Text>Ingrese Periodo</Text>   
+          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
+          </View>
+          <View>
+          <Text style={stylePresupuesto.addBox}>Rubros</Text>
+          <View style={styles.cuentasInfo}> 
+          <Text>Educacion</Text>       
+          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
+          </View>
           </View>
           <View style={stylePresupuesto.addBox}>
-          <TextInput  placeholder="Periodo" style={stylePresupuesto.textInput}></TextInput> 
-          <TextInput placeholder="Movimiento" style={stylePresupuesto.textInput}></TextInput>
+          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
+          {/* <TextInput placeholder="Movimiento" style={stylePresupuesto.textInput}></TextInput> */}
           <TextInput placeholder="Rubro" style={stylePresupuesto.textInput}></TextInput>
           <TextInput placeholder="Monto" style={stylePresupuesto.textInput}></TextInput>
-          <Button title="Agregar"></Button>
-          </View>
-          <View style={{marginBottom: 40, padding: 10}}>
-          <Text style={styles.cuentasInfo}>Presupuesto:</Text>
-          </View>
-          <View style={{marginBottom: 40, padding: 10}}>
-          <FlatList
-           data={presumocks}
-           renderItem={this.renderPresupuesto}
-           keyExtractor={item => `${item.id}`}
-          />
           </View>
         </ScrollView>
         <View style={[styles.footer]}>

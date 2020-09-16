@@ -70,14 +70,14 @@ export const presupuestos = [
         id: 300,
         periodo:"Enero 2020",
         movimiento: "Ingreso",
-        Rubro: "Salario",
+        rubro: "Salario",
         monto: 50000,
      },
      {
         id: 301,
         periodo:"Enero 2020",
         movimiento: "Egreso",
-        Rubro: "Combustible",
+        rubro: "Combustible",
         monto: 5000,
      },
         
