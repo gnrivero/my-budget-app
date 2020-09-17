@@ -9,3 +9,11 @@ export function getAllCards() {
     });
   return cardsArray;
 }
+
+export function getAllCardsCombo() {
+  const cardsArray = [];
+  cards.map(data => {
+      cardsArray.push({value:data.id, label:data.name +' - ' + data.lastFourNumbers});
+    });
+  return cardsArray;
+}

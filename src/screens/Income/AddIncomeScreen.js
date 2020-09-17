@@ -22,7 +22,7 @@ import DatePicker from 'react-native-datepicker';
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('title')
+      title: navigation.getParam('name')
     };
   };
 
@@ -36,7 +36,8 @@ export default class AddIncomeScreen extends React.Component {
                   value: '',
                   cash: true,
                   monthly: true,
-                  currency: true
+                  currency: 1,
+                  detail: ''
                 };
   }
 
@@ -69,7 +70,7 @@ export default class AddIncomeScreen extends React.Component {
 
   onChangeCurrency = ({ value }) =>{
     let currency = value
-    Alert.alert('Call onPress with value:' + currency?'Pesos':'Dolares'   );
+    Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
     if(currency){
      /* 
@@ -80,7 +81,7 @@ export default class AddIncomeScreen extends React.Component {
   }
 
 buttonPressed(){
-  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
+  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detalle +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
   /*
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
@@ -116,7 +117,7 @@ buttonPressed(){
     const typeIncome = getTypeIncome();
     const optionsMontly = [
       { label: 'Mensual', value: true},
-      { label: 'Ocacional', value: false }
+      { label: 'Ocasional', value: false }
     ];
   const optionsCash = [
     { label: 'En Efectivo', value: true},
@@ -124,8 +125,8 @@ buttonPressed(){
   ];
 
   const optionsCurrency = [
-    { label: 'Pesos', value: true},
-    { label: 'Dolares', value: false }
+    { label: 'Pesos', value: 1},
+    { label: 'Dolares', value: 2 }
   ];
 
     return (
@@ -167,6 +168,12 @@ buttonPressed(){
               }}
               onDateChange={(date) => {this.setState({date: date})}}
             />
+             <TextInput 
+              style ={styles.input}
+              placeholder="Detalle"
+              onChangeText={(detail) => this.setState({detail})}
+              value={this.state.detail}
+            />
             <SwitchSelector options={optionsMontly} initial={0} onPress={value => this.onChangeMonthly({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
             <View style={{padding:5}}></View>
             <SwitchSelector options={optionsCash} initial={0} onPress={value => this.onChangeCash({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
@@ -186,26 +193,6 @@ buttonPressed(){
               onChangeText={(cuenta) => this.setState({account:cuenta})}
               style ={styles.input}
             />
-          {/* 
-            {this.state.agregarTarjeta ? (
-            <View style={{padding:10}}>
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={4}
-                style ={styles.input}
-                placeholder="Ultimos 4 numeros de la tarjeta de debito"
-                onChangeText={(numerosTarjeta) => this.setState({numerosTarjeta})}
-                value={this.state.numerosTarjeta}
-              />
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={6}
-                style ={styles.input}
-                placeholder="Vencimiento MMAAAA"
-                onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
-                value={this.state.vencimientoTarjeta}
-              />
-            </View>
-            ) : null}
-            */}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>

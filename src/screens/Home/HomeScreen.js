@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
   }
-
+/*
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
   };
@@ -33,18 +33,19 @@ export default class HomeScreen extends React.Component {
       </View>
     </TouchableHighlight>
   );
-
+*/
   render() {
     return (
       <View>
-        <FlatList
+        {/*<FlatList
           vertical
           showsVerticalScrollIndicator={false}
           numColumns={2}
           data={recipes}
           renderItem={this.renderRecipes}
           keyExtractor={item => `${item.recipeId}`}
-        />
+        />*/}
+        <Text>Dashboard</Text>
       </View>
     );
   }
