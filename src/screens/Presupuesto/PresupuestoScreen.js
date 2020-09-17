@@ -13,15 +13,9 @@ import SaveCardButton from '../../components/CardButton/SaveCardButton';
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class PresupuestoScreen extends React.Component {
-
-  static navigationOptions = ({ navigation }) => {
-      return {
-        title: navigation.getParam('title'),
-        headerTitleStyle: {
-          fontSize: 16
-        }
-      };
-    };
+  static navigationOptions = {
+    title: 'Agregar Presupuesto'
+};
 
   constructor(props) {
     super(props);
