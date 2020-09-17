@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Image,
+  StyleSheet,
   Dimensions,
   TouchableHighlight
 } from 'react-native';
@@ -73,6 +74,13 @@ export default class PresupuestoDashboardScreen extends React.Component {
              this.props.navigation.navigate('PresupuestoInfo', {title});
            }}
          /> */}
+         <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'
+          onPress={() => this.onPressCuenta()}
+        >
+          <View style={Dashboardstyles.container}>
+          <Text style={Dashboardstyles.text}>Nuevo Presupuesto</Text>
+          </View>
+        </TouchableHighlight>
 
         </View>
         <FlatList
@@ -80,13 +88,33 @@ export default class PresupuestoDashboardScreen extends React.Component {
            renderItem={this.renderPresupuesto}
            keyExtractor={item => `${item.id}`}
           />
-        <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
-        >
-          <Text style={{fontSize: 30, color: 'white', textAlign:'center', backgroundColor:'green'}}>+ Presupuesto</Text>
-        </TouchableHighlight>
+        
       </ScrollView>
+
+// <Text style={{fontSize: 30, color: 'white', textAlign:'center', backgroundColor:'rgba(73,182,77,0.9)'}}>+ Presupuesto</Text>
       
     );
   }
 }
+
+const Dashboardstyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 50,
+    width: 270,
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 100,
+    borderColor: '#2cd18a',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf:'center',
+    // backgroundColor: '#2cd18a'
+  },
+  text: {
+    fontSize: 14,
+    color: '#2cd18a'
+  }
+});

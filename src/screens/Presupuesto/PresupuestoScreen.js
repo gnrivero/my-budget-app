@@ -1,109 +1,95 @@
 import React from 'react';
 import {
-  FlatList,
   ScrollView,
   Text,
   View,
-  Image,
-  TouchableHighlight,
-  Button,
-  Alert,
-  StyleSheet,
+  TextInput,
+  Dimensions,
+  StyleSheet
 } from 'react-native';
 import styles from './styles';
-import {
-  getIngredientUrl,
-  getCuentas,
-  getCategoryName, getMovimientos
-} from '../../data/MockDataAPI';
-import { TextInput } from 'react-native-gesture-handler';
-import { Dropdown } from 'react-native-material-dropdown';
-import { presumocks } from '../../data/presupuestos/presupuestosDataArray';
+import SaveCardButton from '../../components/CardButton/SaveCardButton';
+
+const { width: viewportWidth } = Dimensions.get('window');
 
 export default class PresupuestoScreen extends React.Component {
+
   static navigationOptions = ({ navigation }) => {
-    return {
-      title: navigation.getParam('title')
+      return {
+        title: navigation.getParam('title'),
+        headerTitleStyle: {
+          fontSize: 16
+        }
+      };
     };
-  };
 
   constructor(props) {
     super(props);
-
-    this.state = {periodo: '',
-                  movimiento: '',
-                  rubro: '',
-                  monto: '',
-                }
+    this.state = {
+      activeSlide: 0
+    };
   }
 
-  onPressCuenta = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Cuenta');
-  };
-
-  renderCuentas = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-      <View style={styles.CuentasItemContainer}>
-        <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.alias}</Text>
-        <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
-      </View>
-    </TouchableHighlight>
-);
-
-
-
-
-  FlatListItemSeparator = () => {
-    return (
-      //Item Separator
-      <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
-    );
-  };
-
   render() {
-    const { navigation } = this.props;
-    const item = navigation.getParam('category');
-    // const movimientosArray = getMovimientos();
-    const categoryName = navigation.getParam('title');
     return (
-      <View>
-        <ScrollView style={styles.mainContainer}>
-          <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
-          </View>
-         
-          <View style={{marginBottom: 40, padding: 10}}>
-          <Text >Nuevo Presupuesto:</Text>
-          </View>
-          <View>
-          <Text>Ingrese Periodo</Text>   
-          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
-          </View>
-          <View>
-          <Text style={stylePresupuesto.addBox}>Rubros</Text>
-          <View style={styles.cuentasInfo}> 
-          <Text>Educacion</Text>       
-          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
-          </View>
-          </View>
-          <View style={stylePresupuesto.addBox}>
-          <TextInput  placeholder="MMAAAA" style={stylePresupuesto.textInput}></TextInput> 
-          {/* <TextInput placeholder="Movimiento" style={stylePresupuesto.textInput}></TextInput> */}
-          <TextInput placeholder="Rubro" style={stylePresupuesto.textInput}></TextInput>
-          <TextInput placeholder="Monto" style={stylePresupuesto.textInput}></TextInput>
-          </View>
-        </ScrollView>
-        <View style={[styles.footer]}>
-        <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
-        >
-          <Text style={stylePresupuesto.botonPeriodo}>Guardar</Text>
-        </TouchableHighlight>
-        </View>
-     </View>
+      <ScrollView>
+        <View style={{alignItems: 'center'}}>
+            <View style={stylePresupuesto.itemContainer}>
+              <Text>Ingrese Periodo</Text>
+              <TextInput style={stylePresupuesto.largeInput}
+                placeholder="MMAAAA" textAlign="center"
+              ></TextInput>
+              <View style={stylePresupuesto.infoContainer}>
+                {/* <View><Text fontWeight='bold'>Rubros</Text></View> */}
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Servicios</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Imp Nacionales</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Imp Provinciales</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Imp Municipales</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Educacion</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Salud</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Viaticos</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Comida</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+                <View style={stylePresupuesto.info}>
+                  <Text style={stylePresupuesto.infoRubro}>Entretenimiento</Text>
+                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
+                </View>
+              </View>
+            </View>
+            <View style={stylePresupuesto.infoContainer}>
+             <SaveCardButton
+               onPress={() => {
+                 //let ingredients = item.ingredients;
+                 let title = 'Guardar';
+                 //navigation.navigate('IngredientsDetails', { ingredients, title });
+               }}
+             />
+            </View>
+           </View>
+      </ScrollView>
     );
   }
 }
@@ -126,5 +112,57 @@ const stylePresupuesto = StyleSheet.create({
         color: 'white',
         textAlign:'center',
         backgroundColor: 'green',
-    }
+    },
+    itemContainer: {
+      flex: 1,
+      margin: 10,
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      height: 500,
+      width: 300,
+      borderColor: '#cccccc',
+      borderWidth: 0.5,
+      borderRadius: 20,
+      padding: 10,
+  },
+  infoContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    margin: 15
+},
+info: {
+    flex: 1,
+    flexDirection: 'row',
+    height: 30,
+    padding:10,
+},
+infoRubro: {
+  fontSize: 14,
+  fontWeight: 'bold',
+  marginLeft: 5,
+  width: 150,
+},
+smallInput: {
+  height: 25,
+  width: 40,
+  borderColor: 'gray',
+  borderWidth: 1,
+  marginLeft: 10
+},
+mediumInput: {
+  height: 25,
+  width: 80,
+  borderColor: 'gray',
+  borderWidth: 1,
+  marginLeft: 10,
+},
+largeInput: {
+  height: 30,
+  width: 100,
+  borderColor: 'gray',
+  borderWidth: 1,
+  margin: 10
+}
 })
