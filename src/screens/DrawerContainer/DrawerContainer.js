@@ -34,17 +34,33 @@ export default class DrawerContainer extends React.Component {
               navigation.closeDrawer();
             }}
           />
+            <MenuButton
+            title="CUENTAS"
+            source={require('../../../assets/icons/account.png')}
+            onPress={() => {
+             navigation.navigate('Cuentas');
+             navigation.closeDrawer();
+            }}
+          />
+            <MenuButton
+            title="INGRESOS"
+            source={require('../../../assets/icons/ingresos.png')}
+            onPress={() => {
+             navigation.navigate('Income');
+             navigation.closeDrawer();
+            }}
+          />
           <MenuButton
               title="TARJETAS"
-              source={require('../../../assets/icons/search.png')}
+              source={require('../../../assets/icons/tarjetas.png')}
               onPress={() => {
                 navigation.navigate('Cards');
                 navigation.closeDrawer();
               }}
             />
           <MenuButton
-            title="MIS PRESUPUESTOS"
-            source={require('../../../assets/icons/search.png')}
+            title="PRESUPUESTOS"
+            source={require('../../../assets/icons/presupuesto.png')}
             onPress={() => {
                 navigation.navigate('Presupuesto');
                 navigation.closeDrawer();
@@ -52,12 +68,13 @@ export default class DrawerContainer extends React.Component {
           />
           <MenuButton
             title="INVERSIONES"
-            source={require('../../../assets/icons/search.png')}
+            source={require('../../../assets/icons/inversiones.png')}
             onPress={() => {
              navigation.navigate('Investments');
              navigation.closeDrawer();
             }}
           />
+
         </View>
       </View>
     );

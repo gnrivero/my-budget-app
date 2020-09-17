@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
   info: {
       flex: 1,
       flexDirection: 'row',
-      height: 30
+      height: 30,
+
   },
   cardName: {
       flex: .2,
