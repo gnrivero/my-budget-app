@@ -46,6 +46,12 @@ export default class CategoriesScreen extends React.Component {
         case 'expenses':
         titleImg = require('../../data/expenses.jpg');
         break;
+        case 'investments':
+          titleImg = require('../../data/investments.jpg');
+        break;
+        case 'loans':
+          titleImg = require('../../data/loans.jpg');
+        break;
       default:
         titleImg= nombre;
       }

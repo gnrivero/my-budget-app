@@ -88,18 +88,6 @@ export const categories = [
     title: 'Cards',
     photo_url:'cards'
   },
- /* {
-    id: 13,
-    name: 'Egresos',
-    title: 'Expenses',
-    photo_url:'expenses'
-  },*/
-  {
-    id: 14,
-    name: 'Presupuesto',
-    title: 'Presupuesto',
-    photo_url:'bank'
-  },
   {
     id: 15,
     name: 'Ingresos',
@@ -107,11 +95,30 @@ export const categories = [
     photo_url:'income'
   },
   {
-    id: 15,
+    id: 16,
     name: 'Egresos',
     title: 'Expenses',
     photo_url:'expenses'
   },
+  {
+    id: 13,
+    name: 'Inversiones',
+    title: 'Investments',
+    photo_url:'investments'
+  },
+  {
+    id: 17,
+    name: 'Prestamos',
+    title: 'Loans',
+    photo_url:'loans'
+  },
+  {
+    id: 14,
+    name: 'Presupuesto',
+    title: 'Presupuesto',
+    photo_url:'bank'
+  },
+  
   /*{
   id: 3,
   name: 'Cookies',

@@ -24,6 +24,8 @@ import IncomeScreen from '../screens/Income/IncomeScreen';
 import AddIncomeScreen from '../screens/Income/AddIncomeScreen';
 import ExpensesScreen  from '../screens/Expenses/ExpensesScreen';
 import AddExpensesScreen from '../screens/Expenses/AddExpensesScreen';
+import LoansScreen  from '../screens/Loans/LoansScreen';
+import AddLoanScreen  from '../screens/Loans/AddLoanScreen';
 
 const MainNavigator = createStackNavigator(
   {
@@ -46,6 +48,8 @@ const MainNavigator = createStackNavigator(
     AddIncome: AddIncomeScreen,
     Expenses: ExpensesScreen,
     AddExpenses: AddExpensesScreen,
+    Loans: LoansScreen,
+    AddLoan: AddLoanScreen
   },
   {
     initialRouteName: 'Home',

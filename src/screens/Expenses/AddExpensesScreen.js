@@ -108,7 +108,6 @@ buttonPressed(){
 }
   
   render() {
-    const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const accountsArray = getAccounts();
@@ -191,7 +190,7 @@ buttonPressed(){
                 value={this.state.value}
             />
             <Dropdown
-                placeholder='Seleccione entidad'
+                placeholder='Seleccione cuenta'
                 data={accountsArray}
                 value={this.state.account}
                 onChangeText={(cuenta) => this.setState({account:cuenta})}
