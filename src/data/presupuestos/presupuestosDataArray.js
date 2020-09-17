@@ -63,3 +63,22 @@ export const presupuestos = [
       },
         
    ]
+
+
+   export const presumocks = [
+    {
+        id: 300,
+        periodo:"Enero 2020",
+        movimiento: "Ingreso",
+        rubro: "Salario",
+        monto: 50000,
+     },
+     {
+        id: 301,
+        periodo:"Enero 2020",
+        movimiento: "Egreso",
+        rubro: "Combustible",
+        monto: 5000,
+     },
+        
+   ]

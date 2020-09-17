@@ -39,6 +39,7 @@ info: {
   flexDirection: 'row',
   height: 30
 },
+
   CuentasItemContainer: {
     flex: 1,
     flexDirection:'row',
