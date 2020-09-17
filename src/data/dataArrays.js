@@ -112,7 +112,7 @@ export const categories = [
     title: 'Expenses',
     photo_url:'expenses'
   },
-  {
+  /*{
   id: 3,
   name: 'Cookies',
   title: 'RecipesList',
@@ -144,7 +144,7 @@ export const categories = [
   name: 'Pizza',
   title: 'RecipesList',
   photo_url: 'https://amp.businessinsider.com/images/5c084bf7bde70f4ea53f0436-750-563.jpg'
-},
+},*/
   
 ];
 

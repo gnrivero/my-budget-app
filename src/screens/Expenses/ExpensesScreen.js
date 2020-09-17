@@ -25,6 +25,7 @@ export default class ExpensesScreen extends React.Component {
 
   onPressExpenses = item => {
     //lo llamo sin pasarle parametros
+    this.props.navigation.navigate('AddExpenses',{name: 'Egreso'});
     //////////////this.props.navigation.navigate('Addexpenses');
   };
 

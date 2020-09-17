@@ -1,5 +1,32 @@
 export const typeExpenses = [
    {
+      value : 1,
+      label: 'Contado',
+   },
+   {
+      value:2,
+      label: 'Tarjeta Débito',
+   },
+   {
+      value:3,
+      label: 'Tarjeta crédito',
+   },
+   {
+      value:4,
+      label: 'Débito Automatico en cuenta',
+   },
+   {
+      value:5,
+      label: 'Transferencia',
+   },
+   {
+      value:6,
+      label: 'Otro'
+   },
+]
+
+export const paymentMethods = [
+   {
       id:1,
       name: 'Impuestos Nacionales',
       monthly: true,
@@ -36,8 +63,6 @@ export const typeExpenses = [
    }
 
 ]
-
-    
 
 
 export const expenses = [

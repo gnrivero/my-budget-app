@@ -193,26 +193,6 @@ buttonPressed(){
               onChangeText={(cuenta) => this.setState({account:cuenta})}
               style ={styles.input}
             />
-          {/* 
-            {this.state.agregarTarjeta ? (
-            <View style={{padding:10}}>
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={4}
-                style ={styles.input}
-                placeholder="Ultimos 4 numeros de la tarjeta de debito"
-                onChangeText={(numerosTarjeta) => this.setState({numerosTarjeta})}
-                value={this.state.numerosTarjeta}
-              />
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={6}
-                style ={styles.input}
-                placeholder="Vencimiento MMAAAA"
-                onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
-                value={this.state.vencimientoTarjeta}
-              />
-            </View>
-            ) : null}
-            */}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>

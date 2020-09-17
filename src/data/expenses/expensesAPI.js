@@ -1,7 +1,7 @@
 import { Text } from 'react-native';
 import React, { Component } from 'react';
 import { cuentas } from '../../data/dataArrays';
-import { expenses, typeExpenses } from './dataArray';
+import { expenses, typeExpenses, paymentMethods } from './dataArray';
 //lastexpenses o all?
 export function getAllExpenses() {
   const expensesArray = [];
@@ -13,9 +13,17 @@ export function getAllExpenses() {
 export function getTypeExpenses() {
   const typeExpensesArray = [];
   typeExpenses.map(data => {
-    typeExpensesArray.push({value:data.id, label:data.name});
+    typeExpensesArray.push(data);
     });
   return typeExpensesArray;
+}
+
+export function getPaymentMethods() {
+  const paymentMethodsArray = [];
+  paymentMethods.map(data => {
+    paymentMethodsArray.push({value:data.id, label:data.name});
+    });
+  return paymentMethodsArray;
 }
 
 export function getAccounts() {
