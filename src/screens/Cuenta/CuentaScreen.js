@@ -34,6 +34,7 @@ export default class CuentaScreen extends React.Component {
                   numerosTarjeta: '',
                   vencimientoTarjeta:'',
                   entidad: '',
+                  currency:1,
                   agregarTarjeta: false};
   }
 
@@ -47,6 +48,17 @@ export default class CuentaScreen extends React.Component {
     if(agregarTarjeta){
       this.setState({vencimientoTarjeta:'',
                         numerosTarjeta:''});
+    }
+  }
+  onChangeCurrency = ({ value }) =>{
+    let currency = value
+    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
+    this.setState({currency});
+    if(currency){
+     /* 
+      this.setState({vencimientoTarjeta:'',
+                        numerosTarjeta:''});
+      */
     }
   }
 
@@ -86,7 +98,10 @@ buttonPressed(){
       { label: 'SI', value: true},
       { label: 'NO', value: false }
   ];
-  
+  const optionsCurrency = [
+    { label: 'Pesos', value: 1},
+    { label: 'Dolares', value: 2 }
+  ];
 
     return (
       <View>
@@ -123,6 +138,8 @@ buttonPressed(){
               onChangeText={(saldoInicial) => this.setState({saldoInicial})}
               value={this.state.saldoInicial}
             />
+            <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+            <View style={{padding:5}}></View>
             <TextInput style={{height:30}}>Tarjeta de debito</TextInput>
             <SwitchSelector options={options} initial={1} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
            

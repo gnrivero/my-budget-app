@@ -49,6 +49,9 @@ export default class CardScreen extends React.Component {
             <View style={styles.info}>
               <Text style={styles.infoCard}>Vencimiento:</Text><Text>{item.dueDate}</Text>
             </View>
+            <View style={styles.info}>
+              <Text style={styles.infoCard}>Consumo:</Text><Text>$ {item.consumption}</Text>
+            </View>
           </View>
         </View>
       </TouchableHighlight>

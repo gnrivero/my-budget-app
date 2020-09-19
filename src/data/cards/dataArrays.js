@@ -6,7 +6,8 @@ export const cards = [
     issuer: "AMEX",
     expiryDate: "01/25",
     closeDate: "25/09/2020",
-    dueDate: "28/09/2020"
+    dueDate: "28/09/2020",
+    consumption: "2000,00"
  },
  {
      id: 2,
@@ -15,7 +16,8 @@ export const cards = [
      issuer: "VISA",
      expiryDate: "01/26",
      closeDate: "30/09/2020",
-     dueDate: "10/10/2020"
+     dueDate: "10/10/2020",
+     consumption: "2000,00"
   },
   {
      id: 3,
@@ -24,6 +26,7 @@ export const cards = [
      issuer: "VISA",
      expiryDate: "01/25",
      closeDate: "30/09/2020",
-     dueDate: "10/10/2020"
+     dueDate: "10/10/2020",
+     consumption: "2000,00"
     }
 ]

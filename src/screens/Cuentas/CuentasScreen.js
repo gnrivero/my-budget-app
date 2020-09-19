@@ -18,7 +18,7 @@ import {
 export default class CuentasScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('title')
+      title: navigation.getParam('name')
     };
   };
 
@@ -33,11 +33,22 @@ export default class CuentasScreen extends React.Component {
 
   renderCuentas = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
-      <View style={styles.CuentasItemContainer}>
-        <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
-        <Text style={styles.CuentaItemText}>{item.nombreCuenta}</Text>
-        <Text style={styles.CuentaItemTextDetail}>{item.entidad}</Text>
-        <Text style={styles.CuentaItemText}>$ {item.saldo}</Text>
+      <View style={styles.itemContainer}>
+        <View style={styles.infoContainer}>
+          <View style={styles.infoHead}>
+            <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
+            <Text style={styles.infoText}>{item.nombreCuenta}</Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbuCvu}</Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.infoTextDetail}>{item.entidad}</Text>
+            <View style={styles.infoRight}>
+              <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.saldo}</Text>
+            </View>
+          </View>
+        </View>
       </View>
     </TouchableHighlight>
 
@@ -61,6 +72,7 @@ export default class CuentasScreen extends React.Component {
             <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
           </View>
           <Text style={styles.cuentasInfo}>Mis {categoryName}:</Text>
+          <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
           <View style={{marginBottom: 40}}>
             <FlatList
               vertical

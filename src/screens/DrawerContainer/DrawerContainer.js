@@ -38,7 +38,7 @@ export default class DrawerContainer extends React.Component {
             title="CUENTAS"
             source={require('../../../assets/icons/account.png')}
             onPress={() => {
-             navigation.navigate('Cuentas');
+             navigation.navigate('Cuentas',{name: 'Cuentas'});
              navigation.closeDrawer();
             }}
           />
@@ -46,7 +46,7 @@ export default class DrawerContainer extends React.Component {
             title="INGRESOS"
             source={require('../../../assets/icons/ingresos.png')}
             onPress={() => {
-             navigation.navigate('Income');
+             navigation.navigate('Income',{name: 'Ingresos'});
              navigation.closeDrawer();
             }}
           />
