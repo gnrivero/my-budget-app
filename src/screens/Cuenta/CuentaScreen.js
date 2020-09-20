@@ -12,7 +12,6 @@ import {
 import styles from './styles';
 import {
   getEntities,
-  getCategoryName
 } from '../../data/MockDataAPI';
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
@@ -140,7 +139,7 @@ buttonPressed(){
             />
             <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
             <View style={{padding:5}}></View>
-            <TextInput style={{height:30}}>Tarjeta de debito</TextInput>
+            <Text style={{height:30}}>Tarjeta de debito</Text>
             <SwitchSelector options={options} initial={1} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
            
             {this.state.agregarTarjeta ? (

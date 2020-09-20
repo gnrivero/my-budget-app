@@ -8,7 +8,7 @@ export default class AddCardButton extends React.Component {
     return (
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={this.props.onPress}>
         <View style={styles.container}>
-          <Text style={styles.text}>Nueva Tarjeta</Text>
+          <Text style={styles.text}>{this.props.title}</Text>
         </View>
       </TouchableHighlight>
     );

@@ -50,5 +50,19 @@ export const RecipeCard = StyleSheet.create({
     borderBottomColor:'#ccc',
     borderBottomWidth:2,
     marginBottom:20,
-  }
+  },
+  smallInput: {
+    width: 40,
+    height:30,
+    borderBottomColor:'#ccc',
+    borderBottomWidth:2,
+    marginBottom:20,
+  },
+  mediumInput: {
+    height: 30,
+    width: 100,
+    borderBottomColor:'#ccc',
+    borderBottomWidth:2,
+    marginBottom:20,
+  },
 });

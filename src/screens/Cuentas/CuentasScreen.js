@@ -64,14 +64,13 @@ export default class CuentasScreen extends React.Component {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const cuentasArray = getCuentas();
-    const categoryName = navigation.getParam('name');
+    //const categoryName = navigation.getParam('name');
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
             <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
           </View>
-          <Text style={styles.cuentasInfo}>Mis {categoryName}:</Text>
           <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
           <View style={{marginBottom: 40}}>
             <FlatList
