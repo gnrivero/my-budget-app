@@ -6,7 +6,8 @@ import {
   Image,
   TextInput,
   Dimensions,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import styles from './styles';
 import {
@@ -45,34 +46,27 @@ export default class ModifyCardScreen extends React.Component {
 
   
 buttonPressed(){
- /* Alert.alert(this.state.typeExpenses +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - " + this.state.currency+" - " 
-  + this.state.paymentMethod +" - " +this.state.value +" - " +this.state.account +" - " +this.state.card + " - "+this.state.installments); 
-  */
-  /*
-  let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
+  Alert.alert(this.state.name +" - "+this.state.entity +" - " +this.state.lastFourNumbers +" - " +this.state.expiryDate 
+  +" - " + this.state.dueDate+" - " + this.state.closeDate ); 
+  
+  
+  //let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
-  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbu|| this.state.cbu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldoInicial || this.state.saldoInicial==''))
+
+  if ((!this.state.name|| this.state.name=='') || (!this.state.entity|| this.state.entity=='') 
+    || (!this.state.lastFourNumbers || this.state.lastFourNumbers=='') || (!this.state.expiryDate || this.state.expiryDate=='')||
+  (!this.state.dueDate || this.state.dueDate=='') || (!this.state.closeDate || this.state.closeDate==''))
   {
-    Alert.alert("Complete los campos faltantes de la cuenta")
+    Alert.alert("Complete los campos faltantes de la tarjeta")
   }
-   else if(!decimalreg.test(this.state.saldoInicial))
-    Alert.alert("ingrese un valor valido en el saldo"); 
+   else if(!numeroreg.test(this.state.lastFourNumbers) || this.state.lastFourNumbers.length!=4)
+      Alert.alert("ingrese un valor valido para los ultimos 4 digitos"); 
    
-    else if(this.state.agregarTarjeta){
-       if((!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')){
-        Alert.alert("Complete los campos faltantes de la cuenta")
-      }
-      else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
-        Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
-        Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
-      else
-        Alert.alert("Grabar con tarjeta");
-    }  
+    else if(!numeroreg.test(this.state.expiryDate) || this.state.expiryDate.length!=6 ||
+    (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 4)<2020))
+      Alert.alert("ingrese un valor valido para el vencimiento"); 
     else 
       Alert.alert("Grabar");
- */
 }
 
   render() {
@@ -100,7 +94,7 @@ buttonPressed(){
             />
             <View style={{flexDirection: 'row'}}>
               <View style={{flexDirection: 'row', flex:1}}>
-                <Text style={{height:30, paddingTop:5,}}>Ultimos 4 digitos: </Text>
+                <Text style={{height:30, marginBottom:10}}>Ultimos 4 digitos: </Text>
                 <TextInput 
                   keyboardType='decimal-pad'
                   maxLength ={4}
@@ -109,7 +103,7 @@ buttonPressed(){
                   value={this.state.lastFourNumbers}></TextInput>
               </View>
               <View style={{flexDirection: 'row', flex:1}}>
-                <Text style={{height:30, paddingTop:5,}}>Vencimiento: </Text>
+                <Text style={{height:30, marginBottom:10}}>Vencimiento: </Text>
                 <TextInput keyboardType='decimal-pad'
                       maxLength ={6}
                       style ={styles.mediumInput}
