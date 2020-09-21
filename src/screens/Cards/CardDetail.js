@@ -115,6 +115,8 @@ export default class CardDetailScreen extends React.Component {
           <CardDetailInfoScreen card={card}></CardDetailInfoScreen>
         </View>
         <View style={{height: 0.8, width: '100%', backgroundColor: '#C8C8C8'}}/>
+        <Text style={styles.cuentasInfo}>Consumos</Text>
+        <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
         <FlatList
            data={consumptions}
            renderItem={this.renderConsumptions}
