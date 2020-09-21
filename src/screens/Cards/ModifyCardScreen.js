@@ -10,12 +10,14 @@ import {
   Alert
 } from 'react-native';
 import styles from './styles';
+import {getCardId} from '../../data/cards/cardsAPI';
 import {
   getEntities,
 } from '../../data/MockDataAPI';
 
 import { Dropdown } from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
+import { setLightEstimationEnabled } from 'expo/build/AR';
 
 //import SaveCardButton from '../../components/CardButton/SaveCardButton';
 
@@ -35,6 +37,7 @@ export default class ModifyCardScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+                  id:'',
                   name:'',
                   entity: '',
                   lastFourNumbers:'',
@@ -44,6 +47,46 @@ export default class ModifyCardScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    const id = navigation.getParam('id');
+    if(id!= undefined){
+      this.getCard(id);
+    }
+    /*
+    let id = this.props.navigation.state.params.category
+    let result;
+    try {
+      result = await axios.request({
+        method: 'GET',
+        url: `https://developers.zomato.com/api/v2.1/search?category=${id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'user-key': "a31bd76da32396a27b6906bf0ca707a2",
+        },
+      })
+    } catch (err) {
+      err => console.log(err)
+    }
+    this.setState({
+      isLoading: false,
+      data: result.data.restaurants
+    })
+    */
+  }
+
+  getCard(id){
+  console.log('GetCard');
+  let card =getCardId(id);
+  console.log(card);
+    this.setState({id: card.id,
+                  name: card.name,
+                  entity: card.entity,
+                  lastFourNumbers: card.lastFourNumbers,
+                  expiryDate: card.expiryDate,
+                  dueDate: card.dueDate,
+                  closeDate: card.closeDate});
+  }
   
 buttonPressed(){
   Alert.alert(this.state.name +" - "+this.state.entity +" - " +this.state.lastFourNumbers +" - " +this.state.expiryDate 
@@ -62,14 +105,19 @@ buttonPressed(){
    else if(!numeroreg.test(this.state.lastFourNumbers) || this.state.lastFourNumbers.length!=4)
       Alert.alert("ingrese un valor valido para los ultimos 4 digitos"); 
    
-    else if(!numeroreg.test(this.state.expiryDate) || this.state.expiryDate.length!=6 ||
-    (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 4)<2020))
+    else if(!numeroreg.test(this.state.expiryDate) || this.state.expiryDate.length!=4 ||
+    (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 2)<20))
       Alert.alert("ingrese un valor valido para el vencimiento"); 
-    else 
-      Alert.alert("Grabar");
+    else {
+      if(!this.state.id || this.state.id=='')
+        Alert.alert("Grabar Nuevo");
+      else
+      Alert.alert("Grabar Update");
+    }
 }
 
   render() {
+
     const entitiesArray = getEntities();
     return (
       <View>
@@ -77,7 +125,7 @@ buttonPressed(){
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
             <Image style={styles.photoCards} source={require('../../data/cards.png')} />
           </View>
-          <Text style={styles.cuentasInfo}>Nueva cuenta:</Text>
+          <Text style={styles.cuentasInfo}>Cuenta:</Text>
           <View style={{marginBottom: 40, padding:10}}>
             <TextInput
               style ={styles.input}
@@ -105,9 +153,9 @@ buttonPressed(){
               <View style={{flexDirection: 'row', flex:1}}>
                 <Text style={{height:30, marginBottom:10}}>Vencimiento: </Text>
                 <TextInput keyboardType='decimal-pad'
-                      maxLength ={6}
-                      style ={styles.mediumInput}
-                      placeholder="MMAAAA"
+                      maxLength ={4}
+                      style ={styles.smallInput}
+                      placeholder="MMAA"
                       onChangeText={(expiryDate) => this.setState({expiryDate})}
                       value={this.state.expiryDate}
                 />

@@ -30,9 +30,14 @@ export default class CardScreen extends React.Component {
     };
   }
 
+  onPressCard = item => {
+    //lo llamo sin pasarle parametros
+    this.props.navigation.navigate('CardDetail',{name: 'Detalle tarjeta', itemCard:  item});
+  };
+
+
   renderCards = ({ item }) => (
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
-        <View style={styles.itemContainer}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
             <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
@@ -61,7 +66,6 @@ export default class CardScreen extends React.Component {
           </View>
 
         </View>
-      </View>
       </TouchableHighlight>
     );
 
@@ -77,7 +81,7 @@ export default class CardScreen extends React.Component {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const cards = getAllCards();
-    const categoryName = navigation.getParam('name');
+    //const categoryName = navigation.getParam('name');
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>

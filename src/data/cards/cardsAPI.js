@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 import React, { Component } from 'react';
-import { cards } from './dataArrays';
+import { cards, consumptions } from './dataArrays';
 
 export function getAllCards() {
   const cardsArray = [];
@@ -16,4 +16,25 @@ export function getAllCardsCombo() {
       cardsArray.push({value:data.id, label:data.name +' - ' + data.lastFourNumbers});
     });
   return cardsArray;
+}
+
+export function getConsumptions(id) {
+  const consumptionsArray = [];
+  consumptions.map(data => {
+    if(data.idCard == id){
+      consumptionsArray.push(data);
+    }
+  });
+  return consumptionsArray;
+}
+
+
+export function getCardId(id) {
+  let card = null;
+  cards.map(data => {
+    if(data.id == id){
+      card=data;
+    }
+  });
+  return card;
 }
