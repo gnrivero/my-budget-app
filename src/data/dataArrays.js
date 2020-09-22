@@ -92,6 +92,44 @@ export const entities = [
 
 ]
 
+export const transactions = [
+/* Poner movimientos de ingreso y egresos. AGREGAR A INGRESOS Y GASTOS UN CAMPO 
+DETALLE movimiento
+*/
+{
+  id: 1,
+  idAccount:1,
+  name: 'gasto', //esto o el tipo de gasto o ingreso
+  date: '20/09/2020',
+  value:'200,00',
+  transactionType: 1 // 1-ingreso 2-Egreso
+},
+{
+  id: 2,
+  idAccount:1,
+  name: 'gasto ggg',
+  date: '11/09/2020',
+  value:'100,00',
+  transactionType: 1 // 1-ingreso 2-Egreso
+},
+{
+  id: 3,
+  idAccount:1,
+  name: 'ingreso',
+  date: '08/09/2020',
+  value:'85,00',
+  transactionType: 2 // 1-ingreso 2-Egreso
+},
+{
+  id: 4,
+  idAccount:2,
+  name: 'gasto a',
+  date: '20/09/2020',
+  value:'70,00',
+  transactionType: 1 // 1-ingreso 2-Egreso
+},
+]
+
 export const categories = [
 
   {

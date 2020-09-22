@@ -85,16 +85,14 @@ export default class CardScreen extends React.Component {
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCards} source={require('../../data/cards.png')} />
-            <View style={{    position: 'absolute',
-          bottom: 5,
-          right: 5}}>
-              <AddCardButton title = {'Nueva Tarjeta'}
-                onPress={() => {
-                  let title = 'Nueva Tarjeta';
-                  this.props.navigation.navigate('ModifyCard', {title});
-                }}
-              />
+          <Image style={styles.photoCards} source={require('../../data/cards.png')} />
+          <View style={{    position: 'absolute', bottom: 5,  right: 5}}>
+            <AddCardButton title = {'Nueva Tarjeta'}
+              onPress={() => {
+                let title = 'Nueva Tarjeta';
+                this.props.navigation.navigate('ModifyCard', {title});
+              }}
+            />
          </View>
         </View>
         <FlatList

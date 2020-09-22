@@ -15,6 +15,8 @@ import {
   getCategoryName
 } from '../../data/MockDataAPI';
 
+import AddCardButton from '../../components/CardButton/AddCardButton';
+
 export default class CuentasScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -25,14 +27,14 @@ export default class CuentasScreen extends React.Component {
   constructor(props) {
     super(props);
   }
-
   onPressCuenta = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Cuenta');
+    this.props.navigation.navigate('CuentaDetail',{name: 'Detalle cuenta', itemCuenta:  item});
   };
 
+
   renderCuentas = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
+    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'  onPress={() => this.onPressCuenta(item)}>
       <View style={styles.itemContainer}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
@@ -66,32 +68,30 @@ export default class CuentasScreen extends React.Component {
     const cuentasArray = getCuentas();
     //const categoryName = navigation.getParam('name');
     return (
-      <View>
-        <ScrollView style={styles.mainContainer}>
-          <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
-          </View>
-          <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
-          <View style={{marginBottom: 40}}>
-            <FlatList
-              vertical
-              showsVerticalScrollIndicator={false}
-              numColumns={1}
-              data={cuentasArray}
-              renderItem={this.renderCuentas}
-              keyExtractor={item => `${item.id}`}
-              ItemSeparatorComponent={this.FlatListItemSeparator}
+      <ScrollView style={styles.mainContainer}>
+        <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
+          <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
+          <View style={{    position: 'absolute', bottom: 5,  right: 5}}>
+            <AddCardButton title = {'Nueva Cuenta'}
+              onPress={() => {
+                //let title = 'Nueva Tarjeta';
+                //this.props.navigation.navigate('ModifyCard', {title});
+                this.props.navigation.navigate('Cuenta');
+                
+              }}
             />
           </View>
-        </ScrollView>
-        <View style={[styles.footer]}>
-        <TouchableHighlight 
-          onPress={() => this.onPressCuenta()}
-        >
-          <Text style={{fontSize: 30, color: 'white', textAlign:'center'}}>Agregar +</Text>
-        </TouchableHighlight>
         </View>
-     </View>
+        <View>
+          <FlatList
+            data={cuentasArray}
+            renderItem={this.renderCuentas}
+            keyExtractor={item => `${item.id}`}
+            ItemSeparatorComponent={this.FlatListItemSeparator}
+          />
+        </View>
+      </ScrollView>
+
     );
   }
 }
