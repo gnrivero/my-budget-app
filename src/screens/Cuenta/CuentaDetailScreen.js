@@ -24,36 +24,20 @@ export class CuentaDetailInfoScreen extends React.Component {
     const { cuenta } = this.props;
     return(
       //this.props.card
-      <View style={styles.infoContainer}>
-<Text>Prueba</Text>
-{/*
-
+       <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
-            <Text style={styles.infoText}>{card.name}</Text>
-            <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
-            </View>
+            <Image source={require('../../../assets/icons/cuenta.png')} style={styles.cuentasItemIcon} /> 
+            <Text style={styles.infoText}>{cuenta.nombreCuenta}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{card.expiryDate}</Text>
-            <View style={styles.infoRight}>
-             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{card.closeDate}</Text>
-            </View>
+            <Text style={styles.infoTextDetail}>CBU/CVU: {cuenta.cbuCvu}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{card.dueDate}</Text>
+            <Text style={styles.infoTextDetail}>{cuenta.entidad}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>ARS: </Text><Text style={styles.infoText}>{card.consumption}</Text>
+              <Text style={styles.infoTextDetail}>{cuenta.currency==1?'ARS:':(cuenta.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{cuenta.saldo}</Text>
             </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.infoTextDetail}></Text>
-            <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>USD: </Text><Text style={styles.infoText}>{card.consumptionDolar}</Text>
-            </View>
-          </View>
- */}
         </View>
     );
   }
@@ -74,19 +58,20 @@ export default class CuentaDetailScreen extends React.Component {
   renderTransactions = ({ item }) => (
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
         <View style={styles.infoContainer}>
-          <Text>Preuba</Text>
- {/** 
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/consumptions.png')} style={styles.CardsItemIcon} /> 
+            {item.transactionType==1?
+            <Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} /> 
+            :
+            <Image source={require('../../../assets/icons/row-down.png')} style={styles.expensesItemIcon} /> 
+            }
             <Text style={styles.infoText}>{item.name}</Text>
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>Fecha: </Text><Text style={styles.infoText}>{item.date}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>{item.currency} </Text><Text style={styles.infoText}>{item.value}</Text>
+              <Text style={styles.infoText}>{item.value}</Text>
             </View>
           </View>
-  */}
         </View>
       </TouchableHighlight>
     );
@@ -123,7 +108,7 @@ export default class CuentaDetailScreen extends React.Component {
           <CuentaDetailInfoScreen cuenta={cuenta}></CuentaDetailInfoScreen>
         </View>
         <View style={{height: 0.8, width: '100%', backgroundColor: '#C8C8C8'}}/>
-        <Text style={styles.cuentasInfo}>Movimientos</Text>
+        <Text>Movimientos</Text>
         <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
         <FlatList
            data={transactions}

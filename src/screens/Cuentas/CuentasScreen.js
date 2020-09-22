@@ -38,14 +38,14 @@ export default class CuentasScreen extends React.Component {
       <View style={styles.itemContainer}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cuenta.png')} style={styles.CuentasItemIcon} /> 
+            <Image source={require('../../../assets/icons/cuenta.png')} style={styles.cuentasItemIcon} /> 
             <Text style={styles.infoText}>{item.nombreCuenta}</Text>
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbuCvu}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>{item.entidad}</Text>
+            <Text style={styles.infoTextDetail}>{item.nombreEntidad}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.saldo}</Text>
             </View>

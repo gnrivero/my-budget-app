@@ -90,7 +90,6 @@ export function getCuentas() {
   return cuentasArray;
 }
 
-
 export function getTransactions(id) {
   const transactionsArray = [];
   transactions.map(data => {
@@ -100,6 +99,17 @@ export function getTransactions(id) {
   });
   return transactionsArray;
 }
+
+export function getCuentadId(id) {
+  let cuenta = null;
+  cuentas.map(data => {
+    if(data.id == id){
+      cuenta=data;
+    }
+  });
+  return cuenta;
+}
+
 
 
 export function getNumberOfRecipes(categoryId) {

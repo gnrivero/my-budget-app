@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  FlatList,
   ScrollView,
   Text,
   View,
@@ -11,7 +10,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {
-  getEntities,
+  getEntities, getCuentadId
 } from '../../data/MockDataAPI';
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
@@ -27,7 +26,8 @@ export default class CuentaScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {nombreCuenta: '',
+    this.state = {id:'',
+                  nombreCuenta: '',
                   cbu: '',
                   saldoInicial: '',
                   numerosTarjeta: '',
@@ -35,6 +35,50 @@ export default class CuentaScreen extends React.Component {
                   entidad: '',
                   currency:1,
                   agregarTarjeta: false};
+  }
+
+  
+  componentDidMount() {
+    const { navigation } = this.props;
+    const id = navigation.getParam('id');
+    if(id!= undefined){
+      this.getCuenta(id);
+    }
+    /*
+    let id = this.props.navigation.state.params.category
+    let result;
+    try {
+      result = await axios.request({
+        method: 'GET',
+        url: `https://developers.zomato.com/api/v2.1/search?category=${id}`,
+        headers: {
+          'Content-Type': 'application/json',
+          'user-key': "a31bd76da32396a27b6906bf0ca707a2",
+        },
+      })
+    } catch (err) {
+      err => console.log(err)
+    }
+    this.setState({
+      isLoading: false,
+      data: result.data.restaurants
+    })
+    */
+  }
+  
+  getCuenta(id){
+  console.log('GetCuenta');
+  let cuenta =getCuentadId(id);
+  console.log(cuenta);
+  this.setState({id: cuenta.id,
+                  nombreCuenta: cuenta.nombreCuenta,
+                  cbu: cuenta.cbu,
+                  saldoInicial: cuenta.saldoInicial,
+                  numerosTarjeta: cuenta.numerosTarjeta,
+                  entidad: cuenta.entidad,
+                  currency: cuenta.currency,
+                  agregarTarjeta:cuenta.agregarTarjeta
+                });
   }
 
   onPressRecipe = item => {
@@ -79,7 +123,8 @@ buttonPressed(){
       }
       else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
         Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
+      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=4 || 
+      (this.state.vencimientoTarjeta.slice(0, 2)>12)|| (this.state.vencimientoTarjeta.slice(0, 2)<1) || (this.state.vencimientoTarjeta.slice(2, 4)<20))
         Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
       else
         Alert.alert("Grabar con tarjeta");
@@ -110,12 +155,14 @@ buttonPressed(){
           </View>
           <Text style={styles.cuentasInfo}>Nueva cuenta:</Text>
           <View style={{marginBottom: 40, padding:10}}>
+            
             <TextInput
               style ={styles.input}
               placeholder="Nombre referencia cuenta"
               onChangeText={(nombreCuenta) => this.setState({nombreCuenta})}
               value={this.state.nombreCuenta}
             />
+            
             <Dropdown
               placeholder='Seleccione entidad'
               data={entitiesArray}
@@ -152,9 +199,9 @@ buttonPressed(){
                 value={this.state.numerosTarjeta}
               />
               <TextInput keyboardType='decimal-pad'
-                maxLength ={6}
+                maxLength ={4}
                 style ={styles.input}
-                placeholder="Vencimiento MMAAAA"
+                placeholder="Vencimiento MMAA"
                 onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
                 value={this.state.vencimientoTarjeta}
               />

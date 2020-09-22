@@ -2,7 +2,8 @@ export const cuentas = [
   {
     id: 1,
     nombreCuenta: 'Cuentas a ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:1,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:1,
@@ -10,7 +11,8 @@ export const cuentas = [
   {
     id: 2,
     nombreCuenta: 'Cua ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
@@ -18,7 +20,8 @@ export const cuentas = [
   {
     id: 3,
     nombreCuenta: 'Cuentas 3 ',
-    entidad:'banco Xdsdsd',
+    nombreEntidad:'banco Xdsdsd',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:2,
@@ -27,14 +30,16 @@ export const cuentas = [
     id: 4,
     currency:2,
     nombreCuenta: 'Cuentas 4 ',
-    entidad:'aaa XXXX',
+    nombreEntidad:'aaa XXXX',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '450', 
   },
   {
     id: 5,
     currency:1,
-    nombreCuenta: 'Cuentas a5 ',
+    nombreEntidad: 'Cuentas a5 ',
+    entidad:1,
     entidad:'banco XXXX',
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
@@ -42,7 +47,8 @@ export const cuentas = [
   {
     id: 6,
     nombreCuenta: 'Cua6 ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
@@ -50,7 +56,8 @@ export const cuentas = [
   {
     id: 7,
     nombreCuenta: 'Cuentas 77 ',
-    entidad:'banco Xdsdsd',
+    nombreEntidad:'banco Xdsdsd',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:1
@@ -58,7 +65,8 @@ export const cuentas = [
   {
     id: 8,
     nombreCuenta: 'Cuentas 8 ',
-    entidad:'aaa XXXX',
+    nombreEntidad:'aaa XXXX',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     currency:1,
     saldo: '450', 
@@ -66,7 +74,8 @@ export const cuentas = [
   {
     id: 9,
     nombreCuenta: 'Cuentas 9a ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:1,
     cbuCvu: '15124615412351323431215',
     currency:2,
     saldo: '2450', 
@@ -102,7 +111,7 @@ DETALLE movimiento
   name: 'gasto', //esto o el tipo de gasto o ingreso
   date: '20/09/2020',
   value:'200,00',
-  transactionType: 1 // 1-ingreso 2-Egreso
+  transactionType: 2 // 1-ingreso 2-Egreso
 },
 {
   id: 2,
@@ -110,7 +119,7 @@ DETALLE movimiento
   name: 'gasto ggg',
   date: '11/09/2020',
   value:'100,00',
-  transactionType: 1 // 1-ingreso 2-Egreso
+  transactionType: 2 // 1-ingreso 2-Egreso
 },
 {
   id: 3,
@@ -118,7 +127,7 @@ DETALLE movimiento
   name: 'ingreso',
   date: '08/09/2020',
   value:'85,00',
-  transactionType: 2 // 1-ingreso 2-Egreso
+  transactionType: 1 // 1-ingreso 2-Egreso
 },
 {
   id: 4,
@@ -126,7 +135,7 @@ DETALLE movimiento
   name: 'gasto a',
   date: '20/09/2020',
   value:'70,00',
-  transactionType: 1 // 1-ingreso 2-Egreso
+  transactionType: 2 // 1-ingreso 2-Egreso
 },
 ]
 

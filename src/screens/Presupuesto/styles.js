@@ -51,7 +51,7 @@ info: {
     borderWidth: 0.5,
     borderRadius: 20,
   },
-  CuentasItemIcon: {
+  cuentasItemIcon: {
     margin:5,
     width:30,
     height:30,
