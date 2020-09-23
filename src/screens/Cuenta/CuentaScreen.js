@@ -191,12 +191,13 @@ buttonPressed(){
               placeholder="Saldo inicial"
               onChangeText={(saldo) => this.setState({saldo})}
               value={this.state.saldo}
+              editable={this.state.id==''?true:false}
             />
             {/*<SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />*/}
-            <SwitchSelector options={optionsCurrency} initial={this.state.opcionCurrency} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+            <SwitchSelector disabled={this.state.id!=''?true:false} options={optionsCurrency} initial={this.state.opcionCurrency} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
             <View style={{padding:5}}></View>
             <Text style={{height:30}}>Tarjeta de debito</Text>
-            <SwitchSelector options={options} initial={this.state.opcionDebito} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+            <SwitchSelector  options={options} initial={this.state.opcionDebito} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
            
             {this.state.agregarTarjeta ? (
             <View style={{padding:10}}>
