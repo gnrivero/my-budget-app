@@ -7,6 +7,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:1,
+    numerosTarjeta:'',
+    vencimientoTarjeta:''
   },
   {
     id: 2,
@@ -16,6 +18,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
+    numerosTarjeta:'1010',
+    vencimientoTarjeta:'1025'
   },
   {
     id: 3,
@@ -25,6 +29,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:2,
+    numerosTarjeta:'1008',
+    vencimientoTarjeta:'1135'
   },
   {
     id: 4,
@@ -34,6 +40,8 @@ export const cuentas = [
     entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '450', 
+    numerosTarjeta:'1777',
+    vencimientoTarjeta:'1222'
   },
   {
     id: 5,
@@ -43,6 +51,8 @@ export const cuentas = [
     entidad:'banco XXXX',
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
+    numerosTarjeta:'1700',
+    vencimientoTarjeta:'0125'
   },
   {
     id: 6,
@@ -52,6 +62,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
+    numerosTarjeta:'7000',
+    vencimientoTarjeta:'0222'
   },
   {
     id: 7,
@@ -60,7 +72,9 @@ export const cuentas = [
     entidad:2,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
-    currency:1
+    currency:1,
+    numerosTarjeta:'1111',
+    vencimientoTarjeta:'1122'
   },
   {
     id: 8,
@@ -70,6 +84,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     currency:1,
     saldo: '450', 
+    numerosTarjeta:'1011',
+    vencimientoTarjeta:'1125'
   },
   {
     id: 9,
@@ -79,6 +95,8 @@ export const cuentas = [
     cbuCvu: '15124615412351323431215',
     currency:2,
     saldo: '2450', 
+    numerosTarjeta:'1018',
+    vencimientoTarjeta:'0225'
   }
 ];
 export const entities = [

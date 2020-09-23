@@ -33,7 +33,7 @@ export class CuentaDetailInfoScreen extends React.Component {
             <Text style={styles.infoTextDetail}>CBU/CVU: {cuenta.cbuCvu}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>{cuenta.entidad}</Text>
+            <Text style={styles.infoTextDetail}>{cuenta.nombreEntidad}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>{cuenta.currency==1?'ARS:':(cuenta.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{cuenta.saldo}</Text>
             </View>

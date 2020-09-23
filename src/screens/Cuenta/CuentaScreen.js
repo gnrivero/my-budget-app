@@ -28,17 +28,19 @@ export default class CuentaScreen extends React.Component {
 
     this.state = {id:'',
                   nombreCuenta: '',
-                  cbu: '',
-                  saldoInicial: '',
+                  cbuCvu: '',
+                  saldo: '',
                   numerosTarjeta: '',
                   vencimientoTarjeta:'',
                   entidad: '',
                   currency:1,
-                  agregarTarjeta: false};
+                  opcionCurrency:0,
+                  agregarTarjeta: false,
+                  opcionDebito:1};
   }
 
   
-  componentDidMount() {
+  componentWillMount() {
     const { navigation } = this.props;
     const id = navigation.getParam('id');
     if(id!= undefined){
@@ -70,14 +72,20 @@ export default class CuentaScreen extends React.Component {
   console.log('GetCuenta');
   let cuenta =getCuentadId(id);
   console.log(cuenta);
+  console.log(cuenta.numerosTarjeta!='');
   this.setState({id: cuenta.id,
                   nombreCuenta: cuenta.nombreCuenta,
-                  cbu: cuenta.cbu,
-                  saldoInicial: cuenta.saldoInicial,
+                  cbuCvu: cuenta.cbuCvu,
+                  saldo: cuenta.saldo,
                   numerosTarjeta: cuenta.numerosTarjeta,
                   entidad: cuenta.entidad,
                   currency: cuenta.currency,
-                  agregarTarjeta:cuenta.agregarTarjeta
+                  numerosTarjeta:cuenta.numerosTarjeta,
+                  vencimientoTarjeta: cuenta.vencimientoTarjeta,
+                  opcionDebito:cuenta.numerosTarjeta!=''?0:1,
+                  opcionCurrency:cuenta.currency==1?0:1,
+                  agregarTarjeta:cuenta.numerosTarjeta!=''?true:false
+
                 });
   }
 
@@ -106,15 +114,15 @@ export default class CuentaScreen extends React.Component {
   }
 
 buttonPressed(){
-  //Alert.alert(this.state.entidad +" - "+this.state.cbu +" - " +this.state.nombreCuenta +" - "+this.state.saldoInicial +" - " + this.state.numerosTarjeta +" - " +this.state.vencimientoTarjeta); 
+  //Alert.alert(this.state.entidad +" - "+this.state.cbu +" - " +this.state.nombreCuenta +" - "+this.state.saldo +" - " + this.state.numerosTarjeta +" - " +this.state.vencimientoTarjeta); 
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
-  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbu|| this.state.cbu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldoInicial || this.state.saldoInicial==''))
+  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbuCvu|| this.state.cbuCvu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
+  (!this.state.saldo || this.state.saldo==''))
   {
     Alert.alert("Complete los campos faltantes de la cuenta")
   }
-   else if(!decimalreg.test(this.state.saldoInicial))
+   else if(!decimalreg.test(this.state.saldo))
     Alert.alert("ingrese un valor valido en el saldo"); 
    
     else if(this.state.agregarTarjeta){
@@ -174,20 +182,21 @@ buttonPressed(){
             <TextInput
               style ={styles.input}
               placeholder="CBU/CVU"
-              onChangeText={(cbu) => this.setState({cbu})}
-              value={this.state.cbu}
+              onChangeText={(cbuCvu) => this.setState({cbuCvu})}
+              value={this.state.cbuCvu}
             />
 
             <TextInput keyboardType='decimal-pad'
               style ={styles.input}
               placeholder="Saldo inicial"
-              onChangeText={(saldoInicial) => this.setState({saldoInicial})}
-              value={this.state.saldoInicial}
+              onChangeText={(saldo) => this.setState({saldo})}
+              value={this.state.saldo}
             />
-            <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+            {/*<SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />*/}
+            <SwitchSelector options={optionsCurrency} initial={this.state.opcionCurrency} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
             <View style={{padding:5}}></View>
             <Text style={{height:30}}>Tarjeta de debito</Text>
-            <SwitchSelector options={options} initial={1} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+            <SwitchSelector options={options} initial={this.state.opcionDebito} onPress={value => this.onChangeCard({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
            
             {this.state.agregarTarjeta ? (
             <View style={{padding:10}}>
