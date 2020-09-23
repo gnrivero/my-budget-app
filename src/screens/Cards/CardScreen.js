@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
+import CardService from '../../service/CardService';
 import {getAllCards} from '../../data/cards/cardsAPI';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
@@ -25,6 +26,15 @@ export default class CardScreen extends React.Component {
 
   constructor(props) {
     super(props);
+
+    console.log("Constructing Card Screen");
+    //Test de la DB
+    const service = new CardService();
+    service.getAllCards();
+    service.updateCard(2, 'Visa Signature','Banco Galicia','7890', '01/25', '04-10-2020', '11-10-2020');
+    service.getCardById(2);
+    //FIN: Test de la DB
+
     this.state = {
       activeSlide: 0
     };
