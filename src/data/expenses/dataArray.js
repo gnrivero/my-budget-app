@@ -1,4 +1,4 @@
-export const typeExpenses = [
+export const paymentMethods = [
    {
       value : 1,
       label: 'Contado',
@@ -25,7 +25,7 @@ export const typeExpenses = [
    },
 ]
 
-export const paymentMethods = [
+export const typeExpenses= [
    {
       id:1,
       name: 'Impuestos Nacionales',
@@ -70,9 +70,10 @@ export const expenses = [
       id: 1,
       typeExpenses: 1, //alquiler,sueldo,...,etc
       typeExpensesName: 'Impuestos Nacionales', //alquiler,sueldo,...,etc
+      detail: 'Bienes personales',
       value: '515,80',
       date: "01/09/2020",
-      currency: "ARS",   
+      currency: 1,    //1 Pesos, dolares 2
       paymentMethod: '2',
       paymentMethodName: 'Tarjeta Debito',
    },
@@ -80,9 +81,10 @@ export const expenses = [
       id: 2,
       typeExpenses: 5, //Impuestos, servicios,...,etc
       typeExpensesName: 'Comida', 
+      detail: 'compra fin de semana',
       value: '500,80',
       date: "08/09/2020",
-      currency: "ARS",   
+      currency: 1,   
       paymentMethod: '1',
       paymentMethodName: 'Contado',
    },
@@ -90,9 +92,10 @@ export const expenses = [
       id: 3,
       typeExpenses: 5, //Impuestos, servicios,...,etc
       typeExpensesName: 'Comida', 
+      detail: 'desayuno',
       value: '87,80',
       date: "08/09/2020",
-      currency: "ARS",   
+      currency: 1,   
       paymentMethod: '2',
       paymentMethodName: 'Tarjeta Credito',
    },
@@ -100,9 +103,10 @@ export const expenses = [
       id: 4,
       typeExpenses: 5, //Impuestos, servicios,...,etc
       typeExpensesName: 'Comida', 
+      detail: 'Cena',
       value: '10,80',
       date: "08/09/2020",
-      currency: "ARS",   
+      currency: 1,   
       paymentMethod: '3',
       paymentMethodName: 'Tarjeta Debito',
    }

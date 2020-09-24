@@ -40,11 +40,12 @@ export const income = [
     id: 1,
     typeIncome: 1, //alquiler,sueldo,...,etc
     typeIncomeName: 'Alquiler', //alquiler,sueldo,...,etc
+    detail: 'Cobro alquiler',
     monthly : true, //Mensual=true, Ocacional = false
     value: '515,80',
     date: "01/09/2020",
     cash: true,
-    currency: "USD", //1 Pesos, dolares 2
+    currency: 2, //1 Pesos, dolares 2
     account: 0,
     nombreCuenta: ''
  },
@@ -52,12 +53,13 @@ export const income = [
    id: 2,
    typeIncome: 2,  //alquiler,sueldo,...,etc
    typeIncomeName: 'Sueldo', //alquiler,sueldo,...,etc
+   detail: 'Sueldo Septiembre',
    monthly : true, //Mensual=true, Ocacional = false
    value: '15,80',
    date: "02/09/2020",
    cash: false,
    account: 1, //id de la cuenta de ingreso
-   currency: "ARS", //1 Pesos, dolares 2
-   nombreCuenta: '' //nombre de la cuenta de referencia
+   currency: 1, //1 Pesos, dolares 2
+   nombreCuenta: 'Cuenta Banco a' //nombre de la cuenta de referencia
    }
 ]

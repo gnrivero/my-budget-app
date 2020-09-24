@@ -20,7 +20,7 @@ import AddCardButton from '../../components/CardButton/AddCardButton';
 export default class CuentasScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('name')
+      title: 'Mis ' + navigation.getParam('name')
     };
   };
 
@@ -64,7 +64,7 @@ export default class CuentasScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const item = navigation.getParam('category');
+    //const item = navigation.getParam('category');
     const cuentasArray = getCuentas();
     //const categoryName = navigation.getParam('name');
     return (
@@ -74,24 +74,21 @@ export default class CuentasScreen extends React.Component {
           <View style={{    position: 'absolute', bottom: 5,  right: 5}}>
             <AddCardButton title = {'Nueva Cuenta'}
               onPress={() => {
-                //let title = 'Nueva Tarjeta';
+                let title = 'Nueva Cuenta';
                 //this.props.navigation.navigate('ModifyCard', {title});
-                this.props.navigation.navigate('Cuenta');
+                this.props.navigation.navigate('Cuenta',{title});
                 
               }}
             />
           </View>
         </View>
-        <View>
-          <FlatList
-            data={cuentasArray}
-            renderItem={this.renderCuentas}
-            keyExtractor={item => `${item.id}`}
-            ItemSeparatorComponent={this.FlatListItemSeparator}
-          />
-        </View>
+        <FlatList
+          data={cuentasArray}
+          renderItem={this.renderCuentas}
+          keyExtractor={item => `${item.id}`}
+          ItemSeparatorComponent={this.FlatListItemSeparator}
+        />
       </ScrollView>
-
     );
   }
 }

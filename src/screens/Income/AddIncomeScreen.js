@@ -22,7 +22,7 @@ import DatePicker from 'react-native-datepicker';
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('name')
+      title: navigation.getParam('title')
     };
   };
 
@@ -61,10 +61,7 @@ export default class AddIncomeScreen extends React.Component {
     //Alert.alert('Call onPress with value:' + cash    );
     this.setState({cash});
     if(cash){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
+      this.setState({account:''});
     }
   }
 
@@ -114,7 +111,7 @@ buttonPressed(){
     const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const accountsArray = getAccounts();
+    const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
     const typeIncome = getTypeIncome();
     const optionsMontly = [
       { label: 'Mensual', value: true},
@@ -187,13 +184,15 @@ buttonPressed(){
               onChangeText={(value) => this.setState({value})}
               value={this.state.value}
             />
-            <Dropdown
-              placeholder='Seleccione entidad'
-              data={accountsArray}
-              value={this.state.account}
-              onChangeText={(cuenta) => this.setState({account:cuenta})}
-              style ={styles.input}
-            />
+            {!this.state.cash?(
+              <Dropdown
+                placeholder='Seleccione cuenta'
+                data={accountsArray}
+                value={this.state.account}
+                onChangeText={(cuenta) => this.setState({account:cuenta})}
+                style ={styles.input}
+              />
+            ): null}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
