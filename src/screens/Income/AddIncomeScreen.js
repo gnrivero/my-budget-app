@@ -88,8 +88,7 @@ buttonPressed(){
     Alert.alert("Complete los campos faltantes del ingreso")
   }
   else if(!decimalreg.test(this.state.value))
-  Alert.alert("ingrese un valor valido para el monto"); 
-  
+    Alert.alert("ingrese un valor valido para el monto"); 
   else if(!this.state.cash){
       if((!this.state.account  || this.state.account=='')){
       Alert.alert("Complete los campos faltantes del ingreso")
@@ -100,6 +99,7 @@ buttonPressed(){
   else 
     Alert.alert("Grabar Efectivo");
 }
+
   
   render() {
     const mes = new Date().getMonth();

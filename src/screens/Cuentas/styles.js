@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft:5,
     marginTop:5
-
   },
   photoCuentas: {
     width: '100%',

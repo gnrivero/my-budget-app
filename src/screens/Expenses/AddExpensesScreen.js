@@ -28,7 +28,7 @@ import DatePicker from 'react-native-datepicker';
 export default class AddExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('name')
+      title: navigation.getParam('title')
     };
   };
 
