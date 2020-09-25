@@ -194,7 +194,7 @@ render() {
               />
               <View>
                 <View style={{flexDirection: 'row', flex:1, padding:10}}>
-                  <Text style={{height:30, marginBottom:10}}>Día vencimiento cuota</Text>
+                  <Text style={{height:30, marginBottom:10}}>Día de vencimiento: </Text>
                   <TextInput keyboardType='decimal-pad'
                     maxLength ={4}
                     style ={styles.smallInput}

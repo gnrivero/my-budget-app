@@ -52,10 +52,10 @@ export default class LoansScreen extends React.Component {
           {!item.lender?
             (
               <View style={styles.info}>
-                <Text style={styles.infoTextDetail}>Fecha de vencimiento</Text><Text style={styles.infoText}>{item.expirationDay}</Text>
-                <Text style={styles.infoTextDetail}>cuota </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>
+                <Text style={styles.infoTextDetail}>Día de vencimiento: </Text><Text style={styles.infoText}>{item.expirationDay}</Text>
+                <Text style={styles.infoTextDetail}>cuota: </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>
                 <View style={styles.infoRight}>
-                  <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.monthlyFee}</Text>
+                  <Text style={styles.infoTextDetail}>Valor cuota: {item.currency==1?'ARS':(item.currency==2)?'USD':''} </Text><Text style={styles.infoText}>{item.monthlyFee}</Text>
                 </View>
               </View>
           )
