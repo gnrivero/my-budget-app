@@ -54,7 +54,7 @@ export default class DrawerContainer extends React.Component {
               title="TARJETAS"
               source={require('../../../assets/icons/tarjetas.png')}
               onPress={() => {
-                navigation.navigate('Cards');
+                navigation.navigate('Cards',{name: 'Tarjetas'});
                 navigation.closeDrawer();
               }}
             />
@@ -62,7 +62,7 @@ export default class DrawerContainer extends React.Component {
             title="PRESUPUESTOS"
             source={require('../../../assets/icons/presupuesto.png')}
             onPress={() => {
-                navigation.navigate('Presupuesto');
+                navigation.navigate('Presupuesto',{name: 'Presupuestos'});
                 navigation.closeDrawer();
             }}
           />
@@ -70,7 +70,7 @@ export default class DrawerContainer extends React.Component {
             title="INVERSIONES"
             source={require('../../../assets/icons/inversiones.png')}
             onPress={() => {
-             navigation.navigate('Investments');
+             navigation.navigate('Investments',{name: 'Inversiones'});
              navigation.closeDrawer();
             }}
           />

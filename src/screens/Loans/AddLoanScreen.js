@@ -21,7 +21,7 @@ import DatePicker from 'react-native-datepicker';
 export default class AddLoanScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('name')
+      title: navigation.getParam('title')
     };
   };
 
@@ -38,6 +38,7 @@ export default class AddLoanScreen extends React.Component {
                   amountFees: '',
                   debit:false,
                   account:'',
+                  expirationDay:''
                 };
   }
 
@@ -81,33 +82,56 @@ export default class AddLoanScreen extends React.Component {
   }
 
 buttonPressed(){
-  Alert.alert(this.state.reference +" - " + this.state.lender +" - "+/*this.state.date +" - " */ + this.state.currency+" - " 
-  + this.state.value +" - " +this.state.amountFees +" - " +this.state.monthlyFee +" - " +this.state.debit + " - "+this.state.account); 
-  /*
+  Alert.alert(this.state.reference +" - " + this.state.lender +" - "+ this.state.currency+" - " + this.state.value +" - " +
+  this.state.amountFees +" - " +this.state.monthlyFee +" - " +this.state.debit + " - "+this.state.account+ " - "+this.state.expirationDay); 
+  
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
-  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbu|| this.state.cbu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldoInicial || this.state.saldoInicial==''))
+  if ((!this.state.reference|| this.state.reference=='') || (!this.state.lender|| this.state.lender=='') || (!this.state.currency || this.state.currency=='') ||
+  (!this.state.value || this.state.value=='') )
   {
-    Alert.alert("Complete los campos faltantes de la cuenta")
+    Alert.alert("Complete los campos faltantes del prestamo");
   }
-   else if(!decimalreg.test(this.state.saldoInicial))
-    Alert.alert("ingrese un valor valido en el saldo"); 
-   
-    else if(this.state.agregarTarjeta){
-       if((!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')){
-        Alert.alert("Complete los campos faltantes de la cuenta")
+  else{ 
+    if(!this.state.lender){
+      if ((!this.state.amountFees || this.state.amountFees=='') || (!this.state.monthlyFee || this.state.monthlyFee=='') ||
+      (!this.state.debit || this.state.debit=='') || (!this.state.expirationDay || this.state.expirationDay=='')){
+        Alert.alert("Complete los campos faltantes del prestamo")
+      }else if(this.state.debit){
+        if( (!this.state.account || this.state.account=='')){
+          Alert.alert("Complete los campos faltantes del prestamo")
+        }
+        else if(!numeroreg.test(this.state.amountFees))
+          Alert.alert("ingrese un valor valido en la cantidad de cuotas"); 
+        else if(!decimalreg.test(this.state.value))
+          Alert.alert("ingrese un valor valido en el monto"); 
+        else if(!decimalreg.test(this.state.monthlyFee))
+          Alert.alert("ingrese un valor valido en la cuota");
+        else if(!numeroreg.test(this.state.expirationDay) || this.state.expirationDay.length!=2 ||
+        (this.state.expirationDay.slice(0, 2)>31)|| (this.state.expiryDate.slice(0, 2)<1))
+          Alert.alert("ingrese un valor valido dia vencimineto");
+        else
+          Alert.alert("Graba prestamo Tomado y devitado");
+      }else{
+        if(!numeroreg.test(this.state.amountFees))
+          Alert.alert("ingrese un valor valido en la cantidad de cuotas"); 
+        else if(!decimalreg.test(this.state.value))
+          Alert.alert("ingrese un valor valido en el monto"); 
+        else if(!decimalreg.test(this.state.monthlyFee))
+          Alert.alert("ingrese un valor valido en la cuota");
+        else if(!numeroreg.test(this.state.expirationDay) || this.state.expirationDay.length!=2 ||
+        (this.state.expirationDay.slice(0, 2)>31)|| (this.state.expiryDate.slice(0, 2)<1))
+          Alert.alert("ingrese un valor valido dia vencimineto");
+        else
+          Alert.alert("Graba prestamo Tomado sin debito");
       }
-      else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
-        Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
-        Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
+    }else{
+      if(!decimalreg.test(this.state.value))
+          Alert.alert("ingrese un valor valido en el monto"); 
       else
-        Alert.alert("Grabar con tarjeta");
-    }  
-    else 
-      Alert.alert("Grabar");
- */
+        Alert.alert("Graba prestamo dado");
+    }
+  }
 }
   
 render() {
@@ -145,30 +169,6 @@ render() {
           />
           <SwitchSelector options={optionsLender} initial={1} onPress={value => this.onChangeLender({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
           <View style={{padding:5}}></View>
-         {/*  <DatePicker
-            style={{marginBottom: 10}}
-            date={this.state.date} //initial date from state
-            mode="date" //The enum of date, datetime and time
-            placeholder="Seleccione una fecha"
-            format="DD-MM-YYYY"
-            minDate="01-01-2020"
-            
-            confirmBtnText="Confirmar"
-            cancelBtnText="Cancelar"
-            customStyles={{
-                dateIcon: {
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0
-                },
-                dateInput: {
-                marginLeft: 36
-                }
-            }}
-            onDateChange={(date) => {this.setState({date: date})}}
-          />
-          */}
           <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
 
           <TextInput keyboardType='decimal-pad'
@@ -177,36 +177,48 @@ render() {
               onChangeText={(value) => this.setState({value})}
               value={this.state.value}
           />
-          <TextInput keyboardType='decimal-pad'
-              style ={styles.input}
-              placeholder="Cantidad de cuotas"
-              onChangeText={(amountFees) => this.setState({amountFees})}
-              value={this.state.amountFees}
-          />
           
-          <TextInput keyboardType='decimal-pad'
-              style ={styles.input}
-              placeholder="Importe Cuota"
-              onChangeText={(monthlyFee) => this.setState({monthlyFee})}
-              value={this.state.monthlyFee}
-          />
           {!this.state.lender ? (
-            <View style={{padding:10}}>
-          
-              <Text style={styles.cuentasInfo}>Debito en cuenta</Text>
-              <SwitchSelector options={optionsDebit} initial={1} onPress={value => this.onChangeDebit({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
-                
-              {this.state.debit ? (
-                <View style={{padding:10}}>
-                  <Dropdown
-                    placeholder='Seleccione cuenta'
-                    data={accountsArray}
-                    value={this.state.account}
-                    onChangeText={(cuenta) => this.setState({account:cuenta})}
-                    style ={styles.input}
-                 />
+            <View>
+              <TextInput keyboardType='decimal-pad'
+                style ={styles.input}
+                placeholder="Cantidad de cuotas"
+                onChangeText={(amountFees) => this.setState({amountFees})}
+                value={this.state.amountFees}
+              />
+              <TextInput keyboardType='decimal-pad'
+                style ={styles.input}
+                placeholder="Importe Cuota"
+                onChangeText={(monthlyFee) => this.setState({monthlyFee})}
+                value={this.state.monthlyFee}
+              />
+              <View>
+                <View style={{flexDirection: 'row', flex:1, padding:10}}>
+                  <Text style={{height:30, marginBottom:10}}>Día de vencimiento: </Text>
+                  <TextInput keyboardType='decimal-pad'
+                    maxLength ={4}
+                    style ={styles.smallInput}
+                    placeholder="DD"
+                    onChangeText={(expirationDay) => this.setState({expirationDay})}
+                    value={this.state.expirationDay}
+                  />
                 </View>
-              ) : null}
+              </View>
+              <View style={{padding:10}}>
+                <Text style={styles.cuentasInfo}>Debito en cuenta</Text>
+                <SwitchSelector options={optionsDebit} initial={1} onPress={value => this.onChangeDebit({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+                {this.state.debit ? (
+                  <View style={{padding:10}}>
+                    <Dropdown
+                      placeholder='Seleccione cuenta'
+                      data={accountsArray}
+                      value={this.state.account}
+                      onChangeText={(cuenta) => this.setState({account:cuenta})}
+                      style ={styles.input}
+                  />
+                  </View>
+                ) : null}
+              </View>
             </View>
             ) : null}
           </View>

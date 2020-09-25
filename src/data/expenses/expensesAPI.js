@@ -13,7 +13,7 @@ export function getAllExpenses() {
 export function getTypeExpenses() {
   const typeExpensesArray = [];
   typeExpenses.map(data => {
-    typeExpensesArray.push(data);
+    typeExpensesArray.push({value:data.id, label:data.name});
     });
   return typeExpensesArray;
 }
@@ -21,7 +21,7 @@ export function getTypeExpenses() {
 export function getPaymentMethods() {
   const paymentMethodsArray = [];
   paymentMethods.map(data => {
-    paymentMethodsArray.push({value:data.id, label:data.name});
+    paymentMethodsArray.push(data);
     });
   return paymentMethodsArray;
 }

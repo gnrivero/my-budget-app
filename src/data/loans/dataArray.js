@@ -73,10 +73,10 @@ export const loans = [
       value: '515,80',
       date: "01/09/2020",
       expirationDay: "01", /// va o tomamos la fecha que lo da de alta????
-      currency: "ARS",   
-      monthlyFee: '25,80',
-      amountFees: '24',
-      amountPaid: '1'
+      currency: 1,   
+      monthlyFee: '',
+      amountFees: '',
+      amountPaid: ''
    },
    {
       id: 2,
@@ -85,7 +85,7 @@ export const loans = [
       value: '1000,00',
       date: "05/08/2020",
       expirationDay: "01", /// va o tomamos la fecha que lo da de alta????
-      currency: "ARS",   
+      currency: 1,   
       monthlyFee: '100,00',
       amountFees: '12',
       amountPaid: '2'
@@ -97,7 +97,7 @@ export const loans = [
       value: '5000,00',
       date: "08/04/2020",
       expirationDay: "01", /// va o tomamos la fecha que lo da de alta????
-      currency: "ARS",   
+      currency: 1,   
       monthlyFee: '300,00',
       amountFees: '20',
       amountPaid: '5'

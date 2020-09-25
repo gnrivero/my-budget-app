@@ -22,7 +22,7 @@ import DatePicker from 'react-native-datepicker';
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: navigation.getParam('name')
+      title: navigation.getParam('title')
     };
   };
 
@@ -61,10 +61,7 @@ export default class AddIncomeScreen extends React.Component {
     //Alert.alert('Call onPress with value:' + cash    );
     this.setState({cash});
     if(cash){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
+      this.setState({account:''});
     }
   }
 
@@ -82,39 +79,33 @@ export default class AddIncomeScreen extends React.Component {
   }
 
 buttonPressed(){
-  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detalle +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
-  /*
-  let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
+  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
+    let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
-  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbu|| this.state.cbu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldoInicial || this.state.saldoInicial==''))
+  if ((!this.state.typeIncome|| this.state.typeIncome=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
+  (!this.state.value || this.state.value==''))
   {
-    Alert.alert("Complete los campos faltantes de la cuenta")
+    Alert.alert("Complete los campos faltantes del ingreso")
   }
-   else if(!decimalreg.test(this.state.saldoInicial))
-    Alert.alert("ingrese un valor valido en el saldo"); 
-   
-    else if(this.state.agregarTarjeta){
-       if((!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')){
-        Alert.alert("Complete los campos faltantes de la cuenta")
-      }
-      else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
-        Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=6 )
-        Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
-      else
-        Alert.alert("Grabar con tarjeta");
-    }  
-    else 
-      Alert.alert("Grabar");
- */
+  else if(!decimalreg.test(this.state.value))
+    Alert.alert("ingrese un valor valido para el monto"); 
+  else if(!this.state.cash){
+      if((!this.state.account  || this.state.account=='')){
+      Alert.alert("Complete los campos faltantes del ingreso")
+    }
+    else
+      Alert.alert("Grabar con Cuenta");
+  }  
+  else 
+    Alert.alert("Grabar Efectivo");
 }
+
   
   render() {
     const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const accountsArray = getAccounts();
+    const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
     const typeIncome = getTypeIncome();
     const optionsMontly = [
       { label: 'Mensual', value: true},
@@ -187,13 +178,15 @@ buttonPressed(){
               onChangeText={(value) => this.setState({value})}
               value={this.state.value}
             />
-            <Dropdown
-              placeholder='Seleccione entidad'
-              data={accountsArray}
-              value={this.state.account}
-              onChangeText={(cuenta) => this.setState({account:cuenta})}
-              style ={styles.input}
-            />
+            {!this.state.cash?(
+              <Dropdown
+                placeholder='Seleccione cuenta'
+                data={accountsArray}
+                value={this.state.account}
+                onChangeText={(cuenta) => this.setState({account:cuenta})}
+                style ={styles.input}
+              />
+            ): null}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
