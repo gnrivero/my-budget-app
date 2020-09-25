@@ -26,15 +26,6 @@ export default class CardScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
-    console.log("Constructing Card Screen");
-    //Test de la DB
-    const service = new CardService();
-    service.getAllCards();
-    service.updateCard(2, 'Visa Signature','Banco Galicia','7890', '01/25', '04-10-2020', '11-10-2020');
-    service.getCardById(2);
-    //FIN: Test de la DB
-
     this.state = {
       activeSlide: 0
     };

@@ -8,13 +8,22 @@ import * as SQLite from 'expo-sqlite';
 */
 export default class DBConnector {
 
+    static connection;
+
     static connect() {
-        return SQLite.openDatabase("MyBudgetApp.db",
-                                        "1.0",
-                                        "My Budget",
-                                        200000,
-                                        () => {console.log("OK CONN")},
-                                        () => {console.log("ERR CONN")});
+
+        if (this.connection === undefined){
+            console.log("DBConnector: Creating new connection");
+            this.connection = SQLite.openDatabase("MyBudgetApp.db",
+                                                   "1.0",
+                                                   "My Budget",
+                                                   200000,
+                                                   () => {console.log("OK CONN")},
+                                                   () => {console.log("ERR CONN")});
+        }
+
+        console.log("DBConnector: returning connection");
+        return this.connection;
     }
 
 }

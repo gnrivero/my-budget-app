@@ -6,7 +6,6 @@ export default class CardService {
 
     constructor(){
         this.db = DBConnector.connect();
-        this.generateTable();//IMPORTANTE: Usar la 1era vez para generar los datos, luego comentar.
     }
 
     createCard(name, issuer, lastFourNumbers, expiryDate, closeDate, dueDate){
@@ -86,7 +85,7 @@ export default class CardService {
 
     }
 
-    generateTable(){
+    test(){
 
         console.log("Dropping table Cards");
         this.db.transaction(
@@ -121,5 +120,9 @@ export default class CardService {
         this.createCard('AMEX Black', 'Banco Galicia', '1234', '01/24', '24-09-2020', '28-09-2020');
         this.createCard('Visa Signature','Banco Galicia','7890', '01/25', '01-10-2020', '11-10-2020');
         this.createCard('Master Black', 'Mercado Pago', '4567', '01/23', '02-10-2020', '12-10-2020');
+
+        this.getAllCards();
+        this.updateCard(2, 'Visa Signature','Banco Galicia','7890', '01/25', '04-10-2020', '11-10-2020');
+        this.getCardById(2);
     }
 }
