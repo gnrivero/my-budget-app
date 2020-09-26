@@ -32,7 +32,7 @@ export default class InvestmentScreen extends React.Component {
 
   onPressInvestment = item => {
     //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('investmentDetail',{name: 'Detalle Inversión', itemInvestment:  item});
+    this.props.navigation.navigate('InvestmentDetail',{name: 'Detalle Inversión', itemInvestment:  item});
   };
 
 

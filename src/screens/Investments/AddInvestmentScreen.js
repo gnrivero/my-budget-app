@@ -151,30 +151,32 @@ export default class AddInvestmentScreen extends React.Component {
                 value={this.state.amountCredited}
                 //editable={this.state.id==''?true:false}
               />
-              <Text style={styles.cuentasInfo}>Fecha de vencimiento</Text>
-              <DatePicker
-                style={{marginBottom: 10}}
-                date={this.state.date} //initial date from state
-                mode="date" //The enum of date, datetime and time
-                placeholder="Seleccione una fecha"
-                format="DD-MM-YYYY"
-                minDate="01-01-2020"
-                
-                confirmBtnText="Confirmar"
-                cancelBtnText="Cancelar"
-                customStyles={{
-                  dateIcon: {
-                    position: 'absolute',
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0
-                  },
-                  dateInput: {
-                    marginLeft: 36
-                  }
-                }}
-                onDateChange={(date) => {this.setState({dueDate: date})}}
-              />
+              <View style={{flexDirection:'row'}}>
+                <Text style={styles.cuentasInfo}>Fecha de vencimiento</Text>
+                <DatePicker
+                  style={{marginBottom: 10}}
+                  date={this.state.dueDate} //initial date from state
+                  mode="date" //The enum of date, datetime and time
+                  placeholder="Seleccione una fecha"
+                  format="DD-MM-YYYY"
+                  minDate="01-01-2020"
+                  
+                  confirmBtnText="Confirmar"
+                  cancelBtnText="Cancelar"
+                  customStyles={{
+                    dateIcon: {
+                      position: 'absolute',
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0
+                    },
+                    dateInput: {
+                      marginLeft: 36
+                    }
+                  }}
+                  onDateChange={(date) => {this.setState({dueDate: date})}}
+                />
+              </View>
               <Dropdown
                 placeholder='Seleccione cuenta para acreditar'
                 data={accountsArray}

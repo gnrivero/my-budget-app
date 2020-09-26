@@ -33,6 +33,7 @@ export const investments = [
     currency: 1,
     symbol:'',
     account: 1,
+    accountName: 'Cuentas a ',
     type: 1
  },
  {
@@ -44,6 +45,8 @@ export const investments = [
     amountCredited: null,
     currency: 1,
     symbol:'',
+    account: null,
+    accountName: null,
     type: 2
   },
   {
@@ -55,6 +58,8 @@ export const investments = [
     amountCredited: null,
     currency: 1,
     symbol: "YPFD",
+    account: null,
+    accountName: null,
     type: 3
   },
   {
@@ -66,6 +71,8 @@ export const investments = [
     amountCredited: null,
     currency: 1,
     symbol: "EDN",
+    account: null,
+    accountName: null,
     type: 3
   }
 ]
