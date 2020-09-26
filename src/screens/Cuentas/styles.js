@@ -36,8 +36,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     height: 25,
   },
-
-  CuentasItemIcon: {
+  cuentasItemIcon: {
     paddingTop:5,
     marginRight: 5,
     width:30,
@@ -55,7 +54,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft:5,
     marginTop:5
-
   },
   photoCuentas: {
     width: '100%',

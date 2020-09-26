@@ -2,74 +2,101 @@ export const cuentas = [
   {
     id: 1,
     nombreCuenta: 'Cuentas a ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:1,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:1,
+    numerosTarjeta:'',
+    vencimientoTarjeta:''
   },
   {
     id: 2,
     nombreCuenta: 'Cua ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
+    numerosTarjeta:'1010',
+    vencimientoTarjeta:'1025'
   },
   {
     id: 3,
     nombreCuenta: 'Cuentas 3 ',
-    entidad:'banco Xdsdsd',
+    nombreEntidad:'banco Xdsdsd',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
     currency:2,
+    numerosTarjeta:'1008',
+    vencimientoTarjeta:'1135'
   },
   {
     id: 4,
     currency:2,
     nombreCuenta: 'Cuentas 4 ',
-    entidad:'aaa XXXX',
+    nombreEntidad:'aaa XXXX',
+    entidad:3,
     cbuCvu: '15124615412351323431215',
     saldo: '450', 
+    numerosTarjeta:'1777',
+    vencimientoTarjeta:'1222'
   },
   {
     id: 5,
     currency:1,
-    nombreCuenta: 'Cuentas a5 ',
+    nombreEntidad: 'Cuentas a5 ',
+    entidad:1,
     entidad:'banco XXXX',
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
+    numerosTarjeta:'1700',
+    vencimientoTarjeta:'0125'
   },
   {
     id: 6,
     nombreCuenta: 'Cua6 ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     saldo: '20', 
     currency:1,
+    numerosTarjeta:'7000',
+    vencimientoTarjeta:'0222'
   },
   {
     id: 7,
     nombreCuenta: 'Cuentas 77 ',
-    entidad:'banco Xdsdsd',
+    nombreEntidad:'banco Xdsdsd',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     saldo: '2450', 
-    currency:1
+    currency:1,
+    numerosTarjeta:'1111',
+    vencimientoTarjeta:'1122'
   },
   {
     id: 8,
     nombreCuenta: 'Cuentas 8 ',
-    entidad:'aaa XXXX',
+    nombreEntidad:'aaa XXXX',
+    entidad:2,
     cbuCvu: '15124615412351323431215',
     currency:1,
     saldo: '450', 
+    numerosTarjeta:'1011',
+    vencimientoTarjeta:'1125'
   },
   {
     id: 9,
     nombreCuenta: 'Cuentas 9a ',
-    entidad:'banco XXXX',
+    nombreEntidad:'banco XXXX',
+    entidad:1,
     cbuCvu: '15124615412351323431215',
     currency:2,
     saldo: '2450', 
+    numerosTarjeta:'1018',
+    vencimientoTarjeta:'0225'
   }
 ];
 export const entities = [
@@ -90,6 +117,44 @@ export const entities = [
     label: 'Mercado Pago'
   },
 
+]
+
+export const transactions = [
+/* Poner movimientos de ingreso y egresos. AGREGAR A INGRESOS Y GASTOS UN CAMPO 
+DETALLE movimiento
+*/
+{
+  id: 1,
+  idAccount:1,
+  name: 'gasto', //esto o el tipo de gasto o ingreso
+  date: '20/09/2020',
+  value:'200,00',
+  transactionType: 2 // 1-ingreso 2-Egreso
+},
+{
+  id: 2,
+  idAccount:1,
+  name: 'gasto ggg',
+  date: '11/09/2020',
+  value:'100,00',
+  transactionType: 2 // 1-ingreso 2-Egreso
+},
+{
+  id: 3,
+  idAccount:1,
+  name: 'ingreso',
+  date: '08/09/2020',
+  value:'85,00',
+  transactionType: 1 // 1-ingreso 2-Egreso
+},
+{
+  id: 4,
+  idAccount:2,
+  name: 'gasto a',
+  date: '20/09/2020',
+  value:'70,00',
+  transactionType: 2 // 1-ingreso 2-Egreso
+},
 ]
 
 export const categories = [

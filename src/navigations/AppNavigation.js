@@ -27,6 +27,7 @@ import AddExpensesScreen from '../screens/Expenses/AddExpensesScreen';
 import LoansScreen  from '../screens/Loans/LoansScreen';
 import AddLoanScreen  from '../screens/Loans/AddLoanScreen';
 import CardDetailScreen from '../screens/Cards/CardDetail';
+import CuentaDetailScreen from '../screens/Cuenta/CuentaDetailScreen';
 
 const MainNavigator = createStackNavigator(
   {
@@ -52,6 +53,7 @@ const MainNavigator = createStackNavigator(
     Loans: LoansScreen,
     AddLoan: AddLoanScreen,
     CardDetail: CardDetailScreen,
+    CuentaDetail: CuentaDetailScreen,
   },
   {
     initialRouteName: 'Home',

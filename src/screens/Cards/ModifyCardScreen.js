@@ -75,23 +75,22 @@ export default class ModifyCardScreen extends React.Component {
     */
   }
 
-  getCard(id){
-  console.log('GetCard');
-  let card =getCardId(id);
-  console.log(card);
-    this.setState({id: card.id,
-                  name: card.name,
-                  entity: card.entity,
-                  lastFourNumbers: card.lastFourNumbers,
-                  expiryDate: card.expiryDate,
-                  dueDate: card.dueDate,
-                  closeDate: card.closeDate});
-  }
+getCard(id){
+//console.log('GetCard');
+let card =getCardId(id);
+//console.log(card);
+  this.setState({id: card.id,
+                name: card.name,
+                entity: card.entity,
+                lastFourNumbers: card.lastFourNumbers,
+                expiryDate: card.expiryDate,
+                dueDate: card.dueDate,
+                closeDate: card.closeDate});
+}
   
 buttonPressed(){
   Alert.alert(this.state.name +" - "+this.state.entity +" - " +this.state.lastFourNumbers +" - " +this.state.expiryDate 
   +" - " + this.state.dueDate+" - " + this.state.closeDate ); 
-  
   
   //let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
@@ -106,7 +105,7 @@ buttonPressed(){
       Alert.alert("ingrese un valor valido para los ultimos 4 digitos"); 
    
     else if(!numeroreg.test(this.state.expiryDate) || this.state.expiryDate.length!=4 ||
-    (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 2)<20))
+    (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 4)<20))
       Alert.alert("ingrese un valor valido para el vencimiento"); 
     else {
       if(!this.state.id || this.state.id=='')
