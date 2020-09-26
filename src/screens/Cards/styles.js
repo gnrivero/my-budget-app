@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
 
-  CardsItemIcon: {
+  cardsItemIcon: {
     paddingTop:5,
     marginRight: 5,
     width:30,

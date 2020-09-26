@@ -19,6 +19,7 @@ import CuentasScreen from '../screens/Cuentas/CuentasScreen';
 import CuentaScreen from '../screens/Cuenta/CuentaScreen';
 import PresupuestoScreen from '../screens/Presupuesto/PresupuestoScreen';
 import InvestmentScreen from '../screens/Investments/InvestmentScreen';
+import AddInvestmentScreen from '../screens/Investments/AddInvestmentScreen';
 import PresupuestoDashboardScreen from '../screens/Presupuesto/PresupuestoDashboardScreen';
 import IncomeScreen from '../screens/Income/IncomeScreen';
 import AddIncomeScreen from '../screens/Income/AddIncomeScreen';
@@ -43,9 +44,10 @@ const MainNavigator = createStackNavigator(
     Cards: CardScreen,
     ModifyCard: ModifyCardScreen,
     Presupuesto: PresupuestoScreen,
-    Investments: InvestmentScreen,
     Presupuesto: PresupuestoDashboardScreen,
     PresupuestoInfo: PresupuestoScreen,
+    Investments: InvestmentScreen,
+    AddInvestment: AddInvestmentScreen,
     Income: IncomeScreen,
     AddIncome: AddIncomeScreen,
     Expenses: ExpensesScreen,

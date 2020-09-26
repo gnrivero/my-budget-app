@@ -24,7 +24,7 @@ export class CardDetailInfoScreen extends React.Component {
       //this.props.card
       <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{card.name}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
@@ -70,7 +70,7 @@ export default class CardDetailScreen extends React.Component {
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/consumptions.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/consumptions.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{item.name}</Text>
           </View>
           <View style={styles.info}>

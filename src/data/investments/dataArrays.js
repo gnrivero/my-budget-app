@@ -1,54 +1,71 @@
 export const investmentTypes= [
  {
-   id: "PLAZO_FIJO",
+   id: 1,
    name: "Plazo Fijo",
    shortName: "Plazo Fijo"
  },
  {
-    id: "FONDO_COMUN",
+    id: 2,
     name: "Fondos Comunes de Inversion",
     shortName: "Fondo Común"
   },
   {
-    id: "ACCION",
+    id: 3,
     name: "Acciones",
     shortName: "Acciones"
+  }
+  ,
+  {
+    id: 4,
+    name: "Otra Inversion",
+    shortName: "Otra"
   }
 ]
 
 export const investments = [
  {
     id: 1,
-    name: "Plazo Fijo Pesos",
+    name: "Plazo Fijo Pesos BNA",
+    date: "03/09/2020",
     dueDate: "03/10/2020",
     amount: 120000.00,
-    currency: "ARS",
-    type: "PLAZO_FIJO"
+    amountCredited: 135000.00,
+    currency: 1,
+    symbol:'',
+    account: 1,
+    type: 1
  },
  {
     id: 2,
-    name: "Fondo Pesos",
+    name: "Fondo Pesos BPBA",
+    date: "03/10/2020",
     dueDate: "",
     amount: 10000.00,
-    currency: "ARS",
-    type: "FONDO_COMUN"
+    amountCredited: null,
+    currency: 1,
+    symbol:'',
+    type: 2
   },
   {
     id: 3,
-    name: "Acciones",
+    name: "Acciones compradas",
+    date: "03/10/2020",
     dueDate: "",
     amount: 50000.00,
-    currency: "ARS",
+    amountCredited: null,
+    currency: 1,
     symbol: "YPFD",
-    type: "ACCION"
+    type: 3
   },
   {
     id: 4,
     name: "Acciones",
+    date: "03/10/2020",
     dueDate: "",
     amount: 25000.00,
-    currency: "ARS",
+    amountCredited: null,
+    currency: 1,
     symbol: "EDN",
-    type: "ACCION"
+    type: 3
   }
 ]
