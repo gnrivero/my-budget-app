@@ -19,12 +19,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 20
 },
-infoContainer: {
+infoContainer: { //boton
   flex: 1,
   flexDirection: 'column',
-  alignItems: 'flex-start',
+  alignItems: 'stretch',
   justifyContent: 'flex-start',
-  margin: 15
+  margin: 15,
+  
+},
+photoCards: {
+  width: '100%',
+  height: 200,
+  alignSelf: 'center'
 },
 cardName: {
   flex: .2,

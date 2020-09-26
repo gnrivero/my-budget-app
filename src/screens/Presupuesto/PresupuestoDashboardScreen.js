@@ -14,6 +14,7 @@ import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
 import { presupuestos } from '../../data/presupuestos/presupuestosDataArray';
 import AddPresupuestoButton from '../../components/PresupuestoButton/AddPresupuestoButton';
+import AddCardButton from '../../components/CardButton/AddCardButton';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -74,13 +75,23 @@ export default class PresupuestoDashboardScreen extends React.Component {
              this.props.navigation.navigate('PresupuestoInfo', {title});
            }}
          /> */}
-         <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'
+         {/* <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'
           onPress={() => this.onPressCuenta()}
         >
           <View style={Dashboardstyles.container}>
           <Text style={Dashboardstyles.text}>Nuevo Presupuesto</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
+
+<Image style={styles.photoCards} source={require('../../data/budget.jpg')} />
+          <View style={{    position: 'absolute', bottom: 5,  right: 5}}>
+            <AddCardButton title = {'Nuevo Presupuesto'}
+              onPress={() => {
+                let title = 'Nuevo Presupuesto';
+                this.props.navigation.navigate('PresupuestoInfo', {title});
+              }}
+            />
+         </View>
 
         </View>
         <FlatList
