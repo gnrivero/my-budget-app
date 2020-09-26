@@ -37,32 +37,61 @@ export default class PresupuestoDashboardScreen extends React.Component {
   };
 
   renderPresupuesto = ({ item }) => (
-      <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
-        <View style={styles.cardItemContainer}>
-          <Text style={styles.cardName}>{item.mes}</Text>
-          <View style={styles.infoContainer}>
-            {/* <View style={styles.info}>
-              <Text style={styles.infoCard}>{item.mes}</Text>
-            </View> */}
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Presupuesto Total:</Text><Text>{item.presupuestoTotal}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Presupuesto Consumido:</Text><Text>{item.presupuestoConsumido}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Inicio Periodo:</Text><Text>{item.startDate}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Cierre Periodo:</Text><Text>{item.closeDate}</Text>
-            </View>
-            <View style={styles.info}>
-              <Text style={styles.infoCard}>Balance:</Text><Text>{item.balance}</Text>
-            </View>
+    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
+      <View style={styles.infoContainer}>
+        <View style={styles.infoHead}>
+          <Image source={require('../../../assets/icons/budgetIcon.png')} style={styles.CardsItemIcon} /> 
+          <Text style={styles.infoText}>{item.name}</Text>
+          <View style={styles.infoRight}>
+            <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
           </View>
         </View>
-      </TouchableHighlight>
-    );
+        <View style={styles.info}>
+          <Text style={styles.infoTextDetail}>Presupuesto Total: </Text><Text style={styles.infoText}>{item.presupuestoTotal}</Text>
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.infoTextDetail}>Presupuesto Consumido: </Text><Text style={styles.infoText}>{item.presupuestoConsumido}</Text>
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.infoTextDetail}>Inicio Periodo: </Text><Text style={styles.infoText}>{item.startDate}</Text>
+          <View style={styles.infoRight}>
+            <Text style={styles.infoTextDetail}>Cierre Periodo: </Text><Text style={styles.infoText}>{item.closeDate}</Text>
+          </View>
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.infoTextDetail}>Balance: </Text><Text style={styles.infoText}>{item.balance}</Text>
+        </View>
+      </View>
+    </TouchableHighlight>
+  );
+
+  // renderPresupuesto = ({ item }) => (
+  //     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
+  //       <View style={styles.cardItemContainer}>
+  //         <Text style={styles.infoHead}>{item.mes}</Text>
+  //         <View style={styles.info}>
+  //           {/* <View style={styles.info}>
+  //             <Text style={styles.infoCard}>{item.mes}</Text>
+  //           </View> */}
+  //           <View style={styles.info}>
+  //             <Text style={styles.infoCard}>Presupuesto Total:</Text><Text>{item.presupuestoTotal}</Text>
+  //           </View>
+  //           <View style={styles.info}>
+  //             <Text style={styles.infoCard}>Presupuesto Consumido:</Text><Text>{item.presupuestoConsumido}</Text>
+  //           </View>
+  //           <View style={styles.info}>
+  //             <Text style={styles.infoCard}>Inicio Periodo:</Text><Text>{item.startDate}</Text>
+  //           </View>
+  //           <View style={styles.info}>
+  //             <Text style={styles.infoCard}>Cierre Periodo:</Text><Text>{item.closeDate}</Text>
+  //           </View>
+  //           <View style={styles.info}>
+  //             <Text style={styles.infoCard}>Balance:</Text><Text>{item.balance}</Text>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </TouchableHighlight>
+  //   );
 
   render() {
 
