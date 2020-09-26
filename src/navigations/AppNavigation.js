@@ -28,6 +28,7 @@ import ExpensesScreen  from '../screens/Expenses/ExpensesScreen';
 import AddExpensesScreen from '../screens/Expenses/AddExpensesScreen';
 import LoansScreen  from '../screens/Loans/LoansScreen';
 import AddLoanScreen  from '../screens/Loans/AddLoanScreen';
+import LoanDetailScreen from '../screens/Loans/LoanDetailScreen';
 import CardDetailScreen from '../screens/Cards/CardDetail';
 import CuentaDetailScreen from '../screens/Cuenta/CuentaDetailScreen';
 
@@ -55,6 +56,7 @@ const MainNavigator = createStackNavigator(
     Expenses: ExpensesScreen,
     AddExpenses: AddExpensesScreen,
     Loans: LoansScreen,
+    LoanDetail: LoanDetailScreen,
     AddLoan: AddLoanScreen,
     CardDetail: CardDetailScreen,
     CuentaDetail: CuentaDetailScreen,

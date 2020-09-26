@@ -3,19 +3,13 @@ import {
   ScrollView,
   Text,
   View,
-  TextInput,
   Image,
   Dimensions,
-  TouchableHighlight,
-  Alert
+  TouchableHighlight
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
 import { getInvestmentTypes,getAccounts } from '../../data/investments/investmentsAPI';
-
-import { Dropdown } from 'react-native-material-dropdown';
-import SwitchSelector from 'react-native-switch-selector';
-import DatePicker from 'react-native-datepicker';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
 const { width: viewportWidth } = Dimensions.get('window');
@@ -42,10 +36,7 @@ export default class InvestmentDetailScreen extends React.Component {
 
     const typesArray = getInvestmentTypes();
     const accountsArray = getAccounts();
-    const optionsCurrency = [
-      { label: 'Pesos', value: 1},
-      { label: 'Dolares', value: 2 }
-    ];
+    
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
