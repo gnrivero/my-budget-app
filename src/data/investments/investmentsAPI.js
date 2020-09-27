@@ -1,11 +1,27 @@
 import { Text } from 'react-native';
 import React, { Component } from 'react';
-import { investments } from './dataArrays';
+import { cuentas } from '../../data/dataArrays';
+import { investments, investmentTypes } from './dataArrays';
 
-export function getStocks() {
+export function getAllInvestments() {
   const investmentsArray = [];
-  cards.map(data => {
+  investments.map(data => {
       investmentsArray.push(data);
     });
   return investmentsArray;
+}
+
+export function getInvestmentTypes() {
+  const investmentTypesArray = [];
+  investmentTypes.map(data => {
+    investmentTypesArray.push({value:data.id, label:data.name});
+    });
+  return investmentTypesArray;
+}
+export function getAccounts() {
+  const accountArray = [];
+  cuentas.map(data => {
+    accountArray.push({value:data.id, label:data.nombreCuenta});
+    });
+  return accountArray;
 }

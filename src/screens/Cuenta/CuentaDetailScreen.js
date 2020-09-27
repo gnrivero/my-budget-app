@@ -87,7 +87,6 @@ export default class CuentaDetailScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const cuenta = navigation.getParam('itemCuenta');
-    //en itemCard tengo el objeto
     const transactions = getTransactions(cuenta.id);
     return (
       <ScrollView>

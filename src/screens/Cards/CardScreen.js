@@ -41,7 +41,7 @@ export default class CardScreen extends React.Component {
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{item.name}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>

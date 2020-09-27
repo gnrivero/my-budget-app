@@ -80,7 +80,6 @@ export default class CuentaScreen extends React.Component {
            allBanks: banks
          })
      });
-  }
 
   onChangeCard = ({ value }) =>{
     let agregarTarjeta = value
@@ -168,7 +167,7 @@ buttonPressed() {
     ];
 
     const optionsCurrency = [
-      { label: 'Pesos', value: 'ARS'},
+      { label: 'Pesos', value: 'ARS' },
       { label: 'Dólares', value: 'USD' }
     ];
 
