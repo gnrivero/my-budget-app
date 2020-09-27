@@ -124,7 +124,7 @@ buttonPressed(){
           <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
             <Image style={styles.photoCards} source={require('../../data/cards.png')} />
           </View>
-          <Text style={styles.cuentasInfo}>Cuenta:</Text>
+          <Text style={styles.cuentasInfo}>Tarjeta:</Text>
           <View style={{marginBottom: 40, padding:10}}>
             <TextInput
               style ={styles.input}

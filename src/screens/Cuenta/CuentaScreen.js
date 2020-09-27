@@ -69,10 +69,10 @@ export default class CuentaScreen extends React.Component {
   }
   
   getCuenta(id){
-  console.log('GetCuenta');
+  //console.log('GetCuenta');
   let cuenta =getCuentadId(id);
-  console.log(cuenta);
-  console.log(cuenta.numerosTarjeta!='');
+  //console.log(cuenta);
+  //console.log(cuenta.numerosTarjeta!='');
   this.setState({id: cuenta.id,
                   nombreCuenta: cuenta.nombreCuenta,
                   cbuCvu: cuenta.cbuCvu,

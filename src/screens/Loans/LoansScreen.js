@@ -27,7 +27,7 @@ export default class LoansScreen extends React.Component {
 
   onPressLoans = item => {
     //lo llamo sin pasarle parametros
-    //this.props.navigation.navigate('AddLoan',{name: 'Prestamo'});
+    this.props.navigation.navigate('LoanDetail',{name: 'Detalle Prestamo', itemLoan:  item});
     //this.props.navigation.navigate('CuentaDetail',{name: 'Detalle cuenta', itemCuenta:  item});
   };
 
@@ -53,7 +53,6 @@ export default class LoansScreen extends React.Component {
             (
               <View style={styles.info}>
                 <Text style={styles.infoTextDetail}>Día de vencimiento: </Text><Text style={styles.infoText}>{item.expirationDay}</Text>
-                <Text style={styles.infoTextDetail}>cuota: </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>
                 <View style={styles.infoRight}>
                   <Text style={styles.infoTextDetail}>Valor cuota: {item.currency==1?'ARS':(item.currency==2)?'USD':''} </Text><Text style={styles.infoText}>{item.monthlyFee}</Text>
                 </View>
@@ -67,7 +66,7 @@ export default class LoansScreen extends React.Component {
   FlatListItemSeparator = () => {
     return (
       //Item Separator
-      <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
+      <View style={{height: 0.4, width: '100%', backgroundColor: '#C8C8C8'}}/>
     );
   };
 

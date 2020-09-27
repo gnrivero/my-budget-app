@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
       flexDirection: 'column',
       alignItems: 'flex-start',
       justifyContent: 'flex-start',
-      margin: 10
+      margin: 5
   },
   infoHead:{
     flex: 1,
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
 
-  CardsItemIcon: {
+  cardsItemIcon: {
     paddingTop:5,
     marginRight: 5,
     width:30,
