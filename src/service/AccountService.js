@@ -8,13 +8,32 @@ export default class AccountService {
         this.db = DBConnector.connect();
     }
 
-    createAccount(name, currencyCode, entityId, identificationNumber, cardId){
+    createAccount(name, currencyCode, bankId, identificationNumber, cardId, balance){
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO account(name, currencyCode, entityId, identificationNumber, cardId, balance) " +
-                   "VALUES (?,?,?,?,?,0.00)",
-                   [name, currencyCode, entityId, identificationNumber, cardId],
+                   "INSERT INTO account(name, currencyCode, bankId, identificationNumber, cardId, balance) " +
+                   "VALUES (?,?,?,?,?,?)",
+                   [name, currencyCode, bankId, identificationNumber, cardId, balance],
+                   (txn, res) => { console.log("AccountService: Affected Rows " + res.rowsAffected); }
+              )
+           }
+       );
+    }
+
+    updateAccount(id, name, currencyCode, bankId, identificationNumber, cardId, balance){
+        this.db.transaction(
+           (txn) => {
+              txn.executeSql(
+                   "UPDATE account SET " +
+                   "name = ?, " +
+                   "currencyCode = ?, " +
+                   "bankId = ?, " +
+                   "identificationNumber = ?, " +
+                   "cardId = ?," +
+                   "balance = ? " +
+                   "WHERE id = ?",
+                   [name, currencyCode, bankId, identificationNumber, cardId, balance, id],
                    (txn, res) => { console.log("AccountService: Affected Rows " + res.rowsAffected); }
               )
            }
@@ -75,7 +94,6 @@ export default class AccountService {
                    }
                 }
               )
-
            }
         );
     }
@@ -86,7 +104,15 @@ export default class AccountService {
           conn.transaction(
             (txn) => {
                txn.executeSql(
-                    "SELECT * FROM account",
+                    "SELECT " +
+                    " account.id as id," +
+                    " account.name as name," +
+                    " account.identificationNumber as cbu," +
+                    " account.balance as balance," +
+                    " account.currencyCode as currencyCode," +
+                    " bank.name as bank " +
+                    "FROM account " +
+                    "INNER JOIN bank ON account.bankId = bank.id",
                     [],
                     (txn, res) => {
                        let accounts = new Array();
@@ -94,7 +120,9 @@ export default class AccountService {
                          accounts.push(res.rows.item(i));
                        }
                        resolve(accounts);
-                       return accounts;
+                    },
+                    (txn, err) => {
+                        console.log("AccountService:" + err);
                     }
                )
             }
@@ -102,84 +130,102 @@ export default class AccountService {
       });
     }
 
-    getAccountById(id){
+    getAccountById(id) {
         const conn = this.db;
         return new Promise((resolve) => {
             conn.transaction(
               (txn) => {
                  txn.executeSql(
-                      "SELECT * FROM account WHERE id = ?",
-                      [id],
-                      (txn, res) => {
-                         if (res.rows.length >= 1){
-                           var item = res.rows.item(0);
-                            console.log("Getting Account By ID Succsessful");
-                            resolve(item);
-                            return item;
+                    "SELECT * FROM account WHERE id = ?",
+                    [id],
+                    (txn, res) => {
+                         if (res.rows.length >= 1) {
+                           var account = res.rows.item(0);
+                           resolve(account);
                          }
-                      }
+                    }
                  )
-              }
-            );
-        });
+              });
+         });
     }
 
-    test(){
 
-        console.log("Dropping table account");
+    /*
+        Este método debe ser llamado desde DBInit.js
+    */
+    initDB(resetData){
+        if(resetData == true){
+            console.log("Dropping table account");
+            this.db.transaction(
+                (txn) => {
+                    txn.executeSql(
+                        "DROP TABLE IF EXISTS account",
+                        [],
+                        (txn, res) => {
+                            console.log("AccountService: Table Dropped");
+                            console.log("AccountService: Creating Table account");
+                            txn.executeSql(
+                                "CREATE TABLE IF NOT EXISTS account (" +
+                                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                    "name VARCHAR(20)," +
+                                    "currencyCode VARCHAR(3)," +
+                                    "bankId INTEGER," +
+                                    "identificationNumber VARCHAR(22)," +
+                                    "cardId INTEGER," +
+                                    "balance INTEGER" +
+                                    ")",
+                                [],
+                                (txn, res) => { console.log("AccountService: Table account created " + res); }
+                           )
+                        }
+                    )
+                }
+            );
 
-        this.db.transaction(
-            (txn) => {
-               txn.executeSql(
-                    "DROP TABLE account",
-                    [],
-                    (txn, res) => {
-                        console.log("AccountService: Table Dropped");
-                        console.log("Creating Table account");
-                        txn.executeSql(
-                            "CREATE TABLE IF NOT EXISTS account (" +
-                                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                                "name VARCHAR(20)," +
-                                "currencyCode VARCHAR(3)," +
-                                "entityId INTEGER," +
-                                "identificationNumber VARCHAR(22)," +
-                                "cardId INTEGER," +
-                                "balance INTEGER" +
-                                ")",
-                            [],
-                            (txn, res) => { console.log("AccountService: Table account created " + res); }
-                       )
-                    }
-               )
-            }
-        );
+            //Inicializo algunos datos
+            this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 0);
+            this.makeDeposit(1,10500);
+            this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 1, 0);
+            this.createAccount('Caja de Ahorro','ARS', 2, '0040000000000000000001', 2, 0);
+            this.makeDeposit(3,2320);
+        }
+    }
 
-        this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 4);
-        this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 4);
+    test(resetDb){
 
-        this.getAccountById(1).then(item => {
-            console.log(item)
-        });
+        this.initDB(resetDb);
+
+        this.getAccountById(1)
+            .then(account => {
+               console.log("Get Account By Id");
+               console.log(account);
+            });
 
         this.makeDeposit(1,2000);
         this.makeDeposit(1,100);
         this.makeWithdraw(1,200);
 
-        this.getAccountById(1).then(item => {
-            console.log(item)
-        });
-        this.makeDeposit(2,3500);
-        this.makeWithdraw(2,500);
+        this.getAccountById(1)
+            .then(account => {
+                console.log("Get Account By Id");
+                console.log(account);
+            });
 
-        this.getAccountById(2).then(item => {
-            console.log(item)
-        });
-
-        this.getAllAccounts().then(account => {
+        this.getAllAccounts()
+         .then(account => {
             console.log("Get All Accounts");
             for ( let i = 0; i < account.length; ++i){
                 console.log(account[i]);
             }
-        });
+         });
+
+         this.updateAccount(3, 'Caixa de Ahorrao','ARS', 3, '0040000001111000000001', 2, 0);
+
+         this.getAccountById(3)
+             .then(account => {
+                 console.log("Get Account By Id");
+                 console.log(account);
+             });
+
     }
 }

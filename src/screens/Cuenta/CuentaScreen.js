@@ -9,14 +9,18 @@ import {
   Alert,
 } from 'react-native';
 import styles from './styles';
-import {
-  getEntities, getCuentadId
-} from '../../data/MockDataAPI';
+
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
+import AccountService from '../../service/AccountService';
+import BankService from '../../service/BankService';
 
 
 export default class CuentaScreen extends React.Component {
+
+  accountService;
+  bankService;
+
   static navigationOptions = ({ navigation }) => {
     return {
       title: navigation.getParam('title')
@@ -25,135 +29,152 @@ export default class CuentaScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.state = {id:'',
-                  nombreCuenta: '',
-                  cbuCvu: '',
-                  saldo: '',
-                  numerosTarjeta: '',
-                  vencimientoTarjeta:'',
-                  entidad: '',
-                  currency:1,
-                  opcionCurrency:0,
-                  agregarTarjeta: false,
-                  opcionDebito:1};
+    this.accountService = new AccountService();
+    this.bankService = new BankService();
+    this.state = {
+        //Accounts
+        id:'',
+        nombreCuenta: '',
+        cbuCvu: '',
+        saldo: '0',
+        numerosTarjeta: '',
+        vencimientoTarjeta:'',
+        entidad: '',
+        currency: 'ARS',
+        opcionCurrency:0,
+        agregarTarjeta: false,
+        opcionDebito:1,
+        //Banks
+        allBanks: []
+    };
   }
 
-  
   componentWillMount() {
     const { navigation } = this.props;
     const id = navigation.getParam('id');
-    if(id!= undefined){
-      this.getCuenta(id);
+    if( id != undefined ){
+      this.accountService.getAccountById(id)
+      .then((account) => {
+            this.setState({
+                id: account.id,
+                nombreCuenta: account.name,
+                cbuCvu: account.identificationNumber,
+                saldo: account.balance,
+                entidad: account.bankId,
+                currency: account.currencyCode,
+                //numerosTarjeta:account.numerosTarjeta
+                //vencimientoTarjeta: account.vencimientoTarjeta,
+                //opcionDebito:account.numerosTarjeta!=''?0:1,
+                //opcionCurrency:account.currency=='ARS'?0:1,
+                //agregarTarjeta:account.numerosTarjeta!=''?true:false
+            });
+        }
+      );
     }
-    /*
-    let id = this.props.navigation.state.params.category
-    let result;
-    try {
-      result = await axios.request({
-        method: 'GET',
-        url: `https://developers.zomato.com/api/v2.1/search?category=${id}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'user-key': "a31bd76da32396a27b6906bf0ca707a2",
-        },
-      })
-    } catch (err) {
-      err => console.log(err)
-    }
-    this.setState({
-      isLoading: false,
-      data: result.data.restaurants
-    })
-    */
-  }
-  
-  getCuenta(id){
-  console.log('GetCuenta');
-  let cuenta =getCuentadId(id);
-  console.log(cuenta);
-  console.log(cuenta.numerosTarjeta!='');
-  this.setState({id: cuenta.id,
-                  nombreCuenta: cuenta.nombreCuenta,
-                  cbuCvu: cuenta.cbuCvu,
-                  saldo: cuenta.saldo,
-                  numerosTarjeta: cuenta.numerosTarjeta,
-                  entidad: cuenta.entidad,
-                  currency: cuenta.currency,
-                  numerosTarjeta:cuenta.numerosTarjeta,
-                  vencimientoTarjeta: cuenta.vencimientoTarjeta,
-                  opcionDebito:cuenta.numerosTarjeta!=''?0:1,
-                  opcionCurrency:cuenta.currency==1?0:1,
-                  agregarTarjeta:cuenta.numerosTarjeta!=''?true:false
-
-                });
   }
 
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
+  componentDidMount(){
+     this.bankService.getAllBanks()
+       .then((banks) => {
+         this.setState({
+           allBanks: banks
+         })
+     });
+  }
+
   onChangeCard = ({ value }) =>{
     let agregarTarjeta = value
-    //Alert.alert('Call onPress with value:' + {agregarTarjeta}    );
     this.setState({agregarTarjeta});
     if(agregarTarjeta){
       this.setState({vencimientoTarjeta:'',
                         numerosTarjeta:''});
     }
   }
-  onChangeCurrency = ({ value }) =>{
+
+  onChangeCurrency = ({ value }) => {
     let currency = value
-    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
-    if(currency){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
-    }
   }
 
-buttonPressed(){
-  //Alert.alert(this.state.entidad +" - "+this.state.cbu +" - " +this.state.nombreCuenta +" - "+this.state.saldo +" - " + this.state.numerosTarjeta +" - " +this.state.vencimientoTarjeta); 
+buttonPressed() {
+
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
-  if ((!this.state.entidad|| this.state.entidad=='') || (!this.state.cbuCvu|| this.state.cbuCvu=='') || (!this.state.nombreCuenta || this.state.nombreCuenta=='') ||
-  (!this.state.saldo || this.state.saldo==''))
-  {
-    Alert.alert("Complete los campos faltantes de la cuenta")
-  }
-   else if(!decimalreg.test(this.state.saldo))
-    Alert.alert("ingrese un valor valido en el saldo"); 
-   
-    else if(this.state.agregarTarjeta){
-       if((!this.state.numerosTarjeta  || this.state.numerosTarjeta=='') || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')){
+
+  if ((!this.state.entidad|| this.state.entidad=='')
+        || (!this.state.cbuCvu || this.state.cbuCvu=='')
+        || (!this.state.nombreCuenta || this.state.nombreCuenta == '')
+        || (!this.state.saldo || this.state.saldo=='')) {
+
         Alert.alert("Complete los campos faltantes de la cuenta")
-      }
-      else if(!numeroreg.test(this.state.numerosTarjeta) || this.state.numerosTarjeta.length!=4 )
+
+  } else if (!decimalreg.test(this.state.saldo)) {
+
+        Alert.alert("ingrese un valor valido en el saldo");
+
+  } else if (this.state.agregarTarjeta) {
+       if((!this.state.numerosTarjeta || this.state.numerosTarjeta=='')
+            || (!this.state.vencimientoTarjeta || this.state.vencimientoTarjeta=='')) {
+        Alert.alert("Complete los campos faltantes de la cuenta")
+      } else if (!numeroreg.test(this.state.numerosTarjeta)
+                    || this.state.numerosTarjeta.length!=4 ) {
         Alert.alert("ingrese un valor valido en el numero de tarjeta");  
-      else if(!numeroreg.test(this.state.vencimientoTarjeta) || this.state.vencimientoTarjeta.length!=4 || 
-      (this.state.vencimientoTarjeta.slice(0, 2)>12)|| (this.state.vencimientoTarjeta.slice(0, 2)<1) || (this.state.vencimientoTarjeta.slice(2, 4)<20))
+      } else if (!numeroreg.test(this.state.vencimientoTarjeta)
+                    || this.state.vencimientoTarjeta.length!=4
+                    || (this.state.vencimientoTarjeta.slice(0, 2)>12)
+                    || (this.state.vencimientoTarjeta.slice(0, 2)<1)
+                    || (this.state.vencimientoTarjeta.slice(2, 4)<20)) {
         Alert.alert("ingrese un valor valido en el vencimiento de tajeta");  
-      else
+      } else {
         Alert.alert("Grabar con tarjeta");
-    }  
-    else 
-      Alert.alert("Grabar");
+      }
+    } else {
+
+      if( this.state.id !== undefined ){
+        console.log("Im Editing");
+        console.log(this.state);
+        this.accountService.updateAccount(
+                        this.state.id,
+                        this.state.nombreCuenta,
+                        this.state.currency,
+                        this.state.entidad,
+                        this.state.cbuCvu,
+                        null,
+                        this.state.saldo);
+      } else {
+        console.log("Im Creating a New One");
+        this.accountService.createAccount(
+                this.state.nombreCuenta,
+                this.state.currency,
+                this.state.entidad,
+                this.state.cbuCvu,
+                null,
+                this.state.saldo);
+      }
+
+
+
+        this.props.navigation.navigate('Cuentas');
+    }
  }
-  
+
   render() {
     const { navigation } = this.props;
-    const item = navigation.getParam('category');
     const categoryName = navigation.getParam('title');
-    const entitiesArray = getEntities();
+
     const options = [
       { label: 'SI', value: true},
       { label: 'NO', value: false }
-  ];
-  const optionsCurrency = [
-    { label: 'Pesos', value: 1},
-    { label: 'Dolares', value: 2 }
-  ];
+    ];
+
+    const optionsCurrency = [
+      { label: 'Pesos', value: 'ARS'},
+      { label: 'Dólares', value: 'USD' }
+    ];
+
+    let banksList = this.state.allBanks.map( (v,k) => {
+      return {value:v.id, label:v.name};
+    });
 
     return (
       <View>
@@ -166,19 +187,19 @@ buttonPressed(){
             
             <TextInput
               style ={styles.input}
-              placeholder="Nombre referencia cuenta"
+              placeholder="Nombre de referencia la Cuenta"
               onChangeText={(nombreCuenta) => this.setState({nombreCuenta})}
               value={this.state.nombreCuenta}
             />
-            
+
             <Dropdown
-              placeholder='Seleccione entidad'
-              data={entitiesArray}
+              placeholder='Seleccione Entidad'
+              data={banksList}
               value={this.state.entidad}
               onChangeText={(entidad) => this.setState({entidad})}
               style ={styles.input}
             />
-          
+
             <TextInput
               style ={styles.input}
               placeholder="CBU/CVU"
@@ -188,9 +209,9 @@ buttonPressed(){
 
             <TextInput keyboardType='decimal-pad'
               style ={styles.input}
-              placeholder="Saldo inicial"
+              placeholder="Saldo Inicial"
               onChangeText={(saldo) => this.setState({saldo})}
-              value={this.state.saldo}
+              value={String(this.state.saldo)}
               editable={this.state.id==''?true:false}
             />
             {/*<SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />*/}
@@ -220,10 +241,7 @@ buttonPressed(){
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
-        <TouchableHighlight 
-          
-          onPress={() =>this.buttonPressed() }
-        >
+        <TouchableHighlight onPress={() =>this.buttonPressed() } >
           <Text style={{fontSize: 40, color: 'white', textAlign:'center'}}>Guardar</Text>
         </TouchableHighlight>
         </View>
