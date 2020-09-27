@@ -11,14 +11,14 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
-import CardService from '../../service/CardService';
-import {getAllCards} from '../../data/cards/cardsAPI';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import CardService from '../../service/CardService';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class CardScreen extends React.Component {
+
+  cardService;
 
   static navigationOptions = {
       title: 'Mis Tarjetas'
@@ -26,9 +26,20 @@ export default class CardScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.cardService = new CardService();
     this.state = {
-      activeSlide: 0
+      activeSlide: 0,
+      allCards: []
     };
+  }
+
+  componentDidMount() {
+    this.cardService.getAllCards()
+    .then((cards) => {
+        this.setState({
+            allCards: cards
+        })
+    });
   }
 
   onPressCard = item => {
@@ -44,7 +55,7 @@ export default class CardScreen extends React.Component {
             <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{item.name}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
+              <Text style={styles.infoTextDetail}>Termina en:</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
             </View>
           </View>
           <View style={styles.info}>
@@ -79,10 +90,10 @@ export default class CardScreen extends React.Component {
   };
 
   render() {
+
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const cards = getAllCards();
-    //const categoryName = navigation.getParam('name');
+
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -97,7 +108,7 @@ export default class CardScreen extends React.Component {
          </View>
         </View>
         <FlatList
-           data={cards}
+           data={this.state.allCards}
            renderItem={this.renderCards}
            keyExtractor={item => `${item.id}`}
            ItemSeparatorComponent={this.FlatListItemSeparator}

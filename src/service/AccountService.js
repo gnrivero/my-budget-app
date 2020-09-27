@@ -149,51 +149,65 @@ export default class AccountService {
          });
     }
 
-
     /*
         Este método debe ser llamado desde DBInit.js
     */
-    initDB(resetData){
-        if(resetData == true){
-            console.log("Dropping table account");
-            this.db.transaction(
-                (txn) => {
-                    txn.executeSql(
-                        "DROP TABLE IF EXISTS account",
-                        [],
-                        (txn, res) => {
-                            console.log("AccountService: Table Dropped");
-                            console.log("AccountService: Creating Table account");
-                            txn.executeSql(
-                                "CREATE TABLE IF NOT EXISTS account (" +
-                                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                                    "name VARCHAR(20)," +
-                                    "currencyCode VARCHAR(3)," +
-                                    "bankId INTEGER," +
-                                    "identificationNumber VARCHAR(22)," +
-                                    "cardId INTEGER," +
-                                    "balance INTEGER" +
-                                    ")",
-                                [],
-                                (txn, res) => { console.log("AccountService: Table account created " + res); }
-                           )
-                        }
-                    )
-                }
-            );
+    initDB(resetData, populate, runTests){
 
-            //Inicializo algunos datos
-            this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 0);
-            this.makeDeposit(1,10500);
-            this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 1, 0);
-            this.createAccount('Caja de Ahorro','ARS', 2, '0040000000000000000001', 2, 0);
-            this.makeDeposit(3,2320);
+        if(resetData === true){
+            this.createTable();
+        }
+
+        if(populate === true){
+            this.populate();
+        }
+
+        if(runTests === true){
+            this.test();
         }
     }
 
-    test(resetDb){
+    createTable(){
+        console.log("Dropping table account");
+        this.db.transaction(
+            (txn) => {
+                txn.executeSql(
+                    "DROP TABLE IF EXISTS account",
+                    [],
+                    (txn, res) => {
+                        console.log("AccountService: Table Dropped");
+                        console.log("AccountService: Creating Table account");
+                        txn.executeSql(
+                            "CREATE TABLE IF NOT EXISTS account (" +
+                                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                                "name VARCHAR(20)," +
+                                "currencyCode VARCHAR(3)," +
+                                "bankId INTEGER," +
+                                "identificationNumber VARCHAR(22)," +
+                                "cardId INTEGER," +
+                                "balance INTEGER" +
+                                ")",
+                            [],
+                            (txn, res) => { console.log("AccountService: Table account created " + res); }
+                       )
+                    }
+                )
+            }
+        );
+    }
 
-        this.initDB(resetDb);
+    populate(){
+        //Inicializo algunos datos
+        this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 10500);
+        this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 1, 0);
+        this.createAccount('Caja de Ahorro','ARS', 2, '0040000000000000000001', 2, 2350);
+    }
+
+
+    test(){
+
+        this.makeDeposit(1,10500);
+        this.makeDeposit(3,2320);
 
         this.getAccountById(1)
             .then(account => {

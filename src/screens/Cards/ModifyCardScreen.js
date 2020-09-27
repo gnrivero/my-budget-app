@@ -11,19 +11,19 @@ import {
 } from 'react-native';
 import styles from './styles';
 import {getCardId} from '../../data/cards/cardsAPI';
-import {
-  getEntities,
-} from '../../data/MockDataAPI';
 
-import { Dropdown } from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
+import { Dropdown } from 'react-native-material-dropdown';
 import { setLightEstimationEnabled } from 'expo/build/AR';
-
-//import SaveCardButton from '../../components/CardButton/SaveCardButton';
+import CardService from '../../service/CardService';
+import BankService from '../../service/BankService';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class ModifyCardScreen extends React.Component {
+
+  bankService;
+  cardService;
 
   static navigationOptions = ({ navigation }) => {
       return {
@@ -36,62 +36,53 @@ export default class ModifyCardScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.bankService = new BankService();
+    this.cardService = new CardService();
     this.state = {
-                  id:'',
-                  name:'',
-                  entity: '',
-                  lastFourNumbers:'',
-                  expiryDate:'',
-                  dueDate:'',
-                  closeDate:'',
+      //Cards
+      id:'',
+      name:'',
+      entity: '',
+      lastFourNumbers:'',
+      expiryDate:'',
+      dueDate:'',
+      closeDate:'',
+      //Banks
+      allBanks: []
     };
   }
 
   componentDidMount() {
     const { navigation } = this.props;
     const id = navigation.getParam('id');
-    if(id!= undefined){
-      this.getCard(id);
-    }
-    /*
-    let id = this.props.navigation.state.params.category
-    let result;
-    try {
-      result = await axios.request({
-        method: 'GET',
-        url: `https://developers.zomato.com/api/v2.1/search?category=${id}`,
-        headers: {
-          'Content-Type': 'application/json',
-          'user-key': "a31bd76da32396a27b6906bf0ca707a2",
-        },
-      })
-    } catch (err) {
-      err => console.log(err)
-    }
-    this.setState({
-      isLoading: false,
-      data: result.data.restaurants
-    })
-    */
+    this.setCardToState(id);
+    this.bankService.getAllBanks()
+     .then((banks) => {
+        this.setState({
+            allBanks: banks
+        });
+     });
   }
 
-getCard(id){
-//console.log('GetCard');
-let card =getCardId(id);
-//console.log(card);
-  this.setState({id: card.id,
+  setCardToState(id){
+    if(id!== undefined){
+      this.cardService.getCardById(id)
+        .then((card) => {
+            this.setState({
+                id: card.id,
                 name: card.name,
-                entity: card.entity,
+                entity: card.bankId,
                 lastFourNumbers: card.lastFourNumbers,
                 expiryDate: card.expiryDate,
                 dueDate: card.dueDate,
-                closeDate: card.closeDate});
-}
+                closeDate: card.closeDate
+            })
+        });
+    }
+  }
   
 buttonPressed(){
-  Alert.alert(this.state.name +" - "+this.state.entity +" - " +this.state.lastFourNumbers +" - " +this.state.expiryDate 
-  +" - " + this.state.dueDate+" - " + this.state.closeDate ); 
-  
+
   //let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
 
@@ -108,16 +99,35 @@ buttonPressed(){
     (this.state.expiryDate.slice(0, 2)>12)|| (this.state.expiryDate.slice(0, 2)<1) || (this.state.expiryDate.slice(2, 4)<20))
       Alert.alert("ingrese un valor valido para el vencimiento"); 
     else {
-      if(!this.state.id || this.state.id=='')
-        Alert.alert("Grabar Nuevo");
-      else
-      Alert.alert("Grabar Update");
+      if(!this.state.id || this.state.id==''){
+        this.cardService.createCreditCard(
+            this.state.name,
+            this.state.entity,
+            this.state.lastFourNumbers,
+            this.state.expiryDate,
+            this.state.closeDate,
+            this.state.dueDate
+        );
+      } else {
+        this.cardService.updateCard(
+            this.state.id,
+            this.state.name,
+            this.state.entity,
+            this.state.lastFourNumbers,
+            this.state.expiryDate,
+            this.state.closeDate,
+            this.state.dueDate
+        );
+      }
     }
 }
 
   render() {
 
-    const entitiesArray = getEntities();
+    let banksList = this.state.allBanks.map( (v,k) => {
+          return {value:v.id, label:v.name};
+    });
+
     return (
       <View>
         <ScrollView>
@@ -134,7 +144,7 @@ buttonPressed(){
             />
             <Dropdown
               placeholder='Seleccione entidad'
-              data={entitiesArray}
+              data={banksList}
               value={this.state.entity}
               onChangeText={(entity) => this.setState({entity})}
               style ={styles.input}
