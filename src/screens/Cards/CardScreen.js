@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
+import CardService from '../../service/CardService';
 import {getAllCards} from '../../data/cards/cardsAPI';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
