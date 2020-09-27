@@ -1,10 +1,30 @@
 import React from 'react';
-import { FlatList, ScrollView, Text, View, TouchableHighlight, Image } from 'react-native';
+import {  Text, View, StyleSheet, Dimensions, ScrollView, TouchableHighlight, Image } from 'react-native';
 import styles from './styles';
-import { recipes } from '../../data/dataArrays';
 import MenuImage from '../../components/MenuImage/MenuImage';
-import DrawerActions from 'react-navigation';
-import { getCategoryName } from '../../data/MockDataAPI';
+
+
+
+import {
+  LineChart,
+  BarChart,
+  PieChart, ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+  } from 'react-native-chart-kit';
+
+  const screenWidth = Dimensions.get("window").width;
+const chartConfig = {
+  backgroundColor: '#ffffff',
+  backgroundGradientFrom: '#ffffff',
+  backgroundGradientTo: '#ffffff',
+  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`
+};
+const graphStyle = {
+  marginVertical: 8,
+  borderRadius: 16
+}
+
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -19,34 +39,57 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
   }
-/*
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
 
-  renderRecipes = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressRecipe(item)}>
-      <View style={styles.container}>
-        <Image style={styles.photo} source={{ uri: item.photo_url }} />
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.category}>{getCategoryName(item.categoryId)}</Text>
-      </View>
-    </TouchableHighlight>
+render() {
+  
+  return (
+    <View>
+    <Text>Bezier Line Chart</Text>
+    <LineChart
+      data={{
+        labels: ["January", "February", "March", "April", "May", "June"],
+        datasets: [
+          {
+            data: [
+              Math.random() * 100,
+              Math.random() * 100,
+              Math.random() * 100,
+              Math.random() * 100,
+              Math.random() * 100,
+              Math.random() * 100
+            ]
+          }
+        ]
+      }}
+      width={Dimensions.get("window").width} // from react-native
+      height={220}
+      yAxisLabel="$"
+      yAxisSuffix="k"
+      yAxisInterval={1} // optional, defaults to 1
+      chartConfig={{
+        backgroundColor: "#e26a00",
+        backgroundGradientFrom: "#fb8c00",
+        backgroundGradientTo: "#ffa726",
+        decimalPlaces: 2, // optional, defaults to 2dp
+        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+        style: {
+          borderRadius: 16
+        },
+        propsForDots: {
+          r: "6",
+          strokeWidth: "2",
+          stroke: "#ffa726"
+        }
+      }}
+      bezier
+      style={{
+        marginVertical: 8,
+        borderRadius: 16
+      }}
+    />
+  </View>
   );
-*/
-  render() {
-    return (
-      <View>
-        {/*<FlatList
-          vertical
-          showsVerticalScrollIndicator={false}
-          numColumns={2}
-          data={recipes}
-          renderItem={this.renderRecipes}
-          keyExtractor={item => `${item.recipeId}`}
-        />*/}
-        <Text>Dashboard</Text>
-      </View>
-    );
   }
-}
+  }
+  
