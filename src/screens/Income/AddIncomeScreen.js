@@ -18,6 +18,8 @@ import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
+import transactionTypeService from '../../service/TransactionTypeService';
+import TransactionTypeService from '../../service/TransactionTypeService';
 
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -28,7 +30,7 @@ export default class AddIncomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.transactionTypeService = new TransactionTypeService();
     this.state = {
                   date: new Date(),
                   typeIncome: '',
@@ -37,9 +39,19 @@ export default class AddIncomeScreen extends React.Component {
                   cash: true,
                   monthly: true,
                   currency: 1,
-                  detail: ''
+                  detail: '',
+                  alltransactionType: []
                 };
   }
+
+  componentDidMount(){
+    this.transactionTypeService.getTransactionTypeIncome()
+      .then((transactionType) => {
+        this.setState({
+          alltransactionType: transactionType
+        })
+    });
+ }
 
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
@@ -106,7 +118,9 @@ buttonPressed(){
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
-    const typeIncome = getTypeIncome();
+    let  typeIncomeList  = this.state.alltransactionType.map( (v,k) => {
+      return {value:v.id, label:v.name};
+    });
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
@@ -121,6 +135,7 @@ buttonPressed(){
     { label: 'Dolares', value: 2 }
   ];
 
+
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
@@ -132,7 +147,7 @@ buttonPressed(){
 
           <Dropdown
               placeholder="Seleccione tipo de ingreso"
-              data={typeIncome}
+              data={typeIncomeList}
               value={this.state.typeIncome}
               onChangeText={(typeIncome) => this.setState({typeIncome})}
               style ={styles.input}
