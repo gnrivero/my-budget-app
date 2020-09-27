@@ -80,6 +80,7 @@ export default class CuentaScreen extends React.Component {
            allBanks: banks
          })
      });
+  }
 
   onChangeCard = ({ value }) =>{
     let agregarTarjeta = value
