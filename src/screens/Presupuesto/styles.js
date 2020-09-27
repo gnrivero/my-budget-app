@@ -134,7 +134,6 @@ info: {
     height: 250
   },
 
-
   footer: {
     height: 40,
     position: 'absolute',
