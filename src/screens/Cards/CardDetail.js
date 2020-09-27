@@ -27,7 +27,7 @@ export class CardDetailInfoScreen extends React.Component {
             <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{card.name}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
+              <Text style={styles.infoTextDetail}>Termina en: </Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
             </View>
           </View>
           <View style={styles.info}>
