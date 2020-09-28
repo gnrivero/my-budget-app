@@ -18,7 +18,6 @@ import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
-import transactionTypeService from '../../service/TransactionTypeService';
 import TransactionTypeService from '../../service/TransactionTypeService';
 
 export default class AddIncomeScreen extends React.Component {
@@ -38,9 +37,9 @@ export default class AddIncomeScreen extends React.Component {
                   value: '',
                   cash: true,
                   monthly: true,
-                  currency: 1,
+                  currency: 'ARS',
                   detail: '',
-                  alltransactionType: []
+                  allTransactionType: []
                 };
   }
 
@@ -48,7 +47,7 @@ export default class AddIncomeScreen extends React.Component {
     this.transactionTypeService.getTransactionTypeIncome()
       .then((transactionType) => {
         this.setState({
-          alltransactionType: transactionType
+          allTransactionType: transactionType
         })
     });
  }
@@ -79,7 +78,7 @@ export default class AddIncomeScreen extends React.Component {
 
   onChangeCurrency = ({ value }) =>{
     let currency = value
-    Alert.alert('Call onPress with value:' + currency    );
+    //Alert.alert('Call onPress with value:' + currency    );
    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
     if(currency){
@@ -118,9 +117,11 @@ buttonPressed(){
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
-    let  typeIncomeList  = this.state.alltransactionType.map( (v,k) => {
+    
+    let  typeIncomeList  = this.state.allTransactionType.map( (v,k) => {
       return {value:v.id, label:v.name};
     });
+    
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
@@ -131,8 +132,8 @@ buttonPressed(){
   ];
 
   const optionsCurrency = [
-    { label: 'Pesos', value: 1},
-    { label: 'Dolares', value: 2 }
+    { label: 'Pesos', value: 'ARS'},
+    { label: 'Dolares', value: 'USD' }
   ];
 
 

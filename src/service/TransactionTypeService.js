@@ -12,7 +12,7 @@ export default class TransactionTypeService {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO TransactionType(name, type)" +
+                   "INSERT INTO transactionType(name, type)" +
                    "VALUES (?,?)",
                    [name,type],
                    (txn, res) => { console.log("TransactionTypeService: Affected Rows " + res.rowsAffected); },
@@ -28,7 +28,7 @@ export default class TransactionTypeService {
           conn.transaction(
             (txn) => {
                txn.executeSql(
-                    "SELECT * FROM TransactionType",
+                    "SELECT * FROM transactionType",
                     [],
                     (txn, res) => {
                        let transactionType = new Array();
@@ -51,7 +51,7 @@ export default class TransactionTypeService {
           conn.transaction(
             (txn) => {
                txn.executeSql(
-                    "SELECT * FROM TransactionType where type='I'",
+                    "SELECT * FROM transactionType where type='I'",
                     [],
                     (txn, res) => {
                        let transactionType = new Array();
@@ -74,7 +74,7 @@ export default class TransactionTypeService {
           conn.transaction(
             (txn) => {
                txn.executeSql(
-                    "SELECT * FROM TransactionType where type='E'",
+                    "SELECT * FROM transactionType where type='E'",
                     [],
                     (txn, res) => {
                        let transactionType = new Array();
@@ -97,17 +97,17 @@ export default class TransactionTypeService {
     */
    initDB(resetData){
         if(resetData == true){
-            console.log("TransactionTypeService: Dropping table TransactionType");
+            console.log("TransactionTypeService: Dropping table transactionType");
             this.db.transaction(
                 (txn) => {
                     txn.executeSql(
-                        "DROP TABLE IF EXISTS TransactionType",
+                        "DROP TABLE IF EXISTS transactionType",
                         [],
                         (txn, res) => {
                             console.log("TransactionTypeService: Table Dropped");
-                            console.log("TransactionTypeService: Creating Table TransactionType");
+                            console.log("TransactionTypeService: Creating Table transactionType");
                             txn.executeSql(
-                                "CREATE TABLE IF NOT EXISTS TransactionType (" +
+                                "CREATE TABLE IF NOT EXISTS transactionType (" +
                                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                     "name VARCHAR(20)," +
                                     "type VARCHAR(10))",

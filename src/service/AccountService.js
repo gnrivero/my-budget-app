@@ -183,6 +183,8 @@ export default class AccountService {
             );
 
             //Inicializo algunos datos
+            this.createAccount('Efectivo', 'ARS', null, '', null, 0);
+            this.createAccount('Efectivo', 'USD', null, '', 1, 0);
             this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 0);
             this.makeDeposit(1,10500);
             this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 1, 0);
