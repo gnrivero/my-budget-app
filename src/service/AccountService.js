@@ -1,27 +1,39 @@
 import DBConnector from '../data/access/DBConnector';
+import CardService from './CardService';
 
 export default class AccountService {
 
     db;
+    cardService;
 
     constructor(){
         this.db = DBConnector.connect();
+        this.cardService = new CardService();
     }
 
-    createAccount(name, currencyCode, bankId, identificationNumber, cardId, balance){
+    createAccount(name, currencyCode, bankId, identificationNumber, cardId, balance) {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
                    "INSERT INTO account(name, currencyCode, bankId, identificationNumber, cardId, balance) " +
                    "VALUES (?,?,?,?,?,?)",
                    [name, currencyCode, bankId, identificationNumber, cardId, balance],
-                   (txn, res) => { console.log("AccountService: Affected Rows " + res.rowsAffected); }
+                   (txn, res) => { console.log("createAccount: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("createAccount: " + res); }
               )
            }
        );
     }
 
-    updateAccount(id, name, currencyCode, bankId, identificationNumber, cardId, balance){
+    createAccountWithDebitCard(name, currencyCode, bankId, identificationNumber, balance, lastFourNumbers, expiryDate) {
+        this.cardService.createDebitCard('Débito cuenta ' + name, bankId, lastFourNumbers,expiryDate)
+        .then((cardId) => {
+            console.log("CreateDebitCard: Generated ID: " + cardId);
+            this.createAccount(name, currencyCode, bankId, identificationNumber, cardId, balance);
+        });
+    }
+
+    updateAccount(id, name, currencyCode, bankId, identificationNumber, balance) {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
@@ -30,11 +42,11 @@ export default class AccountService {
                    "currencyCode = ?, " +
                    "bankId = ?, " +
                    "identificationNumber = ?, " +
-                   "cardId = ?," +
                    "balance = ? " +
                    "WHERE id = ?",
-                   [name, currencyCode, bankId, identificationNumber, cardId, balance, id],
-                   (txn, res) => { console.log("AccountService: Affected Rows " + res.rowsAffected); }
+                   [name, currencyCode, bankId, identificationNumber, balance, id],
+                   (txn, res) => { console.log("updateAccount with ID: " + id); },
+                   (txn, err) => { console.log("updateAccount: " + err); }
               )
            }
        );
@@ -44,7 +56,6 @@ export default class AccountService {
 
         this.db.transaction(
            (txn) => {
-              console.log("Account Service: Retrieving Account data");
               txn.executeSql(
                 "SELECT * FROM account WHERE id = ?",
                 [accountId],
@@ -73,7 +84,6 @@ export default class AccountService {
     makeWithdraw(accountId, amount){
         this.db.transaction(
            (txn) => {
-              console.log("Account Service: Retrieving Account data");
               txn.executeSql(
                 "SELECT * FROM account WHERE id = ?",
                 [accountId],
@@ -122,7 +132,7 @@ export default class AccountService {
                        resolve(accounts);
                     },
                     (txn, err) => {
-                        console.log("AccountService:" + err);
+                        console.log("getAllAccounts:" + err);
                     }
                )
             }
@@ -136,13 +146,27 @@ export default class AccountService {
             conn.transaction(
               (txn) => {
                  txn.executeSql(
-                    "SELECT * FROM account WHERE id = ?",
+                    "SELECT " +
+                      " account.id, " +
+                      " account.name, " +
+                      " account.identificationNumber, " +
+                      " account.balance, " +
+                      " account.currencyCode, " +
+                      " account.bankId, " +
+                      " card.lastFourNumbers AS cardLastFourNumbers, " +
+                      " card.expiryDate AS cardExpiryDate " +
+                    "FROM account " +
+                    " LEFT JOIN card ON card.id = account.cardId " +
+                    "WHERE account.id = ?",
                     [id],
                     (txn, res) => {
                          if (res.rows.length >= 1) {
                            var account = res.rows.item(0);
                            resolve(account);
                          }
+                    },
+                    (txn, err) => {
+                        console.log("getAccountById: " + err);
                     }
                  )
               });
@@ -168,7 +192,7 @@ export default class AccountService {
     }
 
     createTable(){
-        console.log("Dropping table account");
+        console.log("AccountService: Dropping table account");
         this.db.transaction(
             (txn) => {
                 txn.executeSql(
@@ -198,14 +222,13 @@ export default class AccountService {
 
     populate(){
         //Inicializo algunos datos
+        console.log("AccountService: Populating table account");
         this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 10500);
-        this.createAccount('Cuenta Corriente','ARS', 1, '0070000000000000000002', 1, 0);
-        this.createAccount('Caja de Ahorro','ARS', 2, '0040000000000000000001', 2, 2350);
     }
 
 
     test(){
-
+        console.log("AccountService: Running Tests");
         this.makeDeposit(1,10500);
         this.makeDeposit(3,2320);
 
@@ -233,7 +256,7 @@ export default class AccountService {
             }
          });
 
-         this.updateAccount(3, 'Caixa de Ahorrao','ARS', 3, '0040000001111000000001', 2, 0);
+         this.updateAccount(3, 'Caixa de Ahorrao','ARS', 3, '0040000001111000000001', 0);
 
          this.getAccountById(3)
              .then(account => {
@@ -241,5 +264,6 @@ export default class AccountService {
                  console.log(account);
              });
 
+         this.createAccountWithDebitCard('Caja Galicia', 'ARS', 1, '007000000011111110000022', 1500, '7899', '0124');
     }
 }
