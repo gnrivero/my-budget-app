@@ -121,7 +121,6 @@ export default class AddIncomeScreen extends React.Component {
 
   onChangeCurrency = ({ value }) =>{
     let currency = value;
-    console.log(currency)
    //Alert.alert('Call onPress with value:' + currency    );
    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
