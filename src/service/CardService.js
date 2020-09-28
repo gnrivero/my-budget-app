@@ -13,20 +13,23 @@ export default class CardService {
     }
 
     createDebitCard(name, bankId, lastFourNumbers, expiryDate) {
-        this.createCard('DEBIT', name, bankId, lastFourNumbers, expiryDate, null, null);
+        return this.createCard('DEBIT', name, bankId, lastFourNumbers, expiryDate, null, null);
     }
 
-    createCard(type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate){
-        this.db.transaction(
-           (txn) => {
-              txn.executeSql(
-                   "INSERT INTO card(type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate) " +
-                   "VALUES (?,?,?,?,?,?,?)",
-                   [type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate],
-                   (txn, res) => { console.log("CardService: Affected Rows " + res.rowsAffected); }
-              )
-           }
-       );
+    createCard(type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate) {
+        return new Promise((resolve) => {
+            this.db.transaction(
+               (txn) => {
+                  txn.executeSql(
+                       "INSERT INTO card(type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate) " +
+                       "VALUES (?,?,?,?,?,?,?)",
+                       [type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate],
+                       (txn, res) => {
+                            resolve(res.insertId);
+                       }
+                  )
+               });
+            });
     }
 
     updateCard(id, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate){
@@ -36,8 +39,8 @@ export default class CardService {
                    "UPDATE card SET name = ?, bankId = ?, lastFourNumbers = ?, expiryDate = ?, closeDate = ?, dueDate = ? " +
                    "WHERE id = ?",
                    [name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate, id],
-                   (txn, res) => { console.log("CardService: Affected Rows " + res.rowsAffected); },
-                   (txn, err) => { console.log("CardService: failed " + err); }
+                   (txn, res) => { console.log("updateCard: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("updateCard: failed " + err); }
               )
            }
        );
@@ -137,16 +140,17 @@ export default class CardService {
     }
 
     populate(){
+        console.log("CardService: Populating table card");
         this.createCreditCard('AMEX Black', 1, '1234', '0124', '24-09-2020', '28-09-2020');
         this.createCreditCard('Visa Signature', 1,'7890', '0125', '01-10-2020', '11-10-2020');
         this.createCreditCard('Master Black', 2, '4567', '0123', '02-10-2020', '12-10-2020');
-        this.createDebitCard('Visa Débito', 1, '3829', '0125');
+        this.createDebitCard('Visa Débito', 1, '3829', '0125')
+            .then((id) => {
+                console.log("CreateDebitCard: Generated ID: " + id);
+            });
     }
 
-    test(resetData){
-
-        this.initDB(resetData);
-
+    test(){
         console.log("Test: Get All Cards");
         this.getAllCards()
           .then((cards) => {
