@@ -171,7 +171,7 @@ export default class IncomeService {
             );
 
             this.createTransaction('Alquiler Eftvo Pesos', true, 'ARS',1,'2020/09/27',200.20,'null',true);
-            this.createTransaction('Sueldo Eftvo Dolar', true, 'ARS',3,'2020/09/21',1500.10,null, true);
+            this.createTransaction('Sueldo Eftvo Dolar', true, 'USD',3,'2020/09/21',1500.10,null, true);
             this.createTransaction('Facturacion', false, 'ARS',4,'2020/09/20',400.10,3, true);
 
             this.getAllTransaction()

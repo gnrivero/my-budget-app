@@ -14,7 +14,7 @@ export default class DBInit {
         bankService.initDB();
 
         const accountService = new AccountService();
-        accountService.initDB(true);//Poner esto en true si necesitan resetear las tablas
+        accountService.initDB(false);//Poner esto en true si necesitan resetear las tablas
         //accountService.test(true);
 
         

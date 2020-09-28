@@ -19,6 +19,7 @@ import SwitchSelector from 'react-native-switch-selector';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import TransactionTypeService from '../../service/TransactionTypeService';
+import AccountService from '../../service/AccountService';
 
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -30,7 +31,9 @@ export default class AddIncomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.transactionTypeService = new TransactionTypeService();
+    this.accountService = new AccountService();
     this.state = {
+                  id:'',
                   date: new Date(),
                   typeIncome: '',
                   account:'',
@@ -39,10 +42,11 @@ export default class AddIncomeScreen extends React.Component {
                   monthly: true,
                   currency: 'ARS',
                   detail: '',
+                  allAccount: [],
                   allTransactionType: []
                 };
   }
-
+ 
   componentDidMount(){
     this.transactionTypeService.getTransactionTypeIncome()
       .then((transactionType) => {
@@ -50,7 +54,38 @@ export default class AddIncomeScreen extends React.Component {
           allTransactionType: transactionType
         })
     });
+    
+    this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
+    
+    
+      console.log("----------------FIN DIDMOUNT-------------------------"); 
  }
+
+ componentDidUpdate(p,p1){
+  console.log("----------------CAMPO P--------------------------"); 
+ // console.log(p);
+  console.log("----------------CAMPO P1--------------------------"); 
+ // console.log(p1);
+   /* this.transactionTypeService.getTransactionTypeIncome()
+    .then((transactionType) => {
+      this.setState({
+        allTransactionType: transactionType
+      })
+  });
+
+  this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+
+    });*/
+}
 
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
@@ -68,25 +103,36 @@ export default class AddIncomeScreen extends React.Component {
   }
 
   onChangeCash = ({ value }) =>{
-    let cash = value
+    let cash = value;
     //Alert.alert('Call onPress with value:' + cash    );
     this.setState({cash});
     if(cash){
       this.setState({account:''});
+    }else{
+      this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+      .then((accounts) => {
+        this.setState({
+          allAccount: accounts
+        })
+      });
+      
     }
   }
 
   onChangeCurrency = ({ value }) =>{
-    let currency = value
-    //Alert.alert('Call onPress with value:' + currency    );
+    let currency = value;
+    console.log(currency)
+   //Alert.alert('Call onPress with value:' + currency    );
    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
-    if(currency){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
-    }
+    this.accountService.getAccountBycurrencyCodeCombo(currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
+    
+
   }
 
 buttonPressed(){
@@ -116,12 +162,15 @@ buttonPressed(){
     const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
-    
-    let  typeIncomeList  = this.state.allTransactionType.map( (v,k) => {
+/*
+    let  accountList  = this.state.allAccount.map( (v,k) => {
       return {value:v.id, label:v.name};
     });
-    
+*/
+    let  transactionTypeList  = this.state.allTransactionType.map( (v,k) => {
+      return {value:v.id, label:v.name};
+    });
+
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
@@ -145,10 +194,11 @@ buttonPressed(){
           </View>
           <Text style={styles.cuentasInfo}>Nuevo ingreso:</Text>
           <View style={{marginBottom: 40, padding:10}}>
-
+          <Text>state</Text>
+    <Text>{this.state.allAccount.length}</Text>
           <Dropdown
               placeholder="Seleccione tipo de ingreso"
-              data={typeIncomeList}
+              data={transactionTypeList}
               value={this.state.typeIncome}
               onChangeText={(typeIncome) => this.setState({typeIncome})}
               style ={styles.input}
@@ -197,12 +247,14 @@ buttonPressed(){
             {!this.state.cash?(
               <Dropdown
                 placeholder='Seleccione cuenta'
-                data={accountsArray}
+                data={this.state.allAccount}
                 value={this.state.account}
                 onChangeText={(cuenta) => this.setState({account:cuenta})}
                 style ={styles.input}
               />
-            ): null}
+              
+            ): null
+            }
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
