@@ -27,15 +27,15 @@ export class CuentaDetailInfoScreen extends React.Component {
        <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
             <Image source={require('../../../assets/icons/cuenta.png')} style={styles.cuentasItemIcon} /> 
-            <Text style={styles.infoText}>{cuenta.nombreCuenta}</Text>
+            <Text style={styles.infoText}>{cuenta.name}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>CBU/CVU: {cuenta.cbuCvu}</Text>
+            <Text style={styles.infoTextDetail}>CBU/CVU: {cuenta.cbu}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>{cuenta.nombreEntidad}</Text>
+            <Text style={styles.infoTextDetail}>{cuenta.bank}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>{cuenta.currency==1?'ARS:':(cuenta.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{cuenta.saldo}</Text>
+              <Text style={styles.infoTextDetail}>{cuenta.currencyCode} </Text><Text style={styles.infoText}>{cuenta.balance}</Text>
             </View>
           </View>
         </View>
