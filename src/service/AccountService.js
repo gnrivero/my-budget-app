@@ -172,7 +172,35 @@ export default class AccountService {
               });
          });
     }
-
+  
+    getAccountBycurrencyCodeCombo(currencyCode) {
+        const conn = this.db;
+        return new Promise((resolve) => {
+            conn.transaction(
+              (txn) => {
+                 txn.executeSql(
+                    
+                        "SELECT "+
+                    " account.id as value," +
+                    " account.name as label" +
+                    " FROM account WHERE currencyCode = ? and id>2",
+                    
+                    //"SELECT * FROM account WHERE currencyCode = ? and id>2",
+                    [currencyCode],
+                    (txn, res) => {
+                        let accounts = new Array();
+                        for(var i = 0; i < res.rows.length; ++i){
+                            accounts.push(res.rows.item(i));
+                        }
+                        resolve(accounts);
+                     },
+                     (txn, err) => { console.log("AccountService: getAccountBycurrencyCodeCombo failed " + err); }
+                     
+                 )
+              });
+         });
+    }
+ 
     /*
         Este método debe ser llamado desde DBInit.js
     */
@@ -188,6 +216,7 @@ export default class AccountService {
 
         if(runTests === true){
             this.test();
+
         }
     }
 
@@ -222,8 +251,9 @@ export default class AccountService {
 
     populate(){
         //Inicializo algunos datos
-        console.log("AccountService: Populating table account");
-        this.createAccount('Caja de Ahorro', 'ARS', 1, '0070000000000000000001', 1, 10500);
+        console.log("AccountService: Populating table account");     
+        this.createAccount('Efectivo', 'ARS', null, '', null, 0);
+        this.createAccount('Efectivo', 'USD', null, '', null, 0);      
     }
 
 

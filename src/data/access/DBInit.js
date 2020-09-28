@@ -1,6 +1,8 @@
 import CardService from '../../service/CardService';
 import AccountService from '../../service/AccountService';
 import BankService from '../../service/BankService';
+import TransactionTypeService from '../../service/TransactionTypeService';
+import TransactionService from '../../service/TransactionService';
 
 export default class DBInit {
 
@@ -19,5 +21,12 @@ export default class DBInit {
 
         const accountService = new AccountService();
         accountService.initDB(true,true,false);
+        
+        const transactionTypeService = new TransactionTypeService();
+        transactionTypeService.initDB(true);
+
+        const transactionService = new TransactionService();
+        transactionService.initDB(true);
+      
     }
 }
