@@ -129,9 +129,11 @@ buttonPressed() {
                 this.state.vencimientoTarjeta
             );
     }
-
-    this.props.navigation.navigate('Cuentas');
- }
+    setTimeout(
+      () => { this.props.navigation.navigate('Cuentas',{name: 'Cuentas'}); },
+      2000
+    )
+  }
 
   render() {
     const { navigation } = this.props;

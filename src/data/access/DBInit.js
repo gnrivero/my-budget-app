@@ -26,7 +26,7 @@ export default class DBInit {
         transactionTypeService.initDB(true);
 
         const transactionService = new TransactionService();
-        transactionService.initDB(true);
+        transactionService.initDB(false,false,false);
       
     }
 }

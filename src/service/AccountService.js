@@ -131,10 +131,11 @@ export default class AccountService {
                     " account.currencyCode as currencyCode," +
                     " bank.name as bank " +
                     "FROM account " +
-                    "INNER JOIN bank ON account.bankId = bank.id",
+                    "LEFT JOIN bank ON account.bankId = bank.id",
                     [],
                     (txn, res) => {
                        let accounts = new Array();
+                       console.log(res.rows.length)
                        for(var i = 0; i < res.rows.length; ++i){
                          accounts.push(res.rows.item(i));
                        }
