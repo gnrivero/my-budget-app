@@ -94,7 +94,6 @@ export default class CuentaScreen extends React.Component {
 
 buttonPressed() {
 
-    console.log("Screen: Validating input");
     var error = searchStateError(this.state);
 
     console.log(this.state);
@@ -105,7 +104,7 @@ buttonPressed() {
     }
 
     if( this.state.id !== undefined && this.state.id != '' ) {
-        console.log("Screen: Updating Account");
+
         this.accountService
             .updateAccountWithDebitCard(
                 this.state.id,
@@ -118,7 +117,7 @@ buttonPressed() {
                 this.state.vencimientoTarjeta
             );
     } else {
-        console.log("Screen: Creating Account");
+
         this.accountService
             .createAccountWithDebitCard(
                 this.state.nombreCuenta,
