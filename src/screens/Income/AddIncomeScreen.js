@@ -10,13 +10,11 @@ import {
   Alert,
 } from 'react-native';
 import styles from './styles';
-import {
-  getAccounts, getTypeIncome
-} from '../../data/income/incomeAPI';
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
+
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
 import AccountService from '../../service/AccountService';
@@ -49,7 +47,7 @@ export default class AddIncomeScreen extends React.Component {
   }
  
   componentDidMount(){
-    this.transactionTypeService.getTransactionTypeIncome()
+    this.transactionTypeService.getTransactionType('I')
       .then((transactionType) => {
         this.setState({
           allTransactionType: transactionType
@@ -63,11 +61,7 @@ export default class AddIncomeScreen extends React.Component {
       })
     });
  }
-
  
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
   onChangeMonthly = ({ value }) =>{
     let monthly = value
     this.setState({monthly});
@@ -200,7 +194,7 @@ buttonPressed(){
               style={{marginBottom: 10}}
               date={this.state.date} //initial date from state
               mode="date" //The enum of date, datetime and time
-              placeholder="Seleccione una fecha"
+              placeholder="Seleccione fecha"
               format="DD-MM-YYYY"
               minDate="01-01-2020"
               

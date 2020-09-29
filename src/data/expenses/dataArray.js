@@ -1,26 +1,26 @@
 export const paymentMethods = [
    {
-      value : 1,
+      value : 'CHASH',
       label: 'Contado',
    },
    {
-      value:2,
+      value: 'DC',
       label: 'Tarjeta Débito',
    },
    {
-      value:3,
+      value:'CC',
       label: 'Tarjeta crédito',
    },
    {
-      value:4,
+      value:'AUTODEBIT',
       label: 'Débito Automatico en cuenta',
    },
    {
-      value:5,
+      value:'TRANSFER',
       label: 'Transferencia',
    },
    {
-      value:6,
+      value:'OTHER',
       label: 'Otro'
    },
 ]

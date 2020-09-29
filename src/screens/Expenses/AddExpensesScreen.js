@@ -25,6 +25,10 @@ import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
 
+import TransactionTypeService from '../../service/TransactionTypeService';
+import TransactionService from '../../service/TransactionService';
+import AccountService from '../../service/AccountService';
+
 export default class AddExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -34,55 +38,87 @@ export default class AddExpensesScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.transactionTypeService = new TransactionTypeService();
+    this.accountService = new AccountService();
+    this.transactionService = new TransactionService();
     this.state = {
-                  date: new Date(),
+                  date: '',
                   typeExpenses: '',
                   account:'',
                   value: '',
                   monthly: true,
-                  currency: 1,
+                  currency: 'ARS',
                   detail: '',
-                  typeIncome: '',
                   card: '',
                   paymentMethod: '',
                   installments: '',
                   showCard:false,
                   showAccount:false,
-                  showInstallments:false
+                  showInstallments:false,
+                  allAccount: [],
+                  allTransactionType: []
                 };
   }
 
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
+
+
+  componentDidMount(){
+    this.transactionTypeService.getTransactionType('E')
+      .then((transactionType) => {
+        this.setState({
+          allTransactionType: transactionType
+        })
+    });
+
+    this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
+
+  }
+
   onChangeMonthly = ({ value }) =>{
     let monthly = value
-    //Alert.alert('Call onPress with value:' + monthly    );
     this.setState({monthly});
     if(monthly){
      /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
       */
     }
   }
 
-  onChangeCurrency = ({ value }) =>{
-    let currency = value
-    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
-    this.setState({currency});
-    if(currency){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
+  /*
+  onChangeCash = ({ value }) =>{
+    let cash = value;
+    this.setState({cash});
+    if(cash){
+      this.setState({account:''});
+    }else{
+      this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+      .then((accounts) => {
+        this.setState({
+          allAccount: accounts
+        })
+      });
+      
     }
   }
+*/
 
   getValidOptions =({paymentMethod}) =>{
     this.setState({paymentMethod});
-    if(paymentMethod==3){
+    if(paymentMethod=='CHASH'){
+      this.setState({
+        showCard:false,
+        showInstallments:false,
+        showAccount:false,
+        card:'',
+        installments:'',
+        account:'',
+      });
+    }
+    else if(paymentMethod=='CC'){
       this.setState({
         showCard:true,
         showInstallments:true,
@@ -91,7 +127,7 @@ export default class AddExpensesScreen extends React.Component {
         installments:'',
         account:''
         })
-    }else if (paymentMethod==2){
+    }else if (paymentMethod=='DC'){
       this.setState({
         showCard:true,
         showInstallments:false,
@@ -101,7 +137,7 @@ export default class AddExpensesScreen extends React.Component {
         account:''
         })
     }
-    else if(paymentMethod!=3 && paymentMethod!=2){
+    else{
       this.setState({
         showCard:false,
         showInstallments:false,
@@ -109,7 +145,7 @@ export default class AddExpensesScreen extends React.Component {
         card:'',
         installments:'',
         account:''
-        })
+      })
     }
   }
 
@@ -126,7 +162,7 @@ buttonPressed(){
   }
   else if(!decimalreg.test(this.state.value))
     Alert.alert("ingrese un valor valido en el monto"); 
-  else if(this.state.paymentMethod==3){
+  else if(this.state.paymentMethod=='CC'){
     //Compra con Credito
     if((!this.state.card|| this.state.card=='') || (!this.state.installments|| this.state.installments=='')){
       Alert.alert("Complete los campos faltantes del egreso")
@@ -135,7 +171,7 @@ buttonPressed(){
     }else{
       Alert.alert("Grabar egreso con tarjeta Credito");
     }
-  }else if (this.state.paymentMethod==2){
+  }else if (this.state.paymentMethod=='DC'){
     //Compra con Debito
     if((!this.state.card|| this.state.card=='')){
       Alert.alert("Complete los campos faltantes del egreso")
@@ -143,7 +179,7 @@ buttonPressed(){
       Alert.alert("Grabar egreso con tarjeta Debito");
     }
   }
-  else if(this.state.paymentMethod!=3 && this.state.paymentMethod!=2){
+  else if(this.state.paymentMethod!='CC' && this.state.paymentMethod!='DC'){
     //Compra con otro medio/// asumimos que va a una cuenta
     if((!this.state.account|| this.state.account=='')){
       Alert.alert("Complete los campos faltantes del egreso")
@@ -156,23 +192,21 @@ buttonPressed(){
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const accountsArray = getAccounts();
+    
     const paymentMethods = getPaymentMethods();
-    const typeExpensesList = getTypeExpenses();
     const cards = getAllCardsCombo();//Ver de pasar un parametro para que traiga las tarjetas de credito o debito
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
     ];
-  const optionsCash = [
-    { label: 'En Efectivo', value: true},
-    { label: 'En Cuenta', value: false }
-  ];
+    const optionsCurrency = [
+      { label: 'Pesos', value: 'ARS'},
+      { label: 'Dolares', value: 'USD' }
+    ];
 
-  const optionsCurrency = [
-    { label: 'Pesos', value: 1},
-    { label: 'Dolares', value: 2 }
-  ];
+  let  transactionTypeList  = this.state.allTransactionType.map( (v,k) => {
+    return {value:v.id, label:v.name};
+  });
 
     return (
       <View>
@@ -184,7 +218,7 @@ buttonPressed(){
         <View style={{marginBottom: 40, padding:10}}>
             <Dropdown
                 placeholder="Seleccione tipo de egreso"
-                data={typeExpensesList}
+                data={transactionTypeList}
                 value={this.state.typeExpenses}
                 onChangeText={(typeExpenses) => this.setState({typeExpenses})}
                 style ={styles.input}
@@ -221,7 +255,6 @@ buttonPressed(){
             <SwitchSelector options={optionsMontly} initial={0} onPress={value => this.onChangeMonthly({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
             <View style={{padding:5}}></View>
             <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
-            
             <Dropdown
                 placeholder="Seleccione medio de pago"
                 data={paymentMethods}
@@ -238,7 +271,7 @@ buttonPressed(){
             {this.state.showAccount?(
               <Dropdown
                   placeholder='Seleccione cuenta'
-                  data={accountsArray}
+                  data={this.state.allAccount}
                   value={this.state.account}
                   onChangeText={(cuenta) => this.setState({account:cuenta})}
                   style ={styles.input}
@@ -261,26 +294,6 @@ buttonPressed(){
                   value={this.state.installments}
               />
             ):null}
-          {/* 
-            {this.state.agregarTarjeta ? (
-            <View style={{padding:10}}>
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={4}
-                style ={styles.input}
-                placeholder="Ultimos 4 numeros de la tarjeta de debito"
-                onChangeText={(numerosTarjeta) => this.setState({numerosTarjeta})}
-                value={this.state.numerosTarjeta}
-              />
-              <TextInput keyboardType='decimal-pad'
-                maxLength ={6}
-                style ={styles.input}
-                placeholder="Vencimiento MMAAAA"
-                onChangeText={(vencimientoTarjeta) => this.setState({vencimientoTarjeta})}
-                value={this.state.vencimientoTarjeta}
-              />
-            </View>
-            ) : null}
-            */}
           </View>
         </ScrollView>
         <View style={[styles.footer]}>
