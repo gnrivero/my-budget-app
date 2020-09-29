@@ -53,10 +53,7 @@ export default class PresupuestoDashboardScreen extends React.Component {
           <Text style={styles.infoTextDetail}>Presupuesto Consumido: </Text><Text style={styles.infoText}>{item.presupuestoConsumido}</Text>
         </View>
         <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Inicio Periodo: </Text><Text style={styles.infoText}>{item.startDate}</Text>
-          <View style={styles.infoRight}>
-            <Text style={styles.infoTextDetail}>Cierre Periodo: </Text><Text style={styles.infoText}>{item.closeDate}</Text>
-          </View>
+          <Text style={styles.infoTextDetail}>Periodo: </Text><Text style={styles.infoText}>{item.period}</Text>
         </View>
         <View style={styles.info}>
           <Text style={styles.infoTextDetail}>Balance: </Text><Text style={styles.infoText}>{item.balance}</Text>

@@ -4,8 +4,7 @@ export const presupuestos = [
        presupuestoTotal: 50000,
        mes: 'Enero',
        presupuestoConsumido: 48000,
-       startDate: "01/01/2020",
-       closeDate: "31/01/2020",
+       period: "012020",
        balance: "2000"
     },
     {
@@ -13,8 +12,7 @@ export const presupuestos = [
         presupuestoTotal: 52000,
         mes: 'Febrero',
         presupuestoConsumido: 55000,
-        startDate: "01/02/2020",
-        closeDate: "28/02/2020",
+        period: "022020",
         balance: "-5000"
      },
      {
@@ -22,8 +20,7 @@ export const presupuestos = [
           presupuestoTotal: 75000,
           mes: 'Marzo',
           presupuestoConsumido: 50000,
-          startDate: "01/03/2020",
-          closeDate: "30/03/2020",
+          period: "032020",
           balance: "25000"
        }
    ];

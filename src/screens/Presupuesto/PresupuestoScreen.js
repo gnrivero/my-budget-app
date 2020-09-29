@@ -37,6 +37,7 @@ export default class PresupuestoScreen extends React.Component {
       viatico: '',
       comida: '',
       entretenimiento: '',
+      periodo:'',
     };
   }
 
@@ -67,7 +68,7 @@ export default class PresupuestoScreen extends React.Component {
       <ScrollView>
         <View style={{alignItems: 'center'}}>
             <View style={stylePresupuesto.itemContainer}>
-            <DatePicker
+            {/* <DatePicker
               style={{marginBottom: 10}}
               date={this.state.date} //initial date from state
               mode="date" //The enum of date, datetime and time
@@ -89,7 +90,15 @@ export default class PresupuestoScreen extends React.Component {
                 }
               }}
               onDateChange={(date) => {this.setState({date: date})}}
-            />
+            /> */}
+            <Text style={stylePresupuesto.infoRubro}>Ingrese Periodo</Text>
+            <TextInput placeholder="MMAAAA" textAlign="center" 
+                  style={stylePresupuesto.mediumInput}
+                  onChangeText={(periodo) => this.setState({periodo})}
+                  value={this.state.periodo}
+                  >
+                  </TextInput>
+
               <View style={stylePresupuesto.infoContainer}>
                 {/* <View><Text fontWeight='bold'>Rubros</Text></View> */}
                 <View style={stylePresupuesto.info}>
