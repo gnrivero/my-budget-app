@@ -130,7 +130,7 @@ buttonPressed() {
             );
     }
     setTimeout(
-      () => { this.props.navigation.navigate('Cuentas'); },
+      () => { this.props.navigation.navigate('Cuentas',{name: 'Cuentas'}); },
       2000
     )
   }
