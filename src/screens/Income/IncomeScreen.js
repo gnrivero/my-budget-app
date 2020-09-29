@@ -26,7 +26,7 @@ export default class IncomeScreen extends React.Component {
     this.service = new TransactionService();
     this.state = {
       allIncome : []
-  }
+    }
   }
 
   componentDidMount(){
@@ -37,6 +37,17 @@ export default class IncomeScreen extends React.Component {
       })
     });
    }
+   
+   componentWillReceiveProps(nextProp){
+    this.service.getTransactionByType('I')
+    .then((transaction) => {
+      this.setState({
+        allIncome: transaction
+      })
+    });
+   }
+
+
 
   onPressIncome = item => {
     /* VER SI HACEMOS ALGUNA LOGICA

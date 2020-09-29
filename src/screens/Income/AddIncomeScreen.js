@@ -19,6 +19,7 @@ import SwitchSelector from 'react-native-switch-selector';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import TransactionTypeService from '../../service/TransactionTypeService';
+import TransactionService from '../../service/TransactionService';
 import AccountService from '../../service/AccountService';
 
 export default class AddIncomeScreen extends React.Component {
@@ -32,12 +33,13 @@ export default class AddIncomeScreen extends React.Component {
     super(props);
     this.transactionTypeService = new TransactionTypeService();
     this.accountService = new AccountService();
+    this.transactionService = new TransactionService();
     this.state = {
                   id:'',
                   date: new Date(),
                   typeIncome: '',
                   account:'',
-                  value: '',
+                  amount: '',
                   cash: true,
                   monthly: true,
                   currency: 'ARS',
@@ -61,32 +63,9 @@ export default class AddIncomeScreen extends React.Component {
         allAccount: accounts
       })
     });
-    
-    
-      console.log("----------------FIN DIDMOUNT-------------------------"); 
  }
 
- componentDidUpdate(p,p1){
-  console.log("----------------CAMPO P--------------------------"); 
- // console.log(p);
-  console.log("----------------CAMPO P1--------------------------"); 
- // console.log(p1);
-   /* this.transactionTypeService.getTransactionTypeIncome()
-    .then((transactionType) => {
-      this.setState({
-        allTransactionType: transactionType
-      })
-  });
-
-  this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
-    .then((accounts) => {
-      this.setState({
-        allAccount: accounts
-      })
-
-    });*/
-}
-
+ 
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
   };
@@ -135,25 +114,56 @@ export default class AddIncomeScreen extends React.Component {
   }
 
 buttonPressed(){
-  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
+  //Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.amount +" - " +this.state.account); 
     let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.typeIncome|| this.state.typeIncome=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
-  (!this.state.value || this.state.value==''))
+  (!this.state.amount || this.state.amount==''))
   {
     Alert.alert("Complete los campos faltantes del ingreso")
   }
-  else if(!decimalreg.test(this.state.value))
+  else if(!decimalreg.test(this.state.amount))
     Alert.alert("ingrese un valor valido para el monto"); 
   else if(!this.state.cash){
       if((!this.state.account  || this.state.account=='')){
       Alert.alert("Complete los campos faltantes del ingreso")
     }
-    else
+    else{
       Alert.alert("Grabar con Cuenta");
+      this.transactionService.createTransaction('I',
+        this.state.detail,
+        this.state.cash,
+        this.state.currency,
+        this.state.typeIncome,
+        this.state.date,
+        this.state.amount,
+        this.state.account,
+        this.state.monthly);
+      
+        setTimeout(
+          () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
+          2000
+        )
+    }
   }  
-  else 
+  else {
     Alert.alert("Grabar Efectivo");
+    this.transactionService.createTransaction('I',
+      this.state.detail,
+      this.state.cash,
+      this.state.currency,
+      this.state.typeIncome,
+      this.state.date,
+      this.state.amount,
+      this.state.account,
+      this.state.monthly);
+
+      setTimeout(
+        () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
+        2000
+      )
+      
+  }
 }
 
   
@@ -240,8 +250,8 @@ buttonPressed(){
             <TextInput keyboardType='decimal-pad'
               style ={styles.input}
               placeholder="importe"
-              onChangeText={(value) => this.setState({value})}
-              value={this.state.value}
+              onChangeText={(amount) => this.setState({amount})}
+              value={this.state.amount}
             />
             {!this.state.cash?(
               <Dropdown

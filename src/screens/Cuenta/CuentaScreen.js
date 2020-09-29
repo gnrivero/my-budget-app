@@ -153,7 +153,11 @@ buttonPressed() {
                 this.state.saldo);
     }
 
-    this.props.navigation.navigate('Cuentas');
+    setTimeout(
+      () => { this.props.navigation.navigate('Cuentas'); },
+      2000
+    )
+    
 
  }
 

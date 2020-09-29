@@ -40,6 +40,17 @@ export default class CuentasScreen extends React.Component {
    });
   }
 
+  componentWillReceiveProps(nextProp){
+    console.log("nextpropert");
+    this.service.getAllAccounts()
+    .then((accounts) => {
+      this.setState({
+        allAccounts: accounts
+      })
+    });
+   }
+
+
   onPressCuenta = item => {
     //lo llamo sin pasarle parametros
     this.props.navigation.navigate('CuentaDetail',{name: 'Detalle cuenta', itemCuenta:  item});
@@ -54,7 +65,9 @@ export default class CuentasScreen extends React.Component {
             <Text style={styles.infoText}>{item.name}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbu}</Text>
+            {(item.cbu!='')?
+              <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbu}</Text>
+            :null}
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>{item.bank}</Text>
