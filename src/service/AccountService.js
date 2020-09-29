@@ -249,7 +249,7 @@ export default class AccountService {
                                 "bankId INTEGER," +
                                 "identificationNumber VARCHAR(22)," +
                                 "cardId INTEGER," +
-                                "balance INTEGER" +
+                                "balance DECIMAL(10,2)" +
                                 ")",
                             [],
                             (txn, res) => { console.log("AccountService: Table account created " + res); }

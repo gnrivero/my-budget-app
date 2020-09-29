@@ -16,7 +16,6 @@ import {
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
-//import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
@@ -36,10 +35,10 @@ export default class AddIncomeScreen extends React.Component {
     this.transactionService = new TransactionService();
     this.state = {
                   id:'',
-                  date: new Date(),
+                  date: '',
                   typeIncome: '',
                   account:'',
-                  amount: '',
+                  amount: 0,
                   cash: true,
                   monthly: true,
                   currency: 'ARS',
@@ -71,19 +70,15 @@ export default class AddIncomeScreen extends React.Component {
   };
   onChangeMonthly = ({ value }) =>{
     let monthly = value
-    //Alert.alert('Call onPress with value:' + monthly    );
     this.setState({monthly});
     if(monthly){
      /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
       */
     }
   }
 
   onChangeCash = ({ value }) =>{
     let cash = value;
-    //Alert.alert('Call onPress with value:' + cash    );
     this.setState({cash});
     if(cash){
       this.setState({account:''});
@@ -100,8 +95,6 @@ export default class AddIncomeScreen extends React.Component {
 
   onChangeCurrency = ({ value }) =>{
     let currency = value;
-   //Alert.alert('Call onPress with value:' + currency    );
-   //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
     this.accountService.getAccountBycurrencyCodeCombo(currency)
     .then((accounts) => {
@@ -109,8 +102,6 @@ export default class AddIncomeScreen extends React.Component {
         allAccount: accounts
       })
     });
-    
-
   }
 
 buttonPressed(){
@@ -118,7 +109,7 @@ buttonPressed(){
     let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.typeIncome|| this.state.typeIncome=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
-  (!this.state.amount || this.state.amount==''))
+  (!this.state.amount || this.state.amount==0))
   {
     Alert.alert("Complete los campos faltantes del ingreso")
   }
@@ -168,14 +159,10 @@ buttonPressed(){
 
   
   render() {
-    const mes = new Date().getMonth();
+    //const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-/*
-    let  accountList  = this.state.allAccount.map( (v,k) => {
-      return {value:v.id, label:v.name};
-    });
-*/
+
     let  transactionTypeList  = this.state.allTransactionType.map( (v,k) => {
       return {value:v.id, label:v.name};
     });
@@ -194,7 +181,6 @@ buttonPressed(){
     { label: 'Dolares', value: 'USD' }
   ];
 
-
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
@@ -203,8 +189,6 @@ buttonPressed(){
           </View>
           <Text style={styles.cuentasInfo}>Nuevo ingreso:</Text>
           <View style={{marginBottom: 40, padding:10}}>
-          <Text>state</Text>
-    <Text>{this.state.allAccount.length}</Text>
           <Dropdown
               placeholder="Seleccione tipo de ingreso"
               data={transactionTypeList}
