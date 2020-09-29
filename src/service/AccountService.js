@@ -73,7 +73,7 @@ export default class AccountService {
                      var account = res.rows.item(0);
 
                      var currentBalance = account.balance;
-                     var newBalance = currentBalance + amount;
+                     var newBalance = (1*currentBalance) + (1*amount);
 
                      txn.executeSql(
                         "UPDATE account SET balance = ?" +
@@ -249,7 +249,7 @@ export default class AccountService {
                                 "bankId INTEGER," +
                                 "identificationNumber VARCHAR(22)," +
                                 "cardId INTEGER," +
-                                "balance INTEGER" +
+                                "balance DECIMAL(10,2)" +
                                 ")",
                             [],
                             (txn, res) => { console.log("AccountService: Table account created " + res); }

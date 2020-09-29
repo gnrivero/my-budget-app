@@ -17,16 +17,16 @@ export default class DBInit {
           runTests: Corre pruebas. Info: Modifica los datos.
         */
         const cardService = new CardService();
-        cardService.initDB(false,false,false);
+        cardService.initDB(true,false,false);
 
         const accountService = new AccountService();
-        accountService.initDB(false,false,false);
+        accountService.initDB(true,true,false);
         
         const transactionTypeService = new TransactionTypeService();
         transactionTypeService.initDB(true);
 
         const transactionService = new TransactionService();
-        transactionService.initDB(false,false,false);
+        transactionService.initDB(true,false,false);
       
     }
 }

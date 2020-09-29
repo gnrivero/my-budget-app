@@ -22,8 +22,6 @@ export default class TransactionService {
         else if (currencyCode=='USD')
         accountId=2;
       }
-      console.log( type + " - " + detail +" - " + cash +" - " + currencyCode +" - " + transactionTypeId +" - " + date )
-      console.log( amount +" - " +  accountId +" - " + monthly);
 //date('now')
 
         this.db.transaction(
@@ -70,10 +68,8 @@ export default class TransactionService {
                     " ORDER BY transactions.date DESC",
                     [],
                     (txn, res) => {
-                      console.log("TRANSACCIONES");
                        let transaction = new Array();
                        for(var i = 0; i < res.rows.length; ++i){
-                         console.log(res.rows.item(i));
                         transaction.push(res.rows.item(i));
                        }
 
@@ -88,19 +84,37 @@ export default class TransactionService {
     }
 
     getTransactionByAccountId(accountId){
+      console.log("gettransactionByAccountId : " + accountId)
         const conn = this.db;
         return new Promise((resolve) => {
           conn.transaction(
             (txn) => {
                txn.executeSql(
-                    "SELECT * FROM transactions where accountId=?",
+                "SELECT " +
+                " transactions.id as id," +
+                " transactions.detail as detail," +
+                " transactions.date as date," +
+                " transactions.amount as amount," +
+                " transactions.accountId as accountId," +
+                " transactions.currencyCode as currencyCode," +
+                " transactions.monthly as monthly," +
+                " transactions.transactionTypeId as transactionTypeId," +
+                " transactionType.name as transactionType, " +
+                " transactionType.type as type, " +
+                " account.name as account " +
+                " FROM transactions"+
+                " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
+                " INNER JOIN account ON transactions.accountId = account.id"+
+                " WHERE accountId=?"+
+                " ORDER BY date DESC",    
                     [accountId],
                     (txn, res) => {
-                       let transaction = new Array();
-                       for(var i = 0; i < res.rows.length; ++i){
-                        transaction.push(res.rows.item(i));
-                       }
-                       resolve(transaction);
+                      let transaction = new Array();
+                      console.log(res.rows);
+                      for(var i = 0; i < res.rows.length; ++i){
+                       transaction.push(res.rows.item(i));
+                      }
+                      resolve(transaction);
                     },
                     (txn, err) => { console.log("TransactionService: getTransactionByAccountId failed " + err); }
                     
