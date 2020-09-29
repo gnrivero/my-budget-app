@@ -10,9 +10,7 @@ import {
   Alert
 } from 'react-native';
 import styles from './styles';
-import {
-  getAllIncome
-} from '../../data/income/incomeAPI';
+import TransactionService from '../../service/TransactionService';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
 
@@ -25,7 +23,31 @@ export default class IncomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.service = new TransactionService();
+    this.state = {
+      allIncome : []
+    }
   }
+
+  componentDidMount(){
+    this.service.getTransactionByType('I')
+      .then((transaction) => {
+        this.setState({
+          allIncome: transaction
+      })
+    });
+   }
+   
+   componentWillReceiveProps(nextProp){
+    this.service.getTransactionByType('I')
+    .then((transaction) => {
+      this.setState({
+        allIncome: transaction
+      })
+    });
+   }
+
+
 
   onPressIncome = item => {
     /* VER SI HACEMOS ALGUNA LOGICA
@@ -41,7 +63,7 @@ export default class IncomeScreen extends React.Component {
       <View style={styles.infoContainer}>
         <View style={styles.infoHead}>
           <Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} /> 
-          <Text style={styles.infoText}>{item.typeIncomeName}</Text>
+          <Text style={styles.infoText}>{item.transactionType}</Text>
           <View style={styles.infoRight}>
             <Text style={styles.infoText}>{item.date}</Text>
           </View>
@@ -50,9 +72,9 @@ export default class IncomeScreen extends React.Component {
           <Text style={styles.infoText}>{item.detail}</Text>
         </View>
         <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Destino: </Text><Text style={styles.infoText}>{item.cash?'Efectivo':item.nombreCuenta}</Text>
+          <Text style={styles.infoTextDetail}>Destino: </Text><Text style={styles.infoText}>{item.account}</Text>
           <View style={styles.infoRight}>
-            <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.value}</Text>
+            <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.amount}</Text>
           </View>
         </View>
       </View>
@@ -69,9 +91,6 @@ export default class IncomeScreen extends React.Component {
 
 render() {
   const { navigation } = this.props;
-//    const item = navigation.getParam('category');
-    const incomeArray = getAllIncome();
-  //  const categoryName = navigation.getParam('name');
     return (
       <ScrollView style={styles.mainContainer}>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -86,7 +105,7 @@ render() {
          </View>
         </View>
           <FlatList
-            data={incomeArray}
+            data={this.state.allIncome}
             renderItem={this.renderIncome}
             keyExtractor={item => `${item.id}`}
             ItemSeparatorComponent={this.FlatListItemSeparator}
