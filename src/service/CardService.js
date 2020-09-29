@@ -62,7 +62,8 @@ export default class CardService {
                       " card.type, " +
                       " bank.name as bank " +
                       "FROM card " +
-                      " INNER JOIN bank ON bank.id = card.bankId",
+                      " INNER JOIN bank ON bank.id = card.bankId " +
+                      " WHERE card.type != 'DEBIT'",
                       [],
                       (txn, res) => {
                         let cards = [];

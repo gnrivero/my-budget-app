@@ -33,6 +33,15 @@ export default class AccountService {
         });
     }
 
+    updateAccountWithDebitCard(id, name, currencyCode, bankId, identificationNumber, balance, lastFourNumbers, expiryDate) {
+        this.getAccountById(id)
+        .then((account) => {
+          console.log(account);
+          this.cardService.updateCard(account.cardId, 'Débito cuenta ' + name, bankId, lastFourNumbers, expiryDate, null, null);
+          this.updateAccount(id, name, currencyCode, bankId, identificationNumber, balance);
+        });
+    }
+
     updateAccount(id, name, currencyCode, bankId, identificationNumber, balance) {
         this.db.transaction(
            (txn) => {
@@ -153,6 +162,7 @@ export default class AccountService {
                       " account.balance, " +
                       " account.currencyCode, " +
                       " account.bankId, " +
+                      " account.cardId, " +
                       " card.lastFourNumbers AS cardLastFourNumbers, " +
                       " card.expiryDate AS cardExpiryDate " +
                     "FROM account " +
