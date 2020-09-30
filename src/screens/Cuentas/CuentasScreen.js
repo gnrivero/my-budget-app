@@ -10,28 +10,51 @@ import {
   Alert
 } from 'react-native';
 import styles from './styles';
-import {
-  getCuentas,
-  getCategoryName
-} from '../../data/MockDataAPI';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import AccountService from '../../service/AccountService';
 
 export default class CuentasScreen extends React.Component {
+
+  service;
+
   static navigationOptions = ({ navigation }) => {
     return {
-      title: 'Mis ' + navigation.getParam('name')
+      title: 'Mis Cuentas'
     };
   };
 
   constructor(props) {
     super(props);
+    this.service = new AccountService();
+    this.state = {
+        allAccounts : []
+    }
   }
+
+  componentDidMount(){
+   this.service.getAllAccounts()
+     .then((accounts) => {
+       this.setState({
+         allAccounts: accounts
+     })
+   });
+  }
+
+  componentWillReceiveProps(nextProp){
+    console.log("nextpropert");
+    this.service.getAllAccounts()
+    .then((accounts) => {
+      this.setState({
+        allAccounts: accounts
+      })
+    });
+   }
+
+
   onPressCuenta = item => {
     //lo llamo sin pasarle parametros
     this.props.navigation.navigate('CuentaDetail',{name: 'Detalle cuenta', itemCuenta:  item});
   };
-
 
   renderCuentas = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'  onPress={() => this.onPressCuenta(item)}>
@@ -39,15 +62,17 @@ export default class CuentasScreen extends React.Component {
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
             <Image source={require('../../../assets/icons/cuenta.png')} style={styles.cuentasItemIcon} /> 
-            <Text style={styles.infoText}>{item.nombreCuenta}</Text>
+            <Text style={styles.infoText}>{item.name}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbuCvu}</Text>
+            {(item.cbu!='')?
+              <Text style={styles.infoTextDetail}>CBU/CVU: {item.cbu}</Text>
+            :null}
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>{item.nombreEntidad}</Text>
+            <Text style={styles.infoTextDetail}>{item.bank}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.saldo}</Text>
+              <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.balance}</Text>
             </View>
           </View>
         </View>
@@ -64,9 +89,6 @@ export default class CuentasScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    //const item = navigation.getParam('category');
-    const cuentasArray = getCuentas();
-    //const categoryName = navigation.getParam('name');
     return (
       <ScrollView style={styles.mainContainer}>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -75,15 +97,13 @@ export default class CuentasScreen extends React.Component {
             <AddCardButton title = {'Nueva Cuenta'}
               onPress={() => {
                 let title = 'Nueva Cuenta';
-                //this.props.navigation.navigate('ModifyCard', {title});
                 this.props.navigation.navigate('Cuenta',{title});
-                
               }}
             />
           </View>
         </View>
         <FlatList
-          data={cuentasArray}
+          data={this.state.allAccounts}
           renderItem={this.renderCuentas}
           keyExtractor={item => `${item.id}`}
           ItemSeparatorComponent={this.FlatListItemSeparator}

@@ -12,8 +12,8 @@ import {
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
 import {getConsumptions} from '../../data/cards/cardsAPI';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import {toView} from '../../utils/DateConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -24,20 +24,20 @@ export class CardDetailInfoScreen extends React.Component {
       //this.props.card
       <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{card.name}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
+              <Text style={styles.infoTextDetail}>Termina en: </Text><Text style={styles.infoText}>{card.lastFourNumbers}</Text>
             </View>
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{card.expiryDate}</Text>
             <View style={styles.infoRight}>
-             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{card.closeDate}</Text>
+             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{toView(card.closeDate)}</Text>
             </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{card.dueDate}</Text>
+            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{toView(card.dueDate)}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>ARS: </Text><Text style={styles.infoText}>{card.consumption}</Text>
             </View>
@@ -70,7 +70,7 @@ export default class CardDetailScreen extends React.Component {
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/consumptions.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/consumptions.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{item.name}</Text>
           </View>
           <View style={styles.info}>

@@ -16,7 +16,6 @@ import {
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
-import DatePicker from 'react-native-datepicker';
 
 export default class AddLoanScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -41,13 +40,13 @@ export default class AddLoanScreen extends React.Component {
                   expirationDay:''
                 };
   }
-
+/*
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
   };
+  */
   onChangeLender = ({ value }) =>{
     let lender = value
-    //Alert.alert('Call onPress with value:' + monthly    );
     this.setState({lender});
     if(lender){
      /* 
@@ -59,7 +58,6 @@ export default class AddLoanScreen extends React.Component {
 
   onChangeCurrency = ({ value }) =>{
     let currency = value
-    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
     if(currency){
      /* 
@@ -71,7 +69,6 @@ export default class AddLoanScreen extends React.Component {
 
   onChangeDebit = ({ value }) =>{
     let debit = value
-    //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({debit});
     if(debit){
      /* 

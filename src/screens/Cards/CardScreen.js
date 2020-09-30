@@ -11,13 +11,15 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
-import {getAllCards} from '../../data/cards/cardsAPI';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import CardService from '../../service/CardService';
+import {toView} from '../../utils/DateConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class CardScreen extends React.Component {
+
+  cardService;
 
   static navigationOptions = {
       title: 'Mis Tarjetas'
@@ -25,9 +27,20 @@ export default class CardScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.cardService = new CardService();
     this.state = {
-      activeSlide: 0
+      activeSlide: 0,
+      allCards: []
     };
+  }
+
+  componentDidMount() {
+    this.cardService.getAllCards()
+    .then((cards) => {
+        this.setState({
+            allCards: cards
+        })
+    });
   }
 
   onPressCard = item => {
@@ -40,20 +53,20 @@ export default class CardScreen extends React.Component {
       <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cards.png')} style={styles.CardsItemIcon} /> 
+            <Image source={require('../../../assets/icons/cards.png')} style={styles.cardsItemIcon} /> 
             <Text style={styles.infoText}>{item.name}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
+              <Text style={styles.infoTextDetail}>Termina en:</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
             </View>
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{item.expiryDate}</Text>
             <View style={styles.infoRight}>
-             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{item.closeDate}</Text>
+             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{toView(item.closeDate)}</Text>
             </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{item.dueDate}</Text>
+            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{toView(item.dueDate)}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>ARS: </Text><Text style={styles.infoText}>{item.consumption}</Text>
             </View>
@@ -78,10 +91,10 @@ export default class CardScreen extends React.Component {
   };
 
   render() {
+
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const cards = getAllCards();
-    //const categoryName = navigation.getParam('name');
+
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -96,7 +109,7 @@ export default class CardScreen extends React.Component {
          </View>
         </View>
         <FlatList
-           data={cards}
+           data={this.state.allCards}
            renderItem={this.renderCards}
            keyExtractor={item => `${item.id}`}
            ItemSeparatorComponent={this.FlatListItemSeparator}

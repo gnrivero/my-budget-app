@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    margin: 10
+    margin: 5
 },
   infoHead:{
     flex: 1,

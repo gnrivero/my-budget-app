@@ -19,6 +19,8 @@ import CuentasScreen from '../screens/Cuentas/CuentasScreen';
 import CuentaScreen from '../screens/Cuenta/CuentaScreen';
 import PresupuestoScreen from '../screens/Presupuesto/PresupuestoScreen';
 import InvestmentScreen from '../screens/Investments/InvestmentScreen';
+import AddInvestmentScreen from '../screens/Investments/AddInvestmentScreen';
+import InvestmentDetailScreen from '../screens/Investments/InvestmentDetailScreen';
 import PresupuestoDashboardScreen from '../screens/Presupuesto/PresupuestoDashboardScreen';
 import IncomeScreen from '../screens/Income/IncomeScreen';
 import AddIncomeScreen from '../screens/Income/AddIncomeScreen';
@@ -26,8 +28,10 @@ import ExpensesScreen  from '../screens/Expenses/ExpensesScreen';
 import AddExpensesScreen from '../screens/Expenses/AddExpensesScreen';
 import LoansScreen  from '../screens/Loans/LoansScreen';
 import AddLoanScreen  from '../screens/Loans/AddLoanScreen';
+import LoanDetailScreen from '../screens/Loans/LoanDetailScreen';
 import CardDetailScreen from '../screens/Cards/CardDetail';
 import CuentaDetailScreen from '../screens/Cuenta/CuentaDetailScreen';
+import BudgetDetailScreen from '../screens/Presupuesto/BudgetDetailScreen';
 
 const MainNavigator = createStackNavigator(
   {
@@ -43,17 +47,21 @@ const MainNavigator = createStackNavigator(
     Cards: CardScreen,
     ModifyCard: ModifyCardScreen,
     Presupuesto: PresupuestoScreen,
-    Investments: InvestmentScreen,
     Presupuesto: PresupuestoDashboardScreen,
     PresupuestoInfo: PresupuestoScreen,
+    Investments: InvestmentScreen,
+    AddInvestment: AddInvestmentScreen,
+    InvestmentDetail: InvestmentDetailScreen,
     Income: IncomeScreen,
     AddIncome: AddIncomeScreen,
     Expenses: ExpensesScreen,
     AddExpenses: AddExpensesScreen,
     Loans: LoansScreen,
+    LoanDetail: LoanDetailScreen,
     AddLoan: AddLoanScreen,
     CardDetail: CardDetailScreen,
     CuentaDetail: CuentaDetailScreen,
+    BudgetDetail: BudgetDetailScreen,
   },
   {
     initialRouteName: 'Home',

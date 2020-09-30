@@ -16,8 +16,10 @@ import {
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
-//import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-datepicker';
+import TransactionTypeService from '../../service/TransactionTypeService';
+import TransactionService from '../../service/TransactionService';
+import AccountService from '../../service/AccountService';
 
 export default class AddIncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -28,85 +30,143 @@ export default class AddIncomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-
+    this.transactionTypeService = new TransactionTypeService();
+    this.accountService = new AccountService();
+    this.transactionService = new TransactionService();
     this.state = {
-                  date: new Date(),
+                  id:'',
+                  date: '',
                   typeIncome: '',
                   account:'',
-                  value: '',
+                  amount: 0,
                   cash: true,
                   monthly: true,
-                  currency: 1,
-                  detail: ''
+                  currency: 'ARS',
+                  detail: '',
+                  allAccount: [],
+                  allTransactionType: []
                 };
   }
+ 
+  componentDidMount(){
+    this.transactionTypeService.getTransactionTypeIncome()
+      .then((transactionType) => {
+        this.setState({
+          allTransactionType: transactionType
+        })
+    });
+    
+    this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
+ }
 
+ 
   onPressRecipe = item => {
     this.props.navigation.navigate('Recipe', { item });
   };
   onChangeMonthly = ({ value }) =>{
     let monthly = value
-    //Alert.alert('Call onPress with value:' + monthly    );
     this.setState({monthly});
     if(monthly){
      /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
       */
     }
   }
 
   onChangeCash = ({ value }) =>{
-    let cash = value
-    //Alert.alert('Call onPress with value:' + cash    );
+    let cash = value;
     this.setState({cash});
     if(cash){
       this.setState({account:''});
+    }else{
+      this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+      .then((accounts) => {
+        this.setState({
+          allAccount: accounts
+        })
+      });
+      
     }
   }
 
   onChangeCurrency = ({ value }) =>{
-    let currency = value
-    Alert.alert('Call onPress with value:' + currency    );
-   //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
+    let currency = value;
     this.setState({currency});
-    if(currency){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
-    }
+    this.accountService.getAccountBycurrencyCodeCombo(currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
   }
 
 buttonPressed(){
-  Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
+  //Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.amount +" - " +this.state.account); 
     let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.typeIncome|| this.state.typeIncome=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
-  (!this.state.value || this.state.value==''))
+  (!this.state.amount || this.state.amount==0))
   {
     Alert.alert("Complete los campos faltantes del ingreso")
   }
-  else if(!decimalreg.test(this.state.value))
+  else if(!decimalreg.test(this.state.amount))
     Alert.alert("ingrese un valor valido para el monto"); 
   else if(!this.state.cash){
       if((!this.state.account  || this.state.account=='')){
       Alert.alert("Complete los campos faltantes del ingreso")
     }
-    else
+    else{
       Alert.alert("Grabar con Cuenta");
+      this.transactionService.createTransaction('I',
+        this.state.detail,
+        this.state.cash,
+        this.state.currency,
+        this.state.typeIncome,
+        this.state.date,
+        this.state.amount,
+        this.state.account,
+        this.state.monthly);
+      
+        setTimeout(
+          () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
+          2000
+        )
+    }
   }  
-  else 
+  else {
     Alert.alert("Grabar Efectivo");
+    this.transactionService.createTransaction('I',
+      this.state.detail,
+      this.state.cash,
+      this.state.currency,
+      this.state.typeIncome,
+      this.state.date,
+      this.state.amount,
+      this.state.account,
+      this.state.monthly);
+
+      setTimeout(
+        () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
+        2000
+      )
+      
+  }
 }
 
   
   render() {
-    const mes = new Date().getMonth();
+    //const mes = new Date().getMonth();
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const accountsArray = getAccounts(); //TODO: FILTRAR POR TIPO DE CUENTA 
-    const typeIncome = getTypeIncome();
+
+    let  transactionTypeList  = this.state.allTransactionType.map( (v,k) => {
+      return {value:v.id, label:v.name};
+    });
+
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
@@ -117,8 +177,8 @@ buttonPressed(){
   ];
 
   const optionsCurrency = [
-    { label: 'Pesos', value: 1},
-    { label: 'Dolares', value: 2 }
+    { label: 'Pesos', value: 'ARS'},
+    { label: 'Dolares', value: 'USD' }
   ];
 
     return (
@@ -129,10 +189,9 @@ buttonPressed(){
           </View>
           <Text style={styles.cuentasInfo}>Nuevo ingreso:</Text>
           <View style={{marginBottom: 40, padding:10}}>
-
           <Dropdown
               placeholder="Seleccione tipo de ingreso"
-              data={typeIncome}
+              data={transactionTypeList}
               value={this.state.typeIncome}
               onChangeText={(typeIncome) => this.setState({typeIncome})}
               style ={styles.input}
@@ -175,18 +234,20 @@ buttonPressed(){
             <TextInput keyboardType='decimal-pad'
               style ={styles.input}
               placeholder="importe"
-              onChangeText={(value) => this.setState({value})}
-              value={this.state.value}
+              onChangeText={(amount) => this.setState({amount})}
+              value={this.state.amount}
             />
             {!this.state.cash?(
               <Dropdown
                 placeholder='Seleccione cuenta'
-                data={accountsArray}
+                data={this.state.allAccount}
                 value={this.state.account}
                 onChangeText={(cuenta) => this.setState({account:cuenta})}
                 style ={styles.input}
               />
-            ): null}
+              
+            ): null
+            }
           </View>
         </ScrollView>
         <View style={[styles.footer]}>

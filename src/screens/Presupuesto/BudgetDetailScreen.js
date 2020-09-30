@@ -18,21 +18,26 @@ import {
 import AddCardButton from '../../components/CardButton/AddCardButton';
 
 import TransactionService from '../../service/TransactionService';
+import { budgetDetailMock } from '../../data/presupuestos/presupuestosDataArray';
+
 
 const { width: viewportWidth } = Dimensions.get('window');
 
-export class CuentaDetailInfoScreen extends React.Component {
+export class BudgetDetailInfoScreen extends React.Component {
   render(){
     const { cuenta } = this.props;
     return(
       //this.props.card
        <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            <Image source={require('../../../assets/icons/cuenta.png')} style={styles.cuentasItemIcon} /> 
+            <Image source={require('../../../assets/icons/budgetIcon.png')} style={styles.cuentasItemIcon} /> 
             <Text style={styles.infoText}>{cuenta.name}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>CBU/CVU: {cuenta.cbu}</Text>
+            <Text style={styles.infoTextDetail}>Presupuesto Total: {cuenta.cbu}</Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.infoTextDetail}>Presupuesto Consumido: {cuenta.cbu}</Text>
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>{cuenta.bank}</Text>
@@ -45,7 +50,7 @@ export class CuentaDetailInfoScreen extends React.Component {
   }
 }
 
-export default class CuentaDetailScreen extends React.Component {
+export default class BudgetDetailScreen extends React.Component {
 
   static navigationOptions = {
       title: 'Cuenta'
@@ -106,7 +111,7 @@ export default class CuentaDetailScreen extends React.Component {
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
-            <Image style={styles.photoCuentas} source={require('../../data/banco.jpg')} />
+            <Image style={styles.photoCuentas} source={require('../../data/budget.jpg')} />
             <View style={{    position: 'absolute',
           bottom: 5,
           right: 5}}>
@@ -123,7 +128,7 @@ export default class CuentaDetailScreen extends React.Component {
          </View>
         </View>
         <View>
-          <CuentaDetailInfoScreen cuenta={cuenta}></CuentaDetailInfoScreen>
+          <BudgetDetailInfoScreen cuenta={cuenta}></BudgetDetailInfoScreen>
         </View>
         <View style={{height: 0.8, width: '100%', backgroundColor: '#C8C8C8'}}/>
         <Text>Movimientos</Text>
