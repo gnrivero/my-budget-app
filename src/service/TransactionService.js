@@ -11,35 +11,55 @@ export default class TransactionService {
       this.db = DBConnector.connect();
     }
 
-    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly){
+    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=null,installments=1,installmentsNumber=1){
 //armar el campo fecha
+console.log(type +"-"+ detail +"-"+ cash +"-"+ currencyCode +"-"+ transactionTypeId);
+console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod +"-"+ cardId + "-" +installments);
       const serviceAccount = new AccountService();
       if(accountId==0)
         accountId=null;
-      if(cash){
+        //seteo la cuenta si es efectivo 
+      if(cash || paymentMethod == 'CASH'){
         if(currencyCode=='ARS')
           accountId=1;
         else if (currencyCode=='USD')
         accountId=2;
       }
-//date('now')
-
-        this.db.transaction(
-           (txn) => {
-              txn.executeSql(
-                   "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly)" +
-                   "VALUES (?,?,?,?,?,?,?)",
-                   [detail,currencyCode,transactionTypeId,date,amount,accountId,monthly],
-                   (txn, res) => { 
-                     console.log("TransactionService: Affected Rows " + res.rowsAffected); 
-                      if(type=='I'){
-                        serviceAccount.makeDeposit(accountId,amount);
+      detailAux=detail;
+      if(installments!=1 && installments >= installmentsNumber){
+        detailAux= detail + ' - '+installmentsNumber+' de '+ installments;
+      }
+      this.db.transaction(
+        (txn) => {
+          txn.executeSql(
+                "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly,cardId)" +
+                "VALUES (?,?,?,?,?,?,?,?)",
+                [detailAux,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId],
+                (txn, res) => { 
+                  console.log("TransactionService: Affected Rows " + res.rowsAffected); 
+                  if(type=='I'){
+                    serviceAccount.makeDeposit(accountId,amount);
+                  }else if(type=='E') {
+                    if(paymentMethod!='CC'){
+                      serviceAccount.makeWithdraw(accountId,amount);
+                    }else{
+                      //Compra en credito
+                      if(installments > installmentsNumber){
+                        installmentsNumber++;
+                        dt= new Date(date);
+                        console.log(dt);
+                        n=1;
+                        newDate=new Date(dt.setMonth(dt.getMonth() + n)).toISOString().split('T')[0];
+                        console.log(newDate);
+                        this.createTransaction(type,detail,cash,currencyCode,transactionTypeId,newDate,amount,accountId,monthly,paymentMethod,cardId,installments,installmentsNumber)
                       }
-                    },
-                   (txn, err) => { console.log("TransactionService: failed " + err); }
-              )
-           }
-       );
+                    }
+                  }
+                },
+                (txn, err) => { console.log("TransactionService: failed " + err); }
+          )
+        }
+      );
 
       this.getAllTransaction();
     }
@@ -140,15 +160,18 @@ export default class TransactionService {
                 " transactions.monthly as monthly," +
                 " transactions.transactionTypeId as transactionTypeId," +
                 " transactionType.name as transactionType, " +
-                " account.name as account " +
+                " account.name as account, " +
+                " card.name as card " +
                 " FROM transactions"+
                 " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
-                " INNER JOIN account ON transactions.accountId = account.id"+
+                " LEFT JOIN account ON transactions.accountId = account.id "+
+                " LEFT JOIN card ON transactions.cardId = card.id "+
                 " WHERE transactionType.type=?"+
                 " ORDER BY transactions.date DESC",
                     [type],
                     (txn, res) => {
                        let transaction = new Array();
+                       console.log(res.rows);
                        for(var i = 0; i < res.rows.length; ++i){
                         transaction.push(res.rows.item(i));
                        }
@@ -201,7 +224,8 @@ export default class TransactionService {
                             "monthly BOOLEAN ," +
                             "date DATE," +
                             "accountId INTEGER," +
-                            "transactiontypeId INTEGER"+
+                            "transactiontypeId INTEGER, "+
+                            "cardId INTEGER"+
                             ")",
                         [],
                         (txn, res) => { console.log("TransactionService: Table Transaction created ");},

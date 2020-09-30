@@ -157,7 +157,7 @@ export default class AddInvestmentScreen extends React.Component {
                   style={{marginBottom: 10}}
                   date={this.state.dueDate} //initial date from state
                   mode="date" //The enum of date, datetime and time
-                  placeholder="Seleccione una fecha"
+                  placeholder="Fecha"
                   format="DD-MM-YYYY"
                   minDate="01-01-2020"
                   

@@ -10,13 +10,12 @@ import {
   Alert,
 } from 'react-native';
 import styles from './styles';
-import {
-  getAccounts, getTypeIncome
-} from '../../data/income/incomeAPI';
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
+import {toModel} from '../../utils/DateConverter';
+
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
 import AccountService from '../../service/AccountService';
@@ -49,7 +48,7 @@ export default class AddIncomeScreen extends React.Component {
   }
  
   componentDidMount(){
-    this.transactionTypeService.getTransactionTypeIncome()
+    this.transactionTypeService.getTransactionType('I')
       .then((transactionType) => {
         this.setState({
           allTransactionType: transactionType
@@ -63,11 +62,7 @@ export default class AddIncomeScreen extends React.Component {
       })
     });
  }
-
  
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
   onChangeMonthly = ({ value }) =>{
     let monthly = value
     this.setState({monthly});
@@ -126,7 +121,7 @@ buttonPressed(){
         this.state.cash,
         this.state.currency,
         this.state.typeIncome,
-        this.state.date,
+        toModel(this.state.date),
         this.state.amount,
         this.state.account,
         this.state.monthly);
@@ -136,15 +131,14 @@ buttonPressed(){
           2000
         )
     }
-  }  
-  else {
+  } else {
     Alert.alert("Grabar Efectivo");
     this.transactionService.createTransaction('I',
       this.state.detail,
       this.state.cash,
       this.state.currency,
       this.state.typeIncome,
-      this.state.date,
+      toModel(this.state.date),
       this.state.amount,
       this.state.account,
       this.state.monthly);
@@ -153,9 +147,8 @@ buttonPressed(){
         () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
         2000
       )
-      
+    }
   }
-}
 
   
   render() {
@@ -200,7 +193,7 @@ buttonPressed(){
               style={{marginBottom: 10}}
               date={this.state.date} //initial date from state
               mode="date" //The enum of date, datetime and time
-              placeholder="Seleccione una fecha"
+              placeholder="Fecha"
               format="DD-MM-YYYY"
               minDate="01-01-2020"
               

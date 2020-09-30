@@ -1,8 +1,10 @@
-import { Text } from 'react-native';
-import React, { Component } from 'react';
-import { cuentas } from '../../data/dataArrays';
-import { expenses, typeExpenses, paymentMethods } from './dataArray';
+//import { Text } from 'react-native';
+//import React, { Component } from 'react';
+//import { cuentas } from '../../data/dataArrays';
+import { paymentMethods } from './dataArray';
+
 //lastexpenses o all?
+/*
 export function getAllExpenses() {
   const expensesArray = [];
   expenses.map(data => {
@@ -10,6 +12,7 @@ export function getAllExpenses() {
     });
   return expensesArray;
 }
+
 export function getTypeExpenses() {
   const typeExpensesArray = [];
   typeExpenses.map(data => {
@@ -17,7 +20,7 @@ export function getTypeExpenses() {
     });
   return typeExpensesArray;
 }
-
+*/
 export function getPaymentMethods() {
   const paymentMethodsArray = [];
   paymentMethods.map(data => {
@@ -25,7 +28,7 @@ export function getPaymentMethods() {
     });
   return paymentMethodsArray;
 }
-
+/*
 export function getAccounts() {
   const accountArray = [];
   cuentas.map(data => {
@@ -33,3 +36,4 @@ export function getAccounts() {
     });
   return accountArray;
 }
+*/

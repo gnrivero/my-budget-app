@@ -183,6 +183,27 @@ export default class AccountService {
               });
          });
     }
+
+    getAccountByCardId(cardId) {
+        console.log("getAccountByCardId");
+        console.log(cardId);
+        const conn = this.db;
+        return new Promise((resolve) => {
+            conn.transaction(
+              (txn) => {
+                 txn.executeSql(
+                        "SELECT * FROM account WHERE cardId = ?",
+                    [cardId],
+                    (txn, res) => {
+                        let account = res.rows.item(0);
+                        resolve(account);
+                     },
+                     (txn, err) => { console.log("AccountService: getAccountByCardId failed " + err); }
+                     
+                 )
+              });
+         });
+    }
   
     getAccountBycurrencyCodeCombo(currencyCode) {
         const conn = this.db;
