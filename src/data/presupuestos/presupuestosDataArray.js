@@ -79,3 +79,19 @@ export const presupuestos = [
      },
         
    ]
+
+   export const budgetDetailsMocks = [
+    {
+        id: 500,
+        ConsumoPrevisto:12700,
+        consumoReal: 10000,
+        item: "Servicio",
+     },
+     {
+        id: 501,
+        ConsumoPrevisto:16000,
+        consumoReal: 5000,
+        item: "Comida",
+     },
+        
+   ]
