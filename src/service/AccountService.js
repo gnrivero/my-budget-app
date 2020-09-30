@@ -285,7 +285,8 @@ export default class AccountService {
         //Inicializo algunos datos
         console.log("AccountService: Populating table account");     
         this.createAccount('Efectivo', 'ARS', null, '', null, 0);
-        this.createAccount('Efectivo', 'USD', null, '', null, 0);      
+        this.createAccount('Efectivo', 'USD', null, '', null, 0);
+        this.createAccount('Cuenta Pesos', 'ARS', 1, 'nikaosdnsd', null, 0);      
     }
 
 

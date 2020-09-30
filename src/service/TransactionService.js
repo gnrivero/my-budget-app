@@ -1,21 +1,20 @@
 import DBConnector from '../data/access/DBConnector';
-import TransactionTypeService from './TransactionTypeService';
-import AcountService from './AccountService';
 import AccountService from './AccountService';
 
 export default class TransactionService {
 
     db;
+    accountService;
 
     constructor(){
       this.db = DBConnector.connect();
+      this.accountService = new AccountService();
     }
 
     createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=null,installments=1,installmentsNumber=1){
 //armar el campo fecha
 console.log(type +"-"+ detail +"-"+ cash +"-"+ currencyCode +"-"+ transactionTypeId);
 console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod +"-"+ cardId + "-" +installments);
-      const serviceAccount = new AccountService();
       if(accountId==0)
         accountId=null;
         //seteo la cuenta si es efectivo 
@@ -38,10 +37,10 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                 (txn, res) => { 
                   console.log("TransactionService: Affected Rows " + res.rowsAffected); 
                   if(type=='I'){
-                    serviceAccount.makeDeposit(accountId,amount);
+                    this.accountService.makeDeposit(accountId,amount);
                   }else if(type=='E') {
                     if(paymentMethod!='CC'){
-                      serviceAccount.makeWithdraw(accountId,amount);
+                      this.accountService.makeWithdraw(accountId,amount);
                     }else{
                       //Compra en credito
                       if(installments > installmentsNumber){
@@ -239,9 +238,9 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
 
   
   populate(){
-    this.createTransaction('I','Alquiler Eftvo Pesos', true, 'ARS',1,'2020/09/27',200.20,'null',true);
-    this.createTransaction('I','Sueldo Eftvo Dolar', true, 'USD',3,'2020/09/21',1500.10,null, true);
-    this.createTransaction('I','Facturacion', false, 'ARS',4,'2020/09/20',400.10,3, true);
+    this.createTransaction('I','Alquiler Eftvo Pesos', true, 'ARS',1,'2020-09-27',200.20,'null',true);
+    this.createTransaction('I','Sueldo Eftvo Dolar', true, 'USD',3,'2020-09-21',1500.10,null, true);
+    this.createTransaction('I','Facturacion', false, 'ARS',4,'2020-09-20',400.10,3, true);
 
     this.getAllTransaction()
   }

@@ -46,10 +46,7 @@ export default class AddInvestmentScreen extends React.Component {
     //Alert.alert('Call onPress with value:' + currency==1?'Pesos':currency==2?'Dolares':null   );
     this.setState({currency});
     if(currency){
-     /* 
-      this.setState({vencimientoTarjeta:'',
-                        numerosTarjeta:''});
-      */
+    
     }
   }
 

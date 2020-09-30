@@ -3,6 +3,7 @@ import AccountService from '../../service/AccountService';
 import BankService from '../../service/BankService';
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
+import InvestmentTypeService from '../../service/InvestmentTypeService';
 
 export default class DBInit {
 
@@ -28,6 +29,9 @@ export default class DBInit {
 
         const transactionService = new TransactionService();
         transactionService.initDB(true,true,false);
+
+        const investmentTypeService = new InvestmentTypeService();
+        investmentTypeService.initDB(false);
       
     }
 }

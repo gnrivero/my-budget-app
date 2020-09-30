@@ -51,7 +51,7 @@ export default class TransactionTypeService {
         conn.transaction(
           (txn) => {
              txn.executeSql(
-                  "SELECT * FROM transactionType where type=?",
+                  "SELECT * FROM transactionType where type=? ORDER BY name",
                   [type],
                   (txn, res) => {
                      let transactionType = new Array();
@@ -100,6 +100,7 @@ export default class TransactionTypeService {
             this.createTransactionType('Sueldo','I');
             this.createTransactionType('Facturacion','I');
             this.createTransactionType('Otros','I');
+            this.createTransactionType('Inversiones','I');
             this.createTransactionType('Servicio','E');
             this.createTransactionType('Impuestos Nacionales','E');
             this.createTransactionType('Impuestos Provinciales','E');
