@@ -79,8 +79,6 @@ export default class CardService {
     }
 
     getAllDebitCardsByCurrencyCombo(currency){
-        console.log("getAllDebitCardsByCurrencyCombo");
-        console.log(currency);
         const conn = this.db;
         return new Promise((resolve) => {
           this.db.transaction(
@@ -95,7 +93,6 @@ export default class CardService {
                       [currency],
                       (txn, res) => {
                         let cards = [];
-                        console.log( res.rows);
                         for (let i = 0; i < res.rows.length; ++i) {
                             cards.push(res.rows.item(i));
                         }

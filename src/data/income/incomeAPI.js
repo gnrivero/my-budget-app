@@ -1,3 +1,4 @@
+/*
 import { Text } from 'react-native';
 import React, { Component } from 'react';
 import { cuentas } from '../../data/dataArrays';
@@ -25,3 +26,4 @@ export function getAccounts() {
     });
   return accountArray;
 }
+*/

@@ -24,7 +24,7 @@ export const paymentMethods = [
       label: 'Otro'
    },
 ]
-
+/*
 export const typeExpenses= [
    {
       id:1,
@@ -64,7 +64,8 @@ export const typeExpenses= [
 
 ]
 
-
+*/
+/*
 export const expenses = [
    {
       id: 1,
@@ -111,4 +112,4 @@ export const expenses = [
       paymentMethodName: 'Tarjeta Debito',
    }
 
-]
+]*/

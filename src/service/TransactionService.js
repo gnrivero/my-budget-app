@@ -11,7 +11,7 @@ export default class TransactionService {
       this.db = DBConnector.connect();
     }
 
-    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=0,installments=1){
+    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=null,installments=1){
 //armar el campo fecha
 console.log(type +"-"+ detail +"-"+ cash +"-"+ currencyCode +"-"+ transactionTypeId);
 console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod +"-"+ cardId + "-" +installments);
@@ -28,9 +28,9 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
       this.db.transaction(
         (txn) => {
           txn.executeSql(
-                "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly)" +
-                "VALUES (?,?,?,?,?,?,?)",
-                [detail,currencyCode,transactionTypeId,date,amount,accountId,monthly],
+                "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly,cardId)" +
+                "VALUES (?,?,?,?,?,?,?,?)",
+                [detail,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId],
                 (txn, res) => { 
                   console.log("TransactionService: Affected Rows " + res.rowsAffected); 
                   if(type=='I'){
@@ -151,15 +151,18 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                 " transactions.monthly as monthly," +
                 " transactions.transactionTypeId as transactionTypeId," +
                 " transactionType.name as transactionType, " +
-                " account.name as account " +
+                " account.name as account, " +
+                " card.name as card " +
                 " FROM transactions"+
                 " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
-                " INNER JOIN account ON transactions.accountId = account.id"+
+                " LEFT JOIN account ON transactions.accountId = account.id "+
+                " LEFT JOIN card ON transactions.cardId = card.id "+
                 " WHERE transactionType.type=?"+
                 " ORDER BY transactions.date DESC",
                     [type],
                     (txn, res) => {
                        let transaction = new Array();
+                       console.log(res.rows);
                        for(var i = 0; i < res.rows.length; ++i){
                         transaction.push(res.rows.item(i));
                        }
@@ -212,7 +215,8 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                             "monthly BOOLEAN ," +
                             "date DATE," +
                             "accountId INTEGER," +
-                            "transactiontypeId INTEGER"+
+                            "transactiontypeId INTEGER, "+
+                            "cardId INTEGER"+
                             ")",
                         [],
                         (txn, res) => { console.log("TransactionService: Table Transaction created ");},

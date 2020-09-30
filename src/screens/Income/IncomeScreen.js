@@ -6,13 +6,12 @@ import {
   View,
   Image,
   TouchableHighlight,
-  Button,
-  Alert
 } from 'react-native';
-import styles from './styles';
-import TransactionService from '../../service/TransactionService';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+
+import styles from './styles';
+
+import TransactionService from '../../service/TransactionService';
 
 export default class IncomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -47,14 +46,9 @@ export default class IncomeScreen extends React.Component {
     });
    }
 
-
-
   onPressIncome = item => {
     /* VER SI HACEMOS ALGUNA LOGICA
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('IncomeDetail',{name: 'Detalle Ingreso', itemCuenta:  item});
     */
-    
   };
 
   renderIncome = ({ item }) => (
@@ -63,7 +57,7 @@ export default class IncomeScreen extends React.Component {
       <View style={styles.infoContainer}>
         <View style={styles.infoHead}>
           <Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} /> 
-          <Text style={styles.infoText}>{item.transactionType}</Text>
+          <Text style={styles.infoText}>{item.allExpenses}</Text>
           <View style={styles.infoRight}>
             <Text style={styles.infoText}>{item.date}</Text>
           </View>
@@ -85,7 +79,7 @@ export default class IncomeScreen extends React.Component {
   FlatListItemSeparator = () => {
     return (
       //Item Separator
-      <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
+      <View style={{height: 0.4, width: '100%', backgroundColor: '#C8C8C8'}}/>
     );
   };
 
