@@ -36,8 +36,14 @@ export default class PresupuestoDashboardScreen extends React.Component {
     this.props.navigation.navigate('PresupuestoInfo');
   };
 
+  onPressBudget = item => {
+    //lo llamo sin pasarle parametros
+    this.props.navigation.navigate('BudgetDetail',{name: 'Detalle Presupuesto', itemCuenta:  item});
+  };
+
+
   renderPresupuesto = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
+    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressBudget(item)}>
       <View style={styles.infoContainer}>
         <View style={styles.infoHead}>
           <Image source={require('../../../assets/icons/budgetIcon.png')} style={styles.CardsItemIcon} /> 
