@@ -130,8 +130,7 @@ buttonPressed(){
           2000
         )
     }
-  }  
-  else {
+  } else {
     Alert.alert("Grabar Efectivo");
     this.transactionService.createTransaction('I',
       this.state.detail,
@@ -147,9 +146,8 @@ buttonPressed(){
         () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
         2000
       )
-      
+    }
   }
-}
 
   
   render() {

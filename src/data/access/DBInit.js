@@ -17,7 +17,7 @@ export default class DBInit {
           runTests: Corre pruebas. Info: Modifica los datos.
         */
         const cardService = new CardService();
-        cardService.initDB(true,false,false);
+        cardService.initDB(true,true,false);
 
         const accountService = new AccountService();
         accountService.initDB(true,true,false);

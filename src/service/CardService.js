@@ -78,6 +78,36 @@ export default class CardService {
         });
     }
 
+    getAllDebitCardsByCurrencyCombo(currency){
+        console.log("getAllDebitCardsByCurrencyCombo");
+        console.log(currency);
+        const conn = this.db;
+        return new Promise((resolve) => {
+          this.db.transaction(
+              (txn) => {
+                 txn.executeSql(
+                      "SELECT " +
+                      " card.id as value," +
+                      " card.name || '-' || card.lastFourNumbers  as label " +
+                      "FROM card " +
+                      " INNER JOIN account ON account.cardId = card.id " +
+                      " WHERE card.type == 'DEBIT' and account.currencyCode ==?",
+                      [currency],
+                      (txn, res) => {
+                        let cards = [];
+                        console.log( res.rows);
+                        for (let i = 0; i < res.rows.length; ++i) {
+                            cards.push(res.rows.item(i));
+                        }
+                        resolve(cards);
+                      },
+                      (txn, err) => { console.log("Card: getAllDebitCardsByCurrencyCombo failed " + err); }
+                 )
+              }
+          );
+        });
+    }
+
     getCardById(id){
       const conn = this.db;
       return new Promise((resolve) => {
@@ -142,10 +172,10 @@ export default class CardService {
 
     populate(){
         console.log("CardService: Populating table card");
-        this.createCreditCard('AMEX Black', 1, '1234', '0124', '24-09-2020', '28-09-2020');
-        this.createCreditCard('Visa Signature', 1,'7890', '0125', '01-10-2020', '11-10-2020');
-        this.createCreditCard('Master Black', 2, '4567', '0123', '02-10-2020', '12-10-2020');
-        this.createDebitCard('Visa Débito', 1, '3829', '0125')
+        this.createCreditCard('AMEX Black', 3, '1234', '0124', '24-09-2020', '28-09-2020');
+        this.createCreditCard('Visa Signature', 3,'7890', '0125', '01-10-2020', '11-10-2020');
+        this.createCreditCard('Master Black', 4, '4567', '0123', '02-10-2020', '12-10-2020');
+        this.createDebitCard('Visa Débito', 5, '3829', '0125')
             .then((id) => {
                 console.log("CreateDebitCard: Generated ID: " + id);
             });

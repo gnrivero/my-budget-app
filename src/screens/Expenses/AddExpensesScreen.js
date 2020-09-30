@@ -1,25 +1,9 @@
 import React from 'react';
-import {
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-  Image,
-  TouchableHighlight,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {  ScrollView,  Text,  View,  Image,  TouchableHighlight,  TextInput,  Alert,} from 'react-native';
 import styles from './styles';
-import {
-    getAllCardsCombo
-} from '../../data/cards/cardsAPI';
 
-import {
-    getPaymentMethods, getTypeExpenses
-} from '../../data/expenses/expensesAPI';
-import {
-    getAccounts
-  } from '../../data/income/incomeAPI';
+import { getPaymentMethods } from '../../data/expenses/expensesAPI';
+import { searchStateError } from './validator/AddExpensesScreenValidator';
 
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
@@ -28,6 +12,7 @@ import DatePicker from 'react-native-datepicker';
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
 import AccountService from '../../service/AccountService';
+import CardService from '../../service/CardService';
 
 export default class AddExpensesScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -41,22 +26,27 @@ export default class AddExpensesScreen extends React.Component {
     this.transactionTypeService = new TransactionTypeService();
     this.accountService = new AccountService();
     this.transactionService = new TransactionService();
+    this.CardService = new CardService();
     this.state = {
                   date: '',
                   typeExpenses: '',
                   account:'',
-                  value: '',
+                  amount: '',
                   monthly: true,
                   currency: 'ARS',
                   detail: '',
                   card: '',
+                  debitCard: '',
                   paymentMethod: '',
                   installments: '',
                   showCard:false,
+                  showDebit:false,
                   showAccount:false,
                   showInstallments:false,
                   allAccount: [],
-                  allTransactionType: []
+                  allTransactionType: [],
+                  allDebitCards: [],
+                  allCards: []
                 };
   }
 
@@ -77,6 +67,20 @@ export default class AddExpensesScreen extends React.Component {
       })
     });
 
+    this.CardService.getAllDebitCardsByCurrencyCombo(this.state.currency)
+    .then((cards) => {
+      this.setState({
+        allDebitCards: cards
+      })
+    });
+
+    this.CardService.getAllCards()
+    .then((cards) => {
+      this.setState({
+        allCards: cards
+      })
+    });
+
   }
 
   onChangeMonthly = ({ value }) =>{
@@ -88,113 +92,171 @@ export default class AddExpensesScreen extends React.Component {
     }
   }
 
-  /*
-  onChangeCash = ({ value }) =>{
-    let cash = value;
-    this.setState({cash});
-    if(cash){
-      this.setState({account:''});
-    }else{
+  onChangeCurrency = ({ value }) =>{
+    let currency = value;
+    this.setState({currency});
+    this.accountService.getAccountBycurrencyCodeCombo(currency)
+    .then((accounts) => {
+      this.setState({
+        allAccount: accounts
+      })
+    });
+    this.CardService.getAllDebitCardsByCurrencyCombo(currency)
+    .then((cards) => {
+      this.setState({
+        allDebitCards: cards
+      })
+    });
+  }
+
+  getValidOptions =({paymentMethod}) =>{
+    this.setState({paymentMethod});
+    let showCard;
+    let showDebit; 
+    let showInstallments;
+    let showAccount;
+    if(paymentMethod=="CASH"){
+      showCard = false;
+      showDebit = false;
+      showInstallments = false;
+      showAccount = false;
+    }
+    else if(paymentMethod=="CC"){
+      showCard = true;
+      showDebit = false;
+      showInstallments = true;
+      showAccount = false;
+    }
+    else if (paymentMethod=="DC"){
+      showCard = false;
+      showDebit = true;
+      showInstallments = false;
+      showAccount = false;  
+      
+      this.CardService.getAllDebitCardsByCurrencyCombo(this.state.currency)
+      .then((cards) => {
+        this.setState({
+        allDebitCards: cards
+        })
+      });
+    }
+    else{
+      showCard = false;
+      showDebit = false;
+      showInstallments = false;
+      showAccount = true;  
+      
       this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
       .then((accounts) => {
         this.setState({
           allAccount: accounts
         })
       });
-      
     }
-  }
-*/
+    this.setState({
+      showCard:showCard,
+      showDebit:showDebit,
+      showInstallments:showInstallments,
+      showAccount:showAccount,
+      card:'',
+      debitCard:'',
+      installments:'',
+      account:'',
+    });
 
-  getValidOptions =({paymentMethod}) =>{
-    this.setState({paymentMethod});
-    if(paymentMethod=='CHASH'){
-      this.setState({
-        showCard:false,
-        showInstallments:false,
-        showAccount:false,
-        card:'',
-        installments:'',
-        account:'',
+  }
+
+  buttonPressed(){
+
+    var error = searchStateError(this.state);
+
+    if (error !== null) {
+      Alert.alert(error);
+      return;
+    }
+
+    if(this.state.paymentMethod=="CC"){
+      //Compra con Credito
+      Alert.alert("Grabar egreso con tarjeta Credito");
+      
+      this.transactionService.createTransaction(
+        'E',
+        this.state.detail,
+        false,
+        this.state.currency,
+        this.state.typeExpenses,
+        this.state.date,
+        this.state.amount,
+        null,
+        this.state.monthly,
+        this.state.paymentMethod,
+        this.state.card,
+        this.state.installments
+        );
+    
+      setTimeout(
+        () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
+        2000
+      )
+    }else if (this.state.paymentMethod=='DC'){
+      //Compra con Debito
+      console.log("Compra debito")
+      Alert.alert("Grabar egreso con tarjeta Debito");
+      //busco el id de la cuenta para hacer el insert
+      this.accountService.getAccountByCardId(this.state.debitCard)
+      .then((account) => {
+        this.transactionService.createTransaction(
+          'E',
+          this.state.detail,
+          false,
+          this.state.currency,
+          this.state.typeExpenses,
+          this.state.date,
+          this.state.amount,
+          account.id,
+          this.state.monthly,
+          this.state.paymentMethod,
+          this.state.debitCard);
+      
+        setTimeout(
+          () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
+          2000
+        )
       });
     }
-    else if(paymentMethod=='CC'){
-      this.setState({
-        showCard:true,
-        showInstallments:true,
-        showAccount:false,
-        card:'',
-        installments:'',
-        account:''
-        })
-    }else if (paymentMethod=='DC'){
-      this.setState({
-        showCard:true,
-        showInstallments:false,
-        showAccount:false,
-        card:'',
-        installments:'',
-        account:''
-        })
-    }
-    else{
-      this.setState({
-        showCard:false,
-        showInstallments:false,
-        showAccount:true,
-        card:'',
-        installments:'',
-        account:''
-      })
-    }
-  }
+    else if(this.state.paymentMethod!='CC' && this.state.paymentMethod!='DC'){
+      //Compra con otro medio/// asumimos que va a una cuenta
+      console.log("EFECTIVO/OTRO");
+      var account = this.state.account;
+      if(this.state.paymentMethod=="CASH")
+        account=-1;
 
-buttonPressed(){
-  Alert.alert(this.state.typeExpenses +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - " + this.state.currency+" - " 
-  + this.state.paymentMethod +" - " +this.state.value +" - " +this.state.account +" - " +this.state.card + " - "+this.state.installments); 
-  
-  let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
-  let numeroreg=/^[0-9]*$/;
-  if ((!this.state.typeExpenses|| this.state.typeExpenses=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
-  (!this.state.paymentMethod || this.state.paymentMethod=='') || (!this.state.value || this.state.value==''))
-  {
-    Alert.alert("Complete los campos faltantes del egreso")
-  }
-  else if(!decimalreg.test(this.state.value))
-    Alert.alert("ingrese un valor valido en el monto"); 
-  else if(this.state.paymentMethod=='CC'){
-    //Compra con Credito
-    if((!this.state.card|| this.state.card=='') || (!this.state.installments|| this.state.installments=='')){
-      Alert.alert("Complete los campos faltantes del egreso")
-    }else if(!numeroreg.test(this.state.installments) || this.state.installments<1){
-      Alert.alert("ingrese un valor valido en las cuotas"); 
-    }else{
-      Alert.alert("Grabar egreso con tarjeta Credito");
-    }
-  }else if (this.state.paymentMethod=='DC'){
-    //Compra con Debito
-    if((!this.state.card|| this.state.card=='')){
-      Alert.alert("Complete los campos faltantes del egreso")
-    }else{
-      Alert.alert("Grabar egreso con tarjeta Debito");
-    }
-  }
-  else if(this.state.paymentMethod!='CC' && this.state.paymentMethod!='DC'){
-    //Compra con otro medio/// asumimos que va a una cuenta
-    if((!this.state.account|| this.state.account=='')){
-      Alert.alert("Complete los campos faltantes del egreso")
-    }else{
       Alert.alert("Grabar egreso con medio distinto a Debito / credito");
+      this.transactionService.createTransaction(
+        'E',
+        this.state.detail,
+        null,
+        this.state.currency,
+        this.state.typeExpenses,
+        this.state.date,
+        this.state.amount,
+        this.state.account,
+        this.state.monthly,
+        this.state.paymentMethod);
+    
+      setTimeout(
+        () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
+        2000
+      )
     }
   }
-}
-  
+    
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
     
     const paymentMethods = getPaymentMethods();
-    const cards = getAllCardsCombo();//Ver de pasar un parametro para que traiga las tarjetas de credito o debito
+
     const optionsMontly = [
       { label: 'Mensual', value: true},
       { label: 'Ocasional', value: false }
@@ -204,9 +266,14 @@ buttonPressed(){
       { label: 'Dolares', value: 'USD' }
     ];
 
-  let  transactionTypeList  = this.state.allTransactionType.map( (v,k) => {
-    return {value:v.id, label:v.name};
-  });
+    let transactionTypeList = this.state.allTransactionType.map( (v,k) => {
+      return {value:v.id, label:v.name};
+    });
+    
+    let cardList = this.state.allCards.map( (v,k) => {
+      return {value:v.id, label:(v.name + " - "+ v.lastFourNumbers)};
+    });
+
 
     return (
       <View>
@@ -265,8 +332,8 @@ buttonPressed(){
             <TextInput keyboardType='decimal-pad'
                 style ={styles.input}
                 placeholder="Importe total"
-                onChangeText={(value) => this.setState({value})}
-                value={this.state.value}
+                onChangeText={(amount) => this.setState({amount})}
+                value={this.state.amount}
             />
             {this.state.showAccount?(
               <Dropdown
@@ -280,9 +347,18 @@ buttonPressed(){
             {this.state.showCard?(
               <Dropdown
                   placeholder="Seleccione Tarjeta"
-                  data={cards}
+                  data={cardList}
                   value={this.state.card}
                   onChangeText={(card) => this.setState({card})}
+                  style ={styles.input}
+              />
+            ):null}
+            {this.state.showDebit?(
+              <Dropdown
+                  placeholder="Seleccione Tarjeta Debito"
+                  data={this.state.allDebitCards}
+                  value={this.state.debitCard}
+                  onChangeText={(debitCard) => this.setState({debitCard})}
                   style ={styles.input}
               />
             ):null}

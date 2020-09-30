@@ -1,6 +1,6 @@
 export const paymentMethods = [
    {
-      value : 'CHASH',
+      value : 'CASH',
       label: 'Contado',
    },
    {
