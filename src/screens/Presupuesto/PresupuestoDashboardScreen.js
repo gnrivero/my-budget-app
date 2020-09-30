@@ -15,6 +15,7 @@ import BackButton from '../../components/BackButton/BackButton';
 import { presupuestos } from '../../data/presupuestos/presupuestosDataArray';
 import AddPresupuestoButton from '../../components/PresupuestoButton/AddPresupuestoButton';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import { getAllbudgetsDetails } from '../../data/presupuestos/presupuestosApi';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -36,11 +37,20 @@ export default class PresupuestoDashboardScreen extends React.Component {
     this.props.navigation.navigate('PresupuestoInfo');
   };
 
+<<<<<<< Updated upstream
   onPressBudget = item => {
     //lo llamo sin pasarle parametros
     this.props.navigation.navigate('BudgetDetail',{name: 'Detalle Presupuesto', itemCuenta:  item});
   };
 
+=======
+  onPressBudget= item => {
+    //lo llamo sin pasarle parametros
+    this.props.navigation.navigate('BudgetDetail',{name: 'Detalle Presupuesto', itemCard:  item});
+  };
+
+
+>>>>>>> Stashed changes
   renderPresupuesto = ({ item }) => (
     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressBudget(item)}>
       <View style={styles.infoContainer}>
@@ -96,6 +106,7 @@ export default class PresupuestoDashboardScreen extends React.Component {
   //   );
 
   render() {
+
 
     return (
       <ScrollView>

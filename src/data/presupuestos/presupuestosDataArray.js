@@ -51,6 +51,17 @@ export const presupuestos = [
 
    export const movimientos = [
     {
+      id: 500,
+      planedBudget: 50000,
+      realBudget: 47000,
+      serviciosPlaned: 12000,
+      serviciosReal: 9000,
+   },
+        
+   ]
+
+   export const budgetDetail = [
+    {
         value: 50,
         label: 'Ingreso'
       },

@@ -63,6 +63,7 @@ export default class PresupuestoScreen extends React.Component {
       Alert.alert("Grabar Efectivo");
   }
 
+
   render() {
     return (
       <ScrollView>
