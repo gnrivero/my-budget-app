@@ -2,12 +2,13 @@ import React from 'react';
 import {  ScrollView,  Text,  View,  Image,  TouchableHighlight,  TextInput,  Alert,} from 'react-native';
 import styles from './styles';
 
-import { getPaymentMethods } from '../../data/expenses/expensesAPI';
-import { searchStateError } from './validator/AddExpensesScreenValidator';
-
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
+import {toModel} from '../../utils/DateConverter';
+
+import { getPaymentMethods } from '../../data/expenses/expensesAPI';
+import { searchStateError } from './validator/AddExpensesScreenValidator';
 
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
@@ -185,8 +186,8 @@ export default class AddExpensesScreen extends React.Component {
         false,
         this.state.currency,
         this.state.typeExpenses,
-        this.state.date,
-        this.state.amount,
+        toModel(this.state.date),
+        parseFloat(this.state.amount/this.state.installments).toFixed(2),
         null,
         this.state.monthly,
         this.state.paymentMethod,
@@ -211,7 +212,7 @@ export default class AddExpensesScreen extends React.Component {
           false,
           this.state.currency,
           this.state.typeExpenses,
-          this.state.date,
+          toModel(this.state.date),
           this.state.amount,
           account.id,
           this.state.monthly,
@@ -238,7 +239,7 @@ export default class AddExpensesScreen extends React.Component {
         null,
         this.state.currency,
         this.state.typeExpenses,
-        this.state.date,
+        toModel(this.state.date),
         this.state.amount,
         this.state.account,
         this.state.monthly,
@@ -294,7 +295,7 @@ export default class AddExpensesScreen extends React.Component {
                 style={{marginBottom: 10}}
                 date={this.state.date} //initial date from state
                 mode="date" //The enum of date, datetime and time
-                placeholder="Seleccione una fecha"
+                placeholder="Fecha"
                 format="DD-MM-YYYY"
                 minDate="01-01-2020"
                 

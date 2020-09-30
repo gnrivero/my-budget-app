@@ -10,6 +10,7 @@ import {
   Alert
 } from 'react-native';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import {toView} from '../../utils/DateConverter';
 
 import styles from './styles';
 
@@ -61,7 +62,7 @@ export default class ExpensesScreen extends React.Component {
             <Image source={require('../../../assets/icons/row-down.png')} style={styles.expensesItemIcon} /> 
             <Text style={styles.infoText}>{item.allExpenses}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoText}>{item.date}</Text>
+              <Text style={styles.infoText}>{toView(item.date)}</Text>
             </View>
           </View>
           <View style={styles.info}>
@@ -69,7 +70,7 @@ export default class ExpensesScreen extends React.Component {
           </View>
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>Pagado con: </Text>
-            <Text style={styles.infoText}>{(item.card!='' || item.card!=null)?(item.card):(item.account)}</Text>
+            <Text style={styles.infoText}>{(item.card!='' && item.card!=null)?(item.card):(item.account)}</Text>
             <View style={styles.infoRight}>
             <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.amount}</Text>
             </View>

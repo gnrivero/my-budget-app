@@ -14,6 +14,7 @@ import styles from './styles';
 import { Dropdown } from 'react-native-material-dropdown';
 import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
+import {toModel} from '../../utils/DateConverter';
 
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
@@ -120,7 +121,7 @@ buttonPressed(){
         this.state.cash,
         this.state.currency,
         this.state.typeIncome,
-        this.state.date,
+        toModel(this.state.date),
         this.state.amount,
         this.state.account,
         this.state.monthly);
@@ -137,7 +138,7 @@ buttonPressed(){
       this.state.cash,
       this.state.currency,
       this.state.typeIncome,
-      this.state.date,
+      toModel(this.state.date),
       this.state.amount,
       this.state.account,
       this.state.monthly);
@@ -192,7 +193,7 @@ buttonPressed(){
               style={{marginBottom: 10}}
               date={this.state.date} //initial date from state
               mode="date" //The enum of date, datetime and time
-              placeholder="Seleccione fecha"
+              placeholder="Fecha"
               format="DD-MM-YYYY"
               minDate="01-01-2020"
               

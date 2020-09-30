@@ -11,7 +11,7 @@ export default class TransactionService {
       this.db = DBConnector.connect();
     }
 
-    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=null,installments=1){
+    createTransaction(type,detail, cash,currencyCode, transactionTypeId, date, amount, accountId, monthly,paymentMethod= '',cardId=null,installments=1,installmentsNumber=1){
 //armar el campo fecha
 console.log(type +"-"+ detail +"-"+ cash +"-"+ currencyCode +"-"+ transactionTypeId);
 console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod +"-"+ cardId + "-" +installments);
@@ -25,12 +25,16 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
         else if (currencyCode=='USD')
         accountId=2;
       }
+      detailAux=detail;
+      if(installments!=1 && installments >= installmentsNumber){
+        detailAux= detail + ' - '+installmentsNumber+' de '+ installments;
+      }
       this.db.transaction(
         (txn) => {
           txn.executeSql(
                 "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly,cardId)" +
                 "VALUES (?,?,?,?,?,?,?,?)",
-                [detail,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId],
+                [detailAux,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId],
                 (txn, res) => { 
                   console.log("TransactionService: Affected Rows " + res.rowsAffected); 
                   if(type=='I'){
@@ -40,9 +44,14 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                       serviceAccount.makeWithdraw(accountId,amount);
                     }else{
                       //Compra en credito
-                      if(installments>1){
-                        installments--;
-                        this.createTransaction(type,detail,cash,currencyCode,transactionTypeId,date,amount,accountId,monthly,paymentMethod,cardId,installments)
+                      if(installments > installmentsNumber){
+                        installmentsNumber++;
+                        dt= new Date(date);
+                        console.log(dt);
+                        n=1;
+                        newDate=new Date(dt.setMonth(dt.getMonth() + n)).toISOString().split('T')[0];
+                        console.log(newDate);
+                        this.createTransaction(type,detail,cash,currencyCode,transactionTypeId,newDate,amount,accountId,monthly,paymentMethod,cardId,installments,installmentsNumber)
                       }
                     }
                   }

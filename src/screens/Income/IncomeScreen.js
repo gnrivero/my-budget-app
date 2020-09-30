@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import {toView} from '../../utils/DateConverter';
 
 import styles from './styles';
 
@@ -59,7 +60,7 @@ export default class IncomeScreen extends React.Component {
           <Image source={require('../../../assets/icons/row-up.png')} style={styles.incomeItemIcon} /> 
           <Text style={styles.infoText}>{item.allExpenses}</Text>
           <View style={styles.infoRight}>
-            <Text style={styles.infoText}>{item.date}</Text>
+            <Text style={styles.infoText}>{toView(item.date)}</Text>
           </View>
         </View>
         <View style={styles.info}>

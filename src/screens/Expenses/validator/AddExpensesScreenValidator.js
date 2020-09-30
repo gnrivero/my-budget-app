@@ -22,7 +22,7 @@ export function searchStateError(state) {
         errorMsg = "Importe invalido";
     }else if(state.paymentMethod=="CC"){
         //Compra con Credito
-        if((!state.card|| state.card=='') || (!state.installments|| state.installments=='')){
+        if((!state.card|| state.card=='') || (!state.installments|| state.installments==''|| state.installments==0)){
             errorMsg = "Complete los datos faltantes de tarjeta";
         }else if(!numeroreg.test(state.installments) || state.installments<1){
             errorMsg = "ingrese un valor correcto en las cuotas"; 
