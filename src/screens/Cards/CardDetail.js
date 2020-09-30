@@ -12,8 +12,8 @@ import {
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
 import {getConsumptions} from '../../data/cards/cardsAPI';
-
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import {toView} from '../../utils/DateConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -33,11 +33,11 @@ export class CardDetailInfoScreen extends React.Component {
           <View style={styles.info}>
             <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{card.expiryDate}</Text>
             <View style={styles.infoRight}>
-             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{card.closeDate}</Text>
+             <Text style={styles.infoTextDetail}>Cierre: </Text><Text style={styles.infoText}>{toView(card.closeDate)}</Text>
             </View>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{card.dueDate}</Text>
+            <Text style={styles.infoTextDetail}>Vencimiento resumen: </Text><Text style={styles.infoText}>{toView(card.dueDate)}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoTextDetail}>ARS: </Text><Text style={styles.infoText}>{card.consumption}</Text>
             </View>

@@ -17,6 +17,7 @@ import { Dropdown } from 'react-native-material-dropdown';
 import { setLightEstimationEnabled } from 'expo/build/AR';
 import CardService from '../../service/CardService';
 import BankService from '../../service/BankService';
+import {toView, toModel} from '../../utils/DateConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -74,8 +75,8 @@ export default class ModifyCardScreen extends React.Component {
                 entity: card.bankId,
                 lastFourNumbers: card.lastFourNumbers,
                 expiryDate: card.expiryDate,
-                dueDate: card.dueDate,
-                closeDate: card.closeDate
+                dueDate: toView(card.dueDate),
+                closeDate: toView(card.closeDate)
             })
         });
     }
@@ -105,8 +106,8 @@ buttonPressed(){
             this.state.entity,
             this.state.lastFourNumbers,
             this.state.expiryDate,
-            this.state.closeDate,
-            this.state.dueDate
+            toModel(this.state.closeDate),
+            toModel(this.state.dueDate)
         );
       } else {
         this.cardService.updateCard(
@@ -115,8 +116,8 @@ buttonPressed(){
             this.state.entity,
             this.state.lastFourNumbers,
             this.state.expiryDate,
-            this.state.closeDate,
-            this.state.dueDate
+            toModel(this.state.closeDate),
+            toModel(this.state.dueDate)
         );
       }
     }

@@ -29,7 +29,7 @@ export default class CardService {
                        }
                   )
                });
-            });
+        });
     }
 
     updateCard(id, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate){
@@ -122,6 +122,39 @@ export default class CardService {
       });
     }
 
+    getCardsByCloseDate(start, end){
+        const conn = this.db;
+        return new Promise((resolve) => {
+          this.db.transaction(
+              (txn) => {
+                 txn.executeSql(
+                      "SELECT " +
+                      " card.id, " +
+                      " card.name, " +
+                      " card.lastFourNumbers, " +
+                      " card.expiryDate , " +
+                      " card.closeDate, " +
+                      " card.dueDate, " +
+                      " card.type, " +
+                      " bank.name as bank " +
+                      "FROM card " +
+                      " INNER JOIN bank ON bank.id = card.bankId " +
+                      " WHERE card.type != 'DEBIT'" +
+                      " AND card.closeDate between ? AND ? ",
+                      [start, end],
+                      (txn, res) => {
+                        let cards = [];
+                        for (let i = 0; i < res.rows.length; ++i) {
+                            cards.push(res.rows.item(i));
+                        }
+                        resolve(cards);
+                      }
+                 )
+              }
+          );
+        });
+     }
+
     initDB(resetData, populate, runTests){
 
         if(resetData === true){
@@ -153,11 +186,10 @@ export default class CardService {
                             "name VARCHAR(20)," +
                             "bankId INTEGER," +
                             "lastFourNumbers VARCHAR(4)," +
-                            "expiryDate VARCHAR(4)," +
-                            "closeDate VARCHAR(10)," +
-                            "dueDate VARCHAR(10)," +
-                            "type VARCHAR(6)" +
-                            ")",
+                            "expiryDate TEXT," +
+                            "closeDate TEXT," +
+                            "dueDate TEXT," +
+                            "type VARCHAR(6))",
                             [],
                             (txn, res) => { console.log("CardService: Table card created " + res); }
                        )
@@ -169,28 +201,44 @@ export default class CardService {
 
     populate(){
         console.log("CardService: Populating table card");
-        this.createCreditCard('AMEX Black', 3, '1234', '0124', '24-09-2020', '28-09-2020');
-        this.createCreditCard('Visa Signature', 3,'7890', '0125', '01-10-2020', '11-10-2020');
-        this.createCreditCard('Master Black', 4, '4567', '0123', '02-10-2020', '12-10-2020');
-        this.createDebitCard('Visa Débito', 5, '3829', '0125')
+        this.createCreditCard('AMEX Black', 1, '1234', '0124', '2020-09-24', '2020-09-28');
+        this.createCreditCard('Visa Signature', 1,'7890', '0125', '2020-10-04', '2020-10-11');
+        this.createCreditCard('Master Black', 2, '4567', '0123', '2020-10-04', '2020-10-12');
+        this.createDebitCard('Visa Débito', 1, '3829', '0125')
+
             .then((id) => {
                 console.log("CreateDebitCard: Generated ID: " + id);
             });
     }
 
     test(){
-        console.log("Test: Get All Cards");
+
+        this.getCardsByCloseDate('2020-08-30', '2020-09-29')
+        .then((cards) => {
+            console.log("Fetching by date '2020-08-30' and '2020-09-29' ")
+            console.log("Found this cards");
+            console.log(cards);
+        });
+
+        this.getCardsByCloseDate('2020-08-30', '2020-10-29')
+            .then((cards) => {
+                console.log("Fetching by date '2020-08-30' and '2020-10-29' ")
+                console.log("Found this cards");
+                console.log(cards);
+        });
+
         this.getAllCards()
           .then((cards) => {
+            console.log("Test: Get All Cards");
             console.log(cards);
-          });
+        });
 
         console.log("Test: Update card ID:2");
-        this.updateCard(2, 'Visa Signature',1,'7890', '0125', '04-10-2020', '11-10-2020');
+        this.updateCard(2, 'Visa Signature',1,'7890', '0125', '2020-10-04', '2020-11-01');
 
-        console.log("Test: Get Card ID:2");
         this.getCardById(2)
           .then((card) => {
+            console.log("Test: Get Card ID:2");
             console.log(card);
           });
     }
