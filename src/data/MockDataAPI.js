@@ -1,6 +1,4 @@
-import { Text } from 'react-native';
-import React, { Component } from 'react';
-import { recipes, categories, ingredients, cuentas, entities, transactions } from './dataArrays';
+import { recipes, categories } from './dataArrays';
 import { movimientos } from './presupuestos/presupuestosDataArray';
 
 export function getCategoryById(categoryId) {
@@ -12,27 +10,6 @@ export function getCategoryById(categoryId) {
   });
   return category;
 }
-
-export function getIngredientName(ingredientID) {
-  let name;
-  ingredients.map(data => {
-    if (data.ingredientId == ingredientID) {
-      name = data.name;
-    }
-  });
-  return name;
-}
-
-export function getIngredientUrl(ingredientID) {
-  let url;
-  ingredients.map(data => {
-    if (data.ingredientId == ingredientID) {
-      url = data.photo_url;
-    }
-  });
-  return url;
-}
-
 export function getCategoryName(categoryId) {
   let name;
   categories.map(data => {
@@ -42,17 +19,6 @@ export function getCategoryName(categoryId) {
   });
   return name;
 }
-
-export function getRecipes(categoryId) {
-  const recipesArray = [];
-  recipes.map(data => {
-    if (data.categoryId == categoryId) {
-      recipesArray.push(data);
-    }
-  });
-  return recipesArray;
-}
-
 // modifica
 export function getRecipesByIngredient(ingredientId) {
   const recipesArray = [];
@@ -66,14 +32,6 @@ export function getRecipesByIngredient(ingredientId) {
   return recipesArray;
 }
 
-export function getEntities() {
-  const entitiesArray = [];
-  entities.map(data => {
-    entitiesArray.push(data);
-    });
-  return entitiesArray;
-}
-
 export function getMovimientos() {
   const movimientosArray = [];
   movimientos.map(data => {
@@ -81,25 +39,7 @@ export function getMovimientos() {
     });
   return movimientosArray;
 }
-
-export function getCuentas() {
-  const cuentasArray = [];
-  cuentas.map(data => {
-      cuentasArray.push(data);
-    });
-  return cuentasArray;
-}
-
-export function getTransactions(id) {
-  const transactionsArray = [];
-  transactions.map(data => {
-    if(data.idAccount == id){
-      transactionsArray.push(data);
-    }
-  });
-  return transactionsArray;
-}
-
+/*
 export function getCuentadId(id) {
   let cuenta = null;
   cuentas.map(data => {
@@ -176,3 +116,4 @@ export function getRecipesByRecipeName(recipeName) {
   });
   return recipesArray;
 }
+*/

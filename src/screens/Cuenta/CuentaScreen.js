@@ -131,7 +131,7 @@ buttonPressed() {
     }
     setTimeout(
       () => { this.props.navigation.navigate('Cuentas',{name: 'Cuentas'}); },
-      2000
+      1200
     )
   }
 

@@ -11,13 +11,16 @@ import {
 } from 'react-native';
 import styles from './styles';
 import BackButton from '../../components/BackButton/BackButton';
-import {getConsumptions} from '../../data/cards/cardsAPI';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import CardService from '../../service/CardService';
 import {toView} from '../../utils/DateConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export class CardDetailInfoScreen extends React.Component {
+
+  cardService;
+
   render(){
     const { card } = this.props;
     return(
@@ -60,10 +63,26 @@ export default class CardDetailScreen extends React.Component {
       title: 'Tarjeta'
   };
 
+  cardService;
+
   constructor(props) {
     super(props);
+    this.cardService = new CardService();
     this.state = {
-        };
+        cardConsumptions : []
+    };
+  }
+
+  componentDidMount(){
+
+      const { navigation } = this.props;
+      const card = navigation.getParam('itemCard');
+      this.cardService.getCardCurrentPeriodConsumption(card.id)
+      .then((consumptions) => {
+            this.setState({
+                cardConsumptions: consumptions
+            });}
+      );
   }
 
   renderConsumptions = ({ item }) => (
@@ -71,12 +90,12 @@ export default class CardDetailScreen extends React.Component {
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
             <Image source={require('../../../assets/icons/consumptions.png')} style={styles.cardsItemIcon} /> 
-            <Text style={styles.infoText}>{item.name}</Text>
+            <Text style={styles.infoText}>{item.detail}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Fecha: </Text><Text style={styles.infoText}>{item.date}</Text>
+            <Text style={styles.infoTextDetail}>Fecha: </Text><Text style={styles.infoText}>{toView(item.date)}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>{item.currency} </Text><Text style={styles.infoText}>{item.value}</Text>
+              <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.amount}</Text>
             </View>
           </View>
         </View>
@@ -92,10 +111,10 @@ export default class CardDetailScreen extends React.Component {
   };
 
   render() {
+
     const { navigation } = this.props;
     const card = navigation.getParam('itemCard');
-    //en itemCard tengo el objeto
-    const consumptions = getConsumptions(card.id);
+
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -118,9 +137,9 @@ export default class CardDetailScreen extends React.Component {
         <Text >Consumos</Text>
         <View style={{height: 0.5, width: '100%', backgroundColor: '#C8C8C8'}}/>
         <FlatList
-           data={consumptions}
+           data={this.state.cardConsumptions}
            renderItem={this.renderConsumptions}
-           keyExtractor={item => `${item.id}`}
+           keyExtractor={item => `${item.detail}`}
            ItemSeparatorComponent={this.FlatListItemSeparator}
           />
       </ScrollView>
