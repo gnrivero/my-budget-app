@@ -1,7 +1,7 @@
 import DBConnector from '../data/access/DBConnector';
 import TransactionService from './TransactionService';
 
-export default class InvestmentService {
+export default class LoanService {
 
     db;
     transactionService;
@@ -9,20 +9,20 @@ export default class InvestmentService {
         this.db = DBConnector.connect();
         this.transactionService = new TransactionService();
     }
-
-    createInvestment(detail, type, currencyCode, date, amount, symbol, dueDate=null, amountCredited=null, accountId=null) {
-       /*
-        console.log(detail + ' - ' + type + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
-        console.log( symbol + ' - ' + dueDate + ' - ' + amountCredited + ' - ' + accountId)
-       */
+    
+    createLoan(detail, lender, currencyCode, date, amount, expirationDate=null, monthlyFee=null,amountFees=null, accountId=null) {
+    
+        console.log(detail + ' - ' + lender + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
+        console.log( expirationDate + ' - ' + monthlyFee + ' - ' + amountFees  +' - ' +  accountId)
+    
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO investment (detail, investmentTypeId, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId, active) " +
+                   "INSERT INTO loan (detail, lender, currencyCode, date, amount, expirationDate, monthlyFee, amountFees, accountId, active) " +
                    "VALUES (?,?,?,?,?,?,?,?,?,1)",
-                   [detail, type, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId],
-                   (txn, res) => { console.log("createInvestment: Affected Rows " + res.rowsAffected); },
-                   (txn, err) => { console.log("createInvestment: " + err); }
+                   [detail, lender, currencyCode, date, amount, expirationDate, monthlyFee, amountFees, accountId],
+                   (txn, res) => { console.log("createLoan: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("createLoan: " + err); }
               )
            }
        );
@@ -48,23 +48,22 @@ export default class InvestmentService {
     }
 */
 
-    updateActive(id) {
+    updateActive(id, active) {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "UPDATE investment SET " +
+                   "UPDATE loan SET " +
                    "active = ? " +
                    "WHERE id = ?",
-                   [0, id],
-                   (txn, res) => { console.log("InvestmentService: updateActive with ID: " + id); },
-                   (txn, err) => { console.log("InvestmentService updateActive: " + err); }
+                   [active, id],
+                   (txn, res) => { console.log("LoanService: updateActive with ID: " + id); },
+                   (txn, err) => { console.log("LoanService updateActive: " + err); }
               )
            }
        );
     }
 
-
-    getAllInvestment(){
+    getAllLoans(){
         //console.log("getAllInvestment")
       const conn = this.db;
       return new Promise((resolve) => {
@@ -72,35 +71,33 @@ export default class InvestmentService {
             (txn) => {
                txn.executeSql(
                     "SELECT " +
-                    " investment.id as id," +
-                    " investment.detail as detail," +
-                    " investment.investmentTypeId as investmentTypeId," +
-                    " investmentType.name as investmentType," +
-                    " investment.amount as amount," +
-                    " investment.currencyCode as currencyCode," +
-                    " investment.date as date," +
-                    " investment.dueDate as dueDate," +
-                    " investment.symbol as symbol," +
-                    " investment.amountCredited as amountCredited," +
-                    " investment.active as active, " +
-                    " investment.accountId as accountId, " +
+                    " loan.id as id," +
+                    " loan.detail as detail," +
+                    " loan.lender as lender," +
+                    " loan.amount as amount," +
+                    " loan.currencyCode as currencyCode," +
+                    " loan.date as date," +
+                    " loan.expirationDate as expirationDate," +
+                    " loan.monthlyFee as monthlyFee," +
+                    " loan.amountFees as amountFees," +
+                    " loan.accountId as accountId, " +
+                    " loan.active as active, " +
                     " account.name as account " +
-                    " FROM investment " +
-                    " INNER JOIN investmentType ON investmentType.id = investment.investmentTypeId "+
-                    " LEFT JOIN account ON account.id = investment.accountId " +
-                    " WHERE investment.active = 1 "+
-                    " ORDER BY investment.date DESC",
+                    " FROM loan " +
+                    " LEFT JOIN account ON account.id = loan.accountId " +
+                    " WHERE loan.active =1 "+
+                    " ORDER BY loan.date DESC",
                     [],
                     (txn, res) => {
-                       let investments = new Array();
+                       let loans = new Array();
                        //console.log(res.rows)
                        for(var i = 0; i < res.rows.length; ++i){
-                        investments.push(res.rows.item(i));
+                        loans.push(res.rows.item(i));
                        }
-                       resolve(investments);
+                       resolve(loans);
                     },
                     (txn, err) => {
-                        console.log("getAllInvestment:" + err);
+                        console.log("getAllLoan:" + err);
                     }
                )
             }
@@ -108,36 +105,36 @@ export default class InvestmentService {
       });
     }
 
-    getInvestmentById(id) {
+    getLoanById(id) {
         const conn = this.db;
         return new Promise((resolve) => {
             conn.transaction(
               (txn) => {
                  txn.executeSql(
-                    "SELECT * FROM investment WHERE investment.id = ?",
+                    "SELECT * FROM loan WHERE loan.id = ?",
                     [id],
                     (txn, res) => {
                          if (res.rows.length >= 1) {
-                           var investment = res.rows.item(0);
-                           resolve(investment);
+                           var loan = res.rows.item(0);
+                           resolve(loan);
                          }
                     },
                     (txn, err) => {
-                        console.log("getInvestmentById: " + err);
+                        console.log("getLoanById: " + err);
                     }
                  )
               });
          });
     }
 
-    checkInvestments(){
+    checkLoans(){
         dateNow= new Date();
         dateShort=dateNow.toISOString().split('T')[0]                
         //console.log(dateShort);
         this.db.transaction(
             (txn) => {
                txn.executeSql(
-                 "SELECT * FROM investment WHERE active = 1 and  dueDate< ?",
+                 "SELECT * FROM loan WHERE active = 1 and  expirationDate< ?",
                  [dateShort],
                  (txn, res) => {
                     //console.log(res.rows);
@@ -146,11 +143,11 @@ export default class InvestmentService {
                         //console.log(res.rows.item(i));
                         item= res.rows.item(i);
                         this.transactionService.createTransaction('I','Acreditacion '+item.detail , false, item.currencyCode ,6,item.dueDate ,item.amountCredited,item.accountId,0);  
-                        this.updateActive(item.id)
+                        this.updateActive(item.id,0)
                     }
                  },
                  (txn, err) => {
-                     console.log("checkInvestments: " + err);
+                     console.log("checkLoans: " + err);
                  }
                )
  
@@ -180,35 +177,34 @@ export default class InvestmentService {
     }
 
     createTable(){
-        console.log("InvestmentService: Dropping table investment");
+        console.log("LoanService: Dropping table loan");
         this.db.transaction(
             (txn) => {
                 txn.executeSql(
-                    "DROP TABLE IF EXISTS investment",
+                    "DROP TABLE IF EXISTS loan",
                     [],
                     (txn, res) => {
-                        console.log("InvestmentService: Table Dropped");
-                        console.log("InvestmentService: Creating Table investment");
+                        console.log("LoanService: Table Dropped");
+                        console.log("LoanService: Creating Table loan");
                         txn.executeSql(
-                            "CREATE TABLE IF NOT EXISTS investment (" +
+                            "CREATE TABLE IF NOT EXISTS loan (" +
                                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                 "detail VARCHAR(50)," +
-                                "investmentTypeId INTEGER," +
+                                "lender INTEGER," + // 1 prestamista 0 prestatario
                                 "currencyCode VARCHAR(3)," +
                                 "amount DECIMAL(10,2)," +
-                                "amountCredited DECIMAL(10,2)," +
+                                "monthlyFee DECIMAL(10,2)," +
+                                "amountFees DECIMAL(10,2)," +
                                 "date DATE," +
-                                "dueDate DATE," +
-                                "symbol VARCHAR(8)," +
+                                "expirationDate DATE," +
                                 "accountId INTEGER," +
                                 "active INTEGER " +
                                 ")",
                             [],
-                            (txn, res) => { console.log("InvestmentService: Table investment created " + res); },
+                            (txn, res) => { console.log("LoanService: Table loan created " + res); },
                             (txn, err) => {
-                                console.log("InvestmentService: create table" + err);
+                                console.log("LoanService: create table" + err);
                             }
-                            
                        )
                     }
                 )
@@ -218,26 +214,23 @@ export default class InvestmentService {
 
     populate(){
         //Inicializo algunos datos
-        console.log("InvestmentService: Populating table investment");     
-        this.createInvestment('Plazo fijo Banco',1, 'ARS', '2020-08-10',10000.50,null,'2020-09-20',12345.50,3);
-        this.createInvestment('Bonos Nacionales',2, 'ARS', '2020-07-15',2000,'BONAR23');
-        this.createInvestment('Acciones YPF',3, 'ARS', '2020-08-10',1000,'YPF');
-        this.createInvestment('Fondo inversion',4, 'ARS', '2020-08-10',50000,'FI');
-        this.createInvestment('Plazo fijo online',1, 'ARS', '2020-08-10',8000,null,'2020-10-20',10000,3);
+        console.log("LoanService: Populating table loan");     
+        this.createLoan('Prestamo Banco',0, 'ARS', '2020-08-10',10000.50,'2020-09-30',24,100,3);
+        this.createLoan('Prestamo Mafia',0, 'USD', '2020-06-15',10000,'2020-08-30',24,100);
+        this.createLoan('Primo lejano',1, 'USD', '2020-08-10',20000,'2020-09-30');
     }
 
     
     test(){
 
-        this.getAllInvestment();
-
-        //check back investments
-        this.checkInvestments();
-
-        this.getInvestmentById(1)
-            .then(investment => {
-               console.log("Get investment By Id");
-               console.log(investment);
+        this.getAllLoans();
+/*
+        this.checkLoans();
+*/
+        this.getLoanById(1)
+            .then(loan => {
+               console.log("Get loan By Id");
+               console.log(loan);
             });
 
        /*

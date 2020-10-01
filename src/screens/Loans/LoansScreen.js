@@ -9,10 +9,12 @@ import {
   Button,
   Alert
 } from 'react-native';
-import styles from './styles';
-import {  getAllLoans } from '../../data/loans/loansAPI';
-
+import {toView} from '../../utils/DateConverter';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+
+import styles from './styles';
+
+import LoanService from '../../service/LoanService';
 
 export default class LoansScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -23,6 +25,29 @@ export default class LoansScreen extends React.Component {
 
   constructor(props) {
     super(props);
+    this.service = new LoanService();
+    this.state = {
+      allLoans : []
+    };
+  }
+
+  
+  componentDidMount(){
+    this.service.getAllLoans()
+      .then((loans) => {
+        this.setState({
+          allLoans: loans
+      })
+    });
+   }
+   
+  componentWillReceiveProps(nextProp){
+    this.service.getAllLoans()
+      .then((loans) => {
+        this.setState({
+          allLoans: loans
+      })
+    });
   }
 
   onPressLoans = item => {
@@ -36,25 +61,25 @@ export default class LoansScreen extends React.Component {
       <View style={styles.itemContainer}>
         <View style={styles.infoContainer}>
           <View style={styles.infoHead}>
-            {item.lender?
+            {item.lender==1?
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansLenderItemIcon} /> )
               :
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansItemIcon} /> )
             }
-            <Text style={styles.infoText}>{item.reference}</Text>
+            <Text style={styles.infoText}>{item.detail}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>{item.date}</Text>
+            <Text style={styles.infoTextDetail}>{toView(item.date)}</Text>
             <View style={styles.infoRight}>
-              <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.value}</Text>
+              <Text style={styles.infoTextDetail}>{item.currencyCode}</Text><Text style={styles.infoText}>{item.amount}</Text>
             </View>
           </View>
-          {!item.lender?
+          {item.lender!=1?
             (
               <View style={styles.info}>
-                <Text style={styles.infoTextDetail}>Día de vencimiento: </Text><Text style={styles.infoText}>{item.expirationDay}</Text>
+                <Text style={styles.infoTextDetail}>1er vencimiento: </Text><Text style={styles.infoText}>{toView(item.expirationDate)}</Text>
                 <View style={styles.infoRight}>
-                  <Text style={styles.infoTextDetail}>Valor cuota: {item.currency==1?'ARS':(item.currency==2)?'USD':''} </Text><Text style={styles.infoText}>{item.monthlyFee}</Text>
+                  <Text style={styles.infoTextDetail}>Valor cuota: {item.currencyCode}</Text><Text style={styles.infoText}>{item.amountFees}</Text>
                 </View>
               </View>
           )
@@ -72,7 +97,6 @@ export default class LoansScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const loansArray = getAllLoans();
     return (
       <ScrollView style={styles.mainContainer}>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -89,7 +113,7 @@ export default class LoansScreen extends React.Component {
           </View>
         </View>
         <FlatList
-          data={loansArray}
+          data={this.state.allLoans}
           renderItem={this.renderLoans}
           keyExtractor={item => `${item.id}`}
           ItemSeparatorComponent={this.FlatListItemSeparator}
