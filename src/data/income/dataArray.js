@@ -1,3 +1,4 @@
+/*
 export const typeIncome = [
    {
       id:1,
@@ -63,3 +64,4 @@ export const income = [
    nombreCuenta: 'Cuenta Banco a' //nombre de la cuenta de referencia
    }
 ]
+*/

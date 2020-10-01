@@ -78,6 +78,33 @@ export default class CardService {
         });
     }
 
+    getAllDebitCardsByCurrencyCombo(currency){
+        const conn = this.db;
+        return new Promise((resolve) => {
+          this.db.transaction(
+              (txn) => {
+                 txn.executeSql(
+                      "SELECT " +
+                      " card.id as value," +
+                      " card.name || '-' || card.lastFourNumbers  as label " +
+                      "FROM card " +
+                      " INNER JOIN account ON account.cardId = card.id " +
+                      " WHERE card.type == 'DEBIT' and account.currencyCode ==?",
+                      [currency],
+                      (txn, res) => {
+                        let cards = [];
+                        for (let i = 0; i < res.rows.length; ++i) {
+                            cards.push(res.rows.item(i));
+                        }
+                        resolve(cards);
+                      },
+                      (txn, err) => { console.log("Card: getAllDebitCardsByCurrencyCombo failed " + err); }
+                 )
+              }
+          );
+        });
+    }
+
     getCardById(id){
       const conn = this.db;
       return new Promise((resolve) => {
@@ -178,6 +205,7 @@ export default class CardService {
         this.createCreditCard('Visa Signature', 1,'7890', '0125', '2020-10-04', '2020-10-11');
         this.createCreditCard('Master Black', 2, '4567', '0123', '2020-10-04', '2020-10-12');
         this.createDebitCard('Visa Débito', 1, '3829', '0125')
+
             .then((id) => {
                 console.log("CreateDebitCard: Generated ID: " + id);
             });

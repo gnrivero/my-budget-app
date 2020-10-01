@@ -45,54 +45,30 @@ export default class TransactionTypeService {
         });
     }
 
-    getTransactionTypeIncome(){
-        const conn = this.db;
-        return new Promise((resolve) => {
-          conn.transaction(
-            (txn) => {
-               txn.executeSql(
-                    "SELECT * FROM transactionType where type='I'",
-                    [],
-                    (txn, res) => {
-                       let transactionType = new Array();
-                       for(var i = 0; i < res.rows.length; ++i){
-                        transactionType.push(res.rows.item(i));
-                       }
-                       resolve(transactionType);
-                    },
-                    (txn, err) => { console.log("TransactionTypeService: getTransactionTypeIncome failed " + err); }
-                    
-               )
-            }
-          );
-        });
+    getTransactionType(type){
+      const conn = this.db;
+      return new Promise((resolve) => {
+        conn.transaction(
+          (txn) => {
+             txn.executeSql(
+                  "SELECT * FROM transactionType where type=?",
+                  [type],
+                  (txn, res) => {
+                     let transactionType = new Array();
+                     for(var i = 0; i < res.rows.length; ++i){
+                      transactionType.push(res.rows.item(i));
+                     }
+                     resolve(transactionType);
+                  },
+                  (txn, err) => { console.log("TransactionTypeService: getTransactionTypeIncome failed " + err); }
+                  
+             )
+          }
+        );
+      });
     }
 
-    getTransactionTypeExpense(){
-        const conn = this.db;
-        return new Promise((resolve) => {
-          conn.transaction(
-            (txn) => {
-               txn.executeSql(
-                    "SELECT * FROM transactionType where type='E'",
-                    [],
-                    (txn, res) => {
-                       let transactionType = new Array();
-                       for(var i = 0; i < res.rows.length; ++i){
-                        transactionType.push(res.rows.item(i));
-                       }
-                       resolve(transactionType);
-                    },
-                    (txn, err) => { console.log("TransactionTypeService: getTransactionTypeExpense failed " + err); }
-                    
-               )
-            }
-          );
-        });
-    }
-
-
-       /*
+    /*
         Este método debe ser llamado desde DBInit.js
     */
    initDB(resetData){
