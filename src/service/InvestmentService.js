@@ -11,14 +11,16 @@ export default class InvestmentService {
     }
 
     createInvestment(detail, type, currencyCode, date, amount, symbol, dueDate=null, amountCredited=null, accountId=null) {
+        console.log(detail + ' - ' + type + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
+        console.log( symbol + ' - ' + dueDate + ' - ' + amountCredited + ' - ' + accountId)
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO investment(detail, investmentTypeId, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId, active) " +
-                   "VALUES (?,?,?,?,?,?,?,?,?,true)",
+                   "INSERT INTO investment (detail, investmentTypeId, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId, active) " +
+                   "VALUES (?,?,?,?,?,?,?,?,?,1)",
                    [detail, type, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId],
-                   (txn, res) => { console.log("createAccount: Affected Rows " + res.rowsAffected); },
-                   (txn, err) => { console.log("createAccount: " + res); }
+                   (txn, res) => { console.log("createInvestment: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("createInvestment: " + err); }
               )
            }
        );
@@ -44,6 +46,22 @@ export default class InvestmentService {
     }
 */
 
+    updateActive(id, active) {
+        this.db.transaction(
+           (txn) => {
+              txn.executeSql(
+                   "UPDATE investment SET " +
+                   "active = ? " +
+                   "WHERE id = ?",
+                   [active, id],
+                   (txn, res) => { console.log("InvestmentService: updateActive with ID: " + id); },
+                   (txn, err) => { console.log("InvestmentService updateActive: " + err); }
+              )
+           }
+       );
+    }
+
+
     getAllInvestment(){
       const conn = this.db;
       return new Promise((resolve) => {
@@ -53,6 +71,7 @@ export default class InvestmentService {
                     "SELECT " +
                     " investment.id as id," +
                     " investment.detail as detail," +
+                    " investment.investmentTypeId as investmentTypeId," +
                     " investmentType.name as investmentType," +
                     " investment.amount as amount," +
                     " investment.currencyCode as currencyCode," +
@@ -63,8 +82,9 @@ export default class InvestmentService {
                     " investment.active as active, " +
                     " account.name as account " +
                     " FROM investment " +
-                    " INNER JOIN investmentType ON investmentType.id = investment.InvestmentTypeId ",
+                    " INNER JOIN investmentType ON investmentType.id = investment.investmentTypeId "+
                     " LEFT JOIN account ON account.id = investment.accountId " +
+                    " WHERE investment.active =1 "+
                     " ORDER BY investment.date DESC",
                     [],
                     (txn, res) => {
@@ -108,18 +128,25 @@ export default class InvestmentService {
 
     checkInvestments(){
         dateNow= new Date();
-        dateNow=dateNow.toISOString().split('T')[0]                
-        console.log(dateNow);
+        dateShort=dateNow.toISOString().split('T')[0]                
+        console.log(dateShort);
         this.db.transaction(
             (txn) => {
                txn.executeSql(
-                 "SELECT * FROM investment WHERE active = true and  dueDate< ?",
-                 [dateNow],
+                 "SELECT * FROM investment WHERE active = 1 and  dueDate< ?",
+                 [dateShort],
                  (txn, res) => {
                     console.log(res.rows);
                     for(var i = 0; i < res.rows.length; ++i){
-                        this.transactionService.createTransaction('I','Acreditacion '+i.detail , false, i.currencyCode ,6,i.dueDate ,i.amountCredited,i.accountId,false);  
+                        console.log("element checkInvestments");
+                        console.log(res.rows.item(i));
+                        item= res.rows.item(i);
+                        this.transactionService.createTransaction('I','Acreditacion '+item.detail , false, item.currencyCode ,6,item.dueDate ,item.amountCredited,item.accountId,0);  
+                        this.updateActive(item.id,0)
                     }
+                 },
+                 (txn, err) => {
+                     console.log("checkInvestments: " + err);
                  }
                )
  
@@ -169,11 +196,15 @@ export default class InvestmentService {
                                 "date DATE," +
                                 "dueDate DATE," +
                                 "symbol VARCHAR(8)," +
-                                "accountId INTEGER" +
-                                "active BOLEAN" +
+                                "accountId INTEGER," +
+                                "active INTEGER " +
                                 ")",
                             [],
-                            (txn, res) => { console.log("InvestmentService: Table investment created " + res); }
+                            (txn, res) => { console.log("InvestmentService: Table investment created " + res); },
+                            (txn, err) => {
+                                console.log("InvestmentService: create table" + err);
+                            }
+                            
                        )
                     }
                 )
@@ -184,19 +215,20 @@ export default class InvestmentService {
     populate(){
         //Inicializo algunos datos
         console.log("InvestmentService: Populating table investment");     
-        this.createInvestment('Plazo fijo nacion',1, 'ARS', '2020-08-10',10000.50,null,'2020-09-20',102000.50,3);
+        this.createInvestment('Plazo fijo Banco',1, 'ARS', '2020-08-10',10000.50,null,'2020-09-20',102000.50,3);
         this.createInvestment('Bonos Nacionales',2, 'ARS', '2020-07-15',2000,'BONAR23');
         this.createInvestment('Acciones YPF',3, 'ARS', '2020-08-10',1000,'YPF');
         this.createInvestment('Fondo inversion',4, 'ARS', '2020-08-10',50000,'FI');
+        this.createInvestment('Plazo fijo online',1, 'ARS', '2020-08-10',8000,null,'2020-10-20',10000,3);
     }
 
     
     test(){
 
-        getAllInvestment();
+        this.getAllInvestment();
 
         //check back investments
-        checkInvestments();
+        this.checkInvestments();
 
         this.getInvestmentById(1)
             .then(investment => {

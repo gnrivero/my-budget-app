@@ -83,7 +83,7 @@ export default class ModifyCardScreen extends React.Component {
   }
   
 buttonPressed(){
-
+console.log("Entra a grabar")
   //let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
 
@@ -120,6 +120,10 @@ buttonPressed(){
             toModel(this.state.dueDate)
         );
       }
+      setTimeout(
+        () => { this.props.navigation.navigate('Cards',{name: 'tarjetas'}); },
+        1000
+      )
     }
 }
 

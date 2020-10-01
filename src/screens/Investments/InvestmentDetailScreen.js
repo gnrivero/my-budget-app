@@ -7,9 +7,9 @@ import {
   Dimensions,
   TouchableHighlight
 } from 'react-native';
+import {toView} from '../../utils/DateConverter';
 import styles from './styles';
-import BackButton from '../../components/BackButton/BackButton';
-import { getInvestmentTypes,getAccounts } from '../../data/investments/investmentsAPI';
+
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
 const { width: viewportWidth } = Dimensions.get('window');
@@ -33,9 +33,6 @@ export default class InvestmentDetailScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const inversion = navigation.getParam('itemInvestment');
-
-    const typesArray = getInvestmentTypes();
-    const accountsArray = getAccounts();
     
     return (
       <ScrollView>
@@ -47,6 +44,7 @@ export default class InvestmentDetailScreen extends React.Component {
               <AddCardButton title = {'Editar Inversión'}
                 onPress={() => {
                   let title = 'Editar Inversión';
+                  this.props.navigation.navigate('AddInvestment', {title: title, id: inversion.id});
                   // TODO: Ver que onda this.props.navigation.navigate('Cuenta', {title: title, id: cuenta.id});
                 }}
               />
@@ -56,24 +54,21 @@ export default class InvestmentDetailScreen extends React.Component {
           <View style={styles.infoContainer}>
             <View style={styles.infoHead}>
               <Image source={require('../../../assets/icons/investment.png')} style={styles.investmentItemIcon} /> 
-              <Text style={styles.infoText}>{inversion.name}</Text>
+              <Text style={styles.infoText}>{inversion.detail}</Text>
               <View style={styles.infoRight}>
-                {
-                  /*(item.type=="PLAZO_FIJO")?( <Text style={styles.infoTextDetail}>Plazo fijo</Text>):(item.type=="FONDO_COMUN")? ( <Text style={styles.infoTextDetail}>Fondo Comun</Text>): ( <Text style={styles.infoTextDetail}>Acciones</Text>)*/
-                  (inversion.type==1)?( <Text style={styles.infoTextDetail}>Plazo fijo</Text>):(inversion.type==2)? ( <Text style={styles.infoTextDetail}>Fondo Comun</Text>): (inversion.type==3)?( <Text style={styles.infoTextDetail}>Acciones</Text>):( <Text style={styles.infoTextDetail}>Otra</Text>)
-                }
+                <Text style={styles.infoTextDetail}>{inversion.investmentType}</Text>
               </View>
             </View>
             <View style={styles.info}>
-              <Text style={styles.infoText}>{inversion.date}</Text>
+              <Text style={styles.infoText}>{toView(inversion.date)}</Text>
               <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>{inversion.currency==1?'ARS:':(inversion.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{inversion.amount}</Text>
+                <Text style={styles.infoTextDetail}>{inversion.currencyCode} </Text><Text style={styles.infoText}>{inversion.amount}</Text>
               </View>
             </View>
-            {(inversion.type==1)?
+            {(inversion.investmentTypeId==1)?
             (
                 <View style={styles.info}>
-                  <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{inversion.dueDate}</Text>
+                  <Text style={styles.infoTextDetail}>Vencimiento: </Text><Text style={styles.infoText}>{toView(inversion.dueDate)}</Text>
                   <View style={styles.infoRight}>
                     <Text style={styles.infoTextDetail}>Monto recuperado: </Text><Text style={styles.infoTextDetail}>{inversion.currency==1?'ARS:':(inversion.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{inversion.amountCredited}</Text>
                   </View>
@@ -88,10 +83,10 @@ export default class InvestmentDetailScreen extends React.Component {
                 </View>
             )
             }
-            {(inversion.type==1)?
+            {(inversion.investmentTypeId==1)?
             (
               <View style={styles.info}>
-                <Text style={styles.infoTextDetail}>Acreditar en: </Text><Text style={styles.infoText}>{inversion.accountName}</Text>
+                <Text style={styles.infoTextDetail}>Acreditar en: </Text><Text style={styles.infoText}>{inversion.account}</Text>
               </View>
             ):(null)
             }

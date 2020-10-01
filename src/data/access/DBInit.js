@@ -4,6 +4,8 @@ import BankService from '../../service/BankService';
 import TransactionTypeService from '../../service/TransactionTypeService';
 import TransactionService from '../../service/TransactionService';
 import InvestmentTypeService from '../../service/InvestmentTypeService';
+import InvestmentService from '../../service/InvestmentService';
+import { investmentTypes } from '../investments/dataArrays';
 
 export default class DBInit {
 
@@ -25,13 +27,21 @@ export default class DBInit {
         accountService.initDB(true,true,false);
         
         const transactionTypeService = new TransactionTypeService();
-        transactionTypeService.initDB(false);
+        transactionTypeService.initDB(true);
 
         const transactionService = new TransactionService();
         transactionService.initDB(true,true,false);
 
         const investmentTypeService = new InvestmentTypeService();
-        investmentTypeService.initDB(false);
+        investmentTypeService.initDB(true);
+
+        
+        const investmentService = new InvestmentService();
+        investmentService.initDB(true,true,true);
+
+        //Chequeo cada vez que arranca si hay invesiones (plazo fijos) para depositar en cuentas
+        investmentService.checkInvestments()
+
       
     }
 }

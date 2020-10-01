@@ -12,7 +12,7 @@ export default class TransactionTypeService {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO transactionType(name, type)" +
+                   "INSERT INTO transactionType (name, type) " +
                    "VALUES (?,?)",
                    [name,type],
                    (txn, res) => { console.log("TransactionTypeService: Affected Rows " + res.rowsAffected); },
@@ -100,7 +100,8 @@ export default class TransactionTypeService {
             this.createTransactionType('Sueldo','I');
             this.createTransactionType('Facturacion','I');
             this.createTransactionType('Otros','I');
-            this.createTransactionType('Inversiones','I');
+            //No tocar el orden xq las inversiones se acredita con el id 6
+            this.createTransactionType('Inversiones','I'); 
             this.createTransactionType('Servicio','E');
             this.createTransactionType('Impuestos Nacionales','E');
             this.createTransactionType('Impuestos Provinciales','E');

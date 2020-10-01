@@ -46,10 +46,10 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                       if(installments > installmentsNumber){
                         installmentsNumber++;
                         dt= new Date(date);
-                        console.log(dt);
+                        //console.log(dt);
                         n=1;
                         newDate=new Date(dt.setMonth(dt.getMonth() + n)).toISOString().split('T')[0];
-                        console.log(newDate);
+                        //console.log(newDate);
                         this.createTransaction(type,detail,cash,currencyCode,transactionTypeId,newDate,amount,accountId,monthly,paymentMethod,cardId,installments,installmentsNumber)
                       }
                     }
@@ -220,7 +220,7 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                             "detail VARCHAR(50)," +
                             "currencyCode VARCHAR(3)," +
                             "amount DECIMAL(10,2)," +
-                            "monthly BOOLEAN ," +
+                            "monthly INTEGER ," +
                             "date DATE," +
                             "accountId INTEGER," +
                             "transactiontypeId INTEGER, "+
@@ -238,9 +238,9 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
 
   
   populate(){
-    this.createTransaction('I','Alquiler Eftvo Pesos', true, 'ARS',1,'2020-09-27',200.20,'null',true);
-    this.createTransaction('I','Sueldo Eftvo Dolar', true, 'USD',3,'2020-09-21',1500.10,null, true);
-    this.createTransaction('I','Facturacion', false, 'ARS',4,'2020-09-20',400.10,3, true);
+    this.createTransaction('I','Alquiler Eftvo Pesos', true, 'ARS',1,'2020-09-27',200.20,null,1);
+    this.createTransaction('I','Sueldo Eftvo Dolar', true, 'USD',3,'2020-09-21',1500.10,null, 1);
+    this.createTransaction('I','Facturacion', false, 'ARS',4,'2020-09-20',400.10,3, 1);
 
     this.getAllTransaction()
   }

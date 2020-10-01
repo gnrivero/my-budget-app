@@ -12,9 +12,9 @@ export default class InvestmentTypeService {
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "INSERT INTO investmentType(name, type)" +
-                   "VALUES (?,?)",
-                   [name,type],
+                   "INSERT INTO investmentType (name) " +
+                   "VALUES (?)",
+                   [name],
                    (txn, res) => { console.log("InvestmentTypeService: Affected Rows " + res.rowsAffected); },
                    (txn, err) => { console.log("InvestmentTypeService: failed " + err); }
               )
@@ -62,9 +62,10 @@ export default class InvestmentTypeService {
                         txn.executeSql(
                           "CREATE TABLE IF NOT EXISTS investmentType (" +
                               "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                              "name VARCHAR(20)," +
+                              "name VARCHAR(20)) " +
                           [],
-                          (txn, res) => { console.log("InvestmentTypeService: Table InvestmentType created "); }
+                          (txn, res) => { console.log("InvestmentTypeService: Table InvestmentType created "); },
+                          (txn, err) => { console.log("InvestmentTypeService: Create table failed " + err); }
                         )
                       }
                   )
