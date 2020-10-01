@@ -108,6 +108,11 @@ export default class PresupuestoScreen extends React.Component {
         <View style={{alignItems: 'center'}}>
             <View style={stylePresupuesto.itemContainer}>
                 <View style={stylePresupuesto.infoContainer}>
+                    <View style={stylePresupuesto.info}>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Rubro</Text>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Monto</Text>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Total</Text>
+                    </View>
                     <FlatList
                       data={this.state.monthlyBudget}
                       renderItem={this.renderBudget}
@@ -174,9 +179,15 @@ info: {
 },
 infoRubro: {
   fontSize: 14,
+  fontWeight: 'normal',
+  marginLeft: 10,
+  width: 120,
+},
+infoRubroTitle: {
+  fontSize: 14,
   fontWeight: 'bold',
-  marginLeft: 4,
-  width: 150,
+  marginLeft: 10,
+  width: 110,
 },
 smallInput: {
   height: 25,
