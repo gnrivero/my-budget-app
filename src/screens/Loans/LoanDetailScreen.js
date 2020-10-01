@@ -7,6 +7,7 @@ import {
   Image,
   TouchableHighlight,
 } from 'react-native';
+import {toView} from '../../utils/DateConverter';
 import styles from './styles';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
@@ -46,36 +47,36 @@ export default class LoanDetailScreen extends React.Component {
         <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
           <View style={styles.infoContainer}>
             <View style={styles.infoHead}>
-            {item.lender?
+            {item.lender==1?
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansLenderItemIcon} /> )
               :
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansItemIcon} /> )
             }
-              <Text style={styles.infoText}>{inversion.reference}</Text>
+              <Text style={styles.infoText}>{loan.detail}</Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.infoTextDetail}>{item.date}</Text>
+              <Text style={styles.infoTextDetail}>{toView(loan.date)}</Text>
               <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.value}</Text>
+                <Text style={styles.infoTextDetail}>{loan.currencyCode} </Text><Text style={styles.infoText}>{loan.amount}</Text>
               </View>
             </View>
-            {!item.lender?
+            {item.lender!=1?
             (
               <View style={styles.info}>
-                <Text style={styles.infoTextDetail}>Día de vencimiento: </Text><Text style={styles.infoText}>{item.expirationDay}</Text>
+                <Text style={styles.infoTextDetail}>1er vencimiento: </Text><Text style={styles.infoText}>{toView(loan.expirationDate)}</Text>
                 <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>cuota: </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>
+                {/*<Text style={styles.infoTextDetail}>cuota: </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>*/}
                 
                 </View>
               </View>
           )  
           :null}
-            {!item.lender?
+            {item.lender!=1?
             (
               <View style={styles.info}>
                 <Text style={styles.infoTextDetail}></Text>
                 <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>Valor cuota: {item.currency==1?'ARS':(item.currency==2)?'USD':''} </Text><Text style={styles.infoText}>{item.monthlyFee}</Text>
+                <Text style={styles.infoTextDetail}>Valor cuota: {item.currencyCode} </Text><Text style={styles.infoText}>{item.amountFees}</Text>
                 </View>
               </View>
             )  
