@@ -11,8 +11,10 @@ export default class InvestmentService {
     }
 
     createInvestment(detail, type, currencyCode, date, amount, symbol, dueDate=null, amountCredited=null, accountId=null) {
+       /*
         console.log(detail + ' - ' + type + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
         console.log( symbol + ' - ' + dueDate + ' - ' + amountCredited + ' - ' + accountId)
+       */
         this.db.transaction(
            (txn) => {
               txn.executeSql(
@@ -63,7 +65,7 @@ export default class InvestmentService {
 
 
     getAllInvestment(){
-        console.log("getAllInvestment")
+        //console.log("getAllInvestment")
       const conn = this.db;
       return new Promise((resolve) => {
           conn.transaction(
@@ -90,7 +92,7 @@ export default class InvestmentService {
                     [],
                     (txn, res) => {
                        let investments = new Array();
-                       console.log(res.rows)
+                       //console.log(res.rows)
                        for(var i = 0; i < res.rows.length; ++i){
                         investments.push(res.rows.item(i));
                        }
@@ -130,17 +132,17 @@ export default class InvestmentService {
     checkInvestments(){
         dateNow= new Date();
         dateShort=dateNow.toISOString().split('T')[0]                
-        console.log(dateShort);
+        //console.log(dateShort);
         this.db.transaction(
             (txn) => {
                txn.executeSql(
                  "SELECT * FROM investment WHERE active = 1 and  dueDate< ?",
                  [dateShort],
                  (txn, res) => {
-                    console.log(res.rows);
+                    //console.log(res.rows);
                     for(var i = 0; i < res.rows.length; ++i){
-                        console.log("element checkInvestments");
-                        console.log(res.rows.item(i));
+                        //console.log("element checkInvestments");
+                        //console.log(res.rows.item(i));
                         item= res.rows.item(i);
                         this.transactionService.createTransaction('I','Acreditacion '+item.detail , false, item.currencyCode ,6,item.dueDate ,item.amountCredited,item.accountId,0);  
                         this.updateActive(item.id,0)
