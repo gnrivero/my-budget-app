@@ -165,7 +165,7 @@ buttonPressed(){
           this.loanService.createLoan(
             this.state.detail,
             this.state.lender,
-            this.state.currencyCode,
+            this.state.currency,
             toModel(this.state.date),
             this.state.amount,
             toModel(this.state.expirationDate),
@@ -193,7 +193,7 @@ buttonPressed(){
           this.loanService.createLoan(
             this.state.detail,
             this.state.lender,
-            this.state.currencyCode,
+            this.state.currency,
             toModel(this.state.date),
             this.state.amount,
             toModel(this.state.expirationDate),
@@ -214,7 +214,7 @@ buttonPressed(){
         this.loanService.createLoan(
           this.state.detail,
           this.state.lender,
-          this.state.currencyCode,
+          this.state.currency,
           toModel(this.state.date),
           this.state.amount);
 
