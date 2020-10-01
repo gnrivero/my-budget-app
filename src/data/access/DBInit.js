@@ -1,11 +1,12 @@
-import CardService from '../../service/CardService';
 import AccountService from '../../service/AccountService';
 import BankService from '../../service/BankService';
-import TransactionTypeService from '../../service/TransactionTypeService';
+import BudgetService from '../../service/BudgetService';
+import CardService from '../../service/CardService';
 import TransactionService from '../../service/TransactionService';
+import TransactionTypeService from '../../service/TransactionTypeService';
 import InvestmentTypeService from '../../service/InvestmentTypeService';
 import InvestmentService from '../../service/InvestmentService';
-import { investmentTypes } from '../investments/dataArrays';
+
 
 export default class DBInit {
 
@@ -20,11 +21,10 @@ export default class DBInit {
           runTests: Corre pruebas. Info: Modifica los datos.
         */
         const cardService = new CardService();
-
-        cardService.initDB(true,true,false);
+        cardService.initDB(false,false,false);
 
         const accountService = new AccountService();
-        accountService.initDB(true,true,false);
+        accountService.initDB(false,false,false);
         
         const transactionTypeService = new TransactionTypeService();
         transactionTypeService.initDB(true);
@@ -42,6 +42,7 @@ export default class DBInit {
         //Chequeo cada vez que arranca si hay invesiones (plazo fijos) para depositar en cuentas
         investmentService.checkInvestments()
 
-      
+        const budgetService = new BudgetService();
+        budgetService.initDB(false,false,true);
     }
 }
