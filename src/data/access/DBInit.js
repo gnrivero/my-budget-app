@@ -1,8 +1,9 @@
-import CardService from '../../service/CardService';
 import AccountService from '../../service/AccountService';
 import BankService from '../../service/BankService';
-import TransactionTypeService from '../../service/TransactionTypeService';
+import BudgetService from '../../service/BudgetService';
+import CardService from '../../service/CardService';
 import TransactionService from '../../service/TransactionService';
+import TransactionTypeService from '../../service/TransactionTypeService';
 
 export default class DBInit {
 
@@ -17,17 +18,19 @@ export default class DBInit {
           runTests: Corre pruebas. Info: Modifica los datos.
         */
         const cardService = new CardService();
-
-        cardService.initDB(true,true,false);
+        cardService.initDB(false,false,false);
 
         const accountService = new AccountService();
-        accountService.initDB(true,true,false);
+        accountService.initDB(false,false,false);
         
         const transactionTypeService = new TransactionTypeService();
         transactionTypeService.initDB(false);
 
         const transactionService = new TransactionService();
-        transactionService.initDB(true,true,false);
-      
+        transactionService.initDB(false,false,false);
+
+
+        const budgetService = new BudgetService();
+        budgetService.initDB(false,false,true);
     }
 }
