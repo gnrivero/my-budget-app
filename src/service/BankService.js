@@ -73,5 +73,7 @@ export default class BankService {
         this.createBank('HSBC');
         this.createBank('ICBC');
         this.createBank('Banco Santander');
+        this.createBank('Mercado Pago');
+        this.createBank('Otra');
     }
 }

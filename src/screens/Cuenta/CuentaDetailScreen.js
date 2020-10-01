@@ -9,11 +9,9 @@ import {
   Dimensions,
   TouchableHighlight
 } from 'react-native';
-import styles from './styles';
+import {toView} from '../../utils/DateConverter';
 
-import {
-  getTransactions
-} from '../../data/MockDataAPI';
+import styles from './styles';
 
 import AddCardButton from '../../components/CardButton/AddCardButton';
 
@@ -82,7 +80,7 @@ export default class CuentaDetailScreen extends React.Component {
             <Text style={styles.infoText}>{item.detail}</Text>
           </View>
           <View style={styles.info}>
-            <Text style={styles.infoTextDetail}>Fecha: </Text><Text style={styles.infoText}>{item.date}</Text>
+            <Text style={styles.infoTextDetail}>Fecha: </Text><Text style={styles.infoText}>{toView(item.date)}</Text>
             <View style={styles.infoRight}>
               <Text style={styles.infoText}>{item.amount}</Text>
             </View>
@@ -102,7 +100,6 @@ export default class CuentaDetailScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const cuenta = navigation.getParam('itemCuenta');
-    const transactions = getTransactions(cuenta.id);
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>

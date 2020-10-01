@@ -43,6 +43,17 @@ export default class CardScreen extends React.Component {
     });
   }
 
+  
+  componentWillReceiveProps(nextProp){
+    console.log("nextpropert");
+    this.cardService.getAllCards()
+    .then((cards) => {
+        this.setState({
+            allCards: cards
+        })
+    });
+   }
+
   onPressCard = item => {
     //lo llamo sin pasarle parametros
     this.props.navigation.navigate('CardDetail',{name: 'Detalle tarjeta', itemCard:  item});

@@ -26,7 +26,8 @@ export default class CardService {
                        [type, name, bankId, lastFourNumbers, expiryDate, closeDate, dueDate],
                        (txn, res) => {
                             resolve(res.insertId);
-                       }
+                       },
+                       (txn, err) => { console.log("CreateCard: failed " + err); }
                   )
                });
         });

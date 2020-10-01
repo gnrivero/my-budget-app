@@ -8,27 +8,50 @@ import {
   Dimensions,
   TouchableHighlight
 } from 'react-native';
-import styles from './styles';
-import BackButton from '../../components/BackButton/BackButton';
-import { getAllInvestments } from '../../data/investments/investmentsAPI';
-
-
+import {toView} from '../../utils/DateConverter';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+
+import styles from './styles';
+
+import InvestmentService from '../../service/InvestmentService';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class InvestmentScreen extends React.Component {
-
-  static navigationOptions = {
-      title: 'Mis Inversiones'
+  
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Mis ' + navigation.getParam('name')
+    };
   };
 
   constructor(props) {
     super(props);
+    this.service = new InvestmentService();
     this.state = {
-      activeSlide: 0
+      allInvestment : []
     };
   }
+
+
+  componentDidMount(){
+    this.service.getAllInvestment()
+      .then((investments) => {
+        this.setState({
+          allInvestment: investments
+      })
+    });
+   }
+   
+  componentWillReceiveProps(nextProp){
+    this.service.getAllInvestment()
+      .then((investments) => {
+        this.setState({
+          allInvestment: investments
+      })
+    });
+  }
+
 
   onPressInvestment = item => {
     //lo llamo sin pasarle parametros
@@ -42,18 +65,15 @@ export default class InvestmentScreen extends React.Component {
           <View style={styles.infoContainer}>
             <View style={styles.infoHead}>
               <Image source={require('../../../assets/icons/investment.png')} style={styles.investmentItemIcon} /> 
-              <Text style={styles.infoText}>{item.name}</Text>
+              <Text style={styles.infoText}>{item.detail}</Text>
               <View style={styles.infoRight}>
-                {
-                  /*(item.type=="PLAZO_FIJO")?( <Text style={styles.infoTextDetail}>Plazo fijo</Text>):(item.type=="FONDO_COMUN")? ( <Text style={styles.infoTextDetail}>Fondo Comun</Text>): ( <Text style={styles.infoTextDetail}>Acciones</Text>)*/
-                  (item.type==1)?( <Text style={styles.infoTextDetail}>Plazo fijo</Text>):(item.type==2)? ( <Text style={styles.infoTextDetail}>Fondo Comun</Text>): (item.type==3)?( <Text style={styles.infoTextDetail}>Acciones</Text>):( <Text style={styles.infoTextDetail}>Otra</Text>)
-                }
+                <Text style={styles.infoTextDetail}>{item.investmentType}</Text>
               </View>
             </View>
             <View style={styles.info}>
-              <Text style={styles.infoText}>{item.date}</Text>
+              <Text style={styles.infoText}>{toView(item.date)}</Text>
               <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>{item.currency==1?'ARS:':(item.currency==2)?'USD:':''} </Text><Text style={styles.infoText}>{item.amount}</Text>
+                <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.amount}</Text>
               </View>
             </View>
           </View>
@@ -71,7 +91,6 @@ export default class InvestmentScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const item = navigation.getParam('category');
-    const investments = getAllInvestments();
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -86,10 +105,10 @@ export default class InvestmentScreen extends React.Component {
          </View>
         </View>
         <FlatList
-           data={investments}
+           data={this.state.allInvestment}
            renderItem={this.renderInvestments}
            keyExtractor={item => `${item.id}`}
-          /* ItemSeparatorComponent={this.FlatListItemSeparator}*/
+           ItemSeparatorComponent={this.FlatListItemSeparator}
           />
       </ScrollView>
     );
