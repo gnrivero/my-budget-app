@@ -7,181 +7,126 @@ import {
   Dimensions,
   StyleSheet,
   TouchableHighlight,
+  FlatList
 } from 'react-native';
 import styles from './styles';
 import SaveCardButton from '../../components/CardButton/SaveCardButton';
 import DatePicker from 'react-native-datepicker';
+import BudgetService from '../../service/BudgetService';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class PresupuestoScreen extends React.Component {
+
+  budgetService;
+
   static navigationOptions = {
     title: 'Agregar Presupuesto'
-};
+  };
 
   constructor(props) {
     super(props);
+    this.budgetService = new BudgetService();
     this.state = {
-      date: new Date(),
-      typeIncome: '',
-      account:'',
-      value: '',
-      cash: true,
-      monthly: true,
-      currency: 1,
-      servicio: '',
-      nacionales: '',
-      provincial: '',
-      municipal: '',
-      educacion: '',
-      viatico: '',
-      comida: '',
-      entretenimiento: '',
+      monthlyBudget : []
     };
   }
 
-  buttonPressed(){
-    Alert.alert(this.state.typeIncome +" - "+this.state.date +" - " +this.state.detail +" - " +this.state.monthly +" - "+this.state.cash +" - " + this.state.currency +" - " +this.state.value +" - " +this.state.account); 
-      let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
-    let numeroreg=/^[0-9]*$/;
-    if ((!this.state.typeIncome|| this.state.typeIncome=='') || (!this.state.date|| this.state.date=='') || (!this.state.detail || this.state.detail=='') ||
-    (!this.state.value || this.state.value==''))
-    {
-      Alert.alert("Complete los campos faltantes del ingreso")
-    }
-    else if(!decimalreg.test(this.state.value))
-      Alert.alert("ingrese un valor valido para el monto"); 
-    else if(!this.state.cash){
-        if((!this.state.account  || this.state.account=='')){
-        Alert.alert("Complete los campos faltantes del ingreso")
-      }
-      else
-        Alert.alert("Grabar con Cuenta");
-    }  
-    else 
-      Alert.alert("Grabar Efectivo");
+  componentDidMount() {
+     const { navigation } = this.props;
+     const id = navigation.getParam('id');
+
+     this.budgetService.existsBudget(id)
+     .then((exists) => {
+        if (!exists) {
+          console.log("Creating new budget");
+          this.budgetService.createMonthlyBudget(id)
+          .then((result) => {
+                 this.budgetService.getBudgetById(id)
+                 .then((budget) => {
+                      this.setState({
+                          monthlyBudget: budget
+                      });
+                  });
+          });
+        } else {
+          console.log("Reading existing budget");
+          this.budgetService.getBudgetById(id)
+          .then((budget) => {
+                this.setState({
+                    monthlyBudget: budget
+                });
+          });
+        }
+     });
   }
+
+  buttonPressed() {
+      console.log(this.state.monthlyBudget);
+      this.budgetService.updateMonthlyBudget(this.state.monthlyBudget);
+  }
+
+  updateBudgetAmount(txTypeId, newAmount) {
+
+     var budgetArray = this.state.monthlyBudget;
+
+     for (var i = 0; i < budgetArray.length; ++i){
+         if( budgetArray[i].transactionTypeId === txTypeId ){
+            budgetArray[i].amount = newAmount;
+            break;
+         }
+     }
+
+     return budgetArray;
+  }
+
+  renderBudget = ({item}) => (
+     <View style={stylePresupuesto.info}>
+        <Text style={stylePresupuesto.infoRubro}>{item.name}</Text>
+        <TextInput
+             placeholder="Monto"
+             textAlign="center"
+             keyboardType="numeric"
+             style={stylePresupuesto.mediumInput}
+             onChangeText={(amount) => this.updateBudgetAmount(item.transactionTypeId, amount)}
+             value={item.amount}
+         />
+         <Text style={stylePresupuesto.infoRubro}>{(item.total == null)? 0 : item.total}</Text>
+      </View>
+  );
+
+  FlatListItemSeparator = () => {
+      return (
+        //Item Separator
+        <View style={{height: 0.1, width: '100%', backgroundColor: '#C8C8C8'}}/>
+      );
+  };
 
   render() {
     return (
       <ScrollView>
         <View style={{alignItems: 'center'}}>
             <View style={stylePresupuesto.itemContainer}>
-            <DatePicker
-              style={{marginBottom: 10}}
-              date={this.state.date} //initial date from state
-              mode="date" //The enum of date, datetime and time
-              placeholder="Fecha"
-              format="DD-MM-YYYY"
-              minDate="01-01-2020"
-              
-              confirmBtnText="Confirmar"
-              cancelBtnText="Cancelar"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0
-                },
-                dateInput: {
-                  marginLeft: 36
-                }
-              }}
-              onDateChange={(date) => {this.setState({date: date})}}
-            />
-              <View style={stylePresupuesto.infoContainer}>
-                {/* <View><Text fontWeight='bold'>Rubros</Text></View> */}
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Servicios</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(servicio) => this.setState({servicio})}
-                  value={this.state.servicio}
-                  >
-                  </TextInput>
+                <View style={stylePresupuesto.infoContainer}>
+                    <View style={stylePresupuesto.info}>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Rubro</Text>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Monto</Text>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Total</Text>
+                    </View>
+                    <FlatList
+                      data={this.state.monthlyBudget}
+                      renderItem={this.renderBudget}
+                      keyExtractor={item => `${item.transactionTypeId}`}
+                      ItemSeparatorComponent={this.FlatListItemSeparator}
+                    />
                 </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Imp Nacionales</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(nacionales) => this.setState({nacionales})}
-                  value={this.state.nacionales}
-                  >
-                  </TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Imp Provinciales</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(provincial) => this.setState({provincial})}
-                  value={this.state.provincial}
-                  >
-                  </TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Imp Municipales</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(municipal) => this.setState({municipal})}
-                  value={this.state.municipal}
-                  >
-                  </TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Educacion</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(educacion) => this.setState({educacion})}
-                  value={this.state.educacion}
-                  >
-                  </TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Salud</Text>
-                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}></TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Viaticos</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(viatico) => this.setState({viatico})}
-                  value={this.state.viatico}
-                  >
-                  </TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Comida</Text>
-                  <TextInput placeholder="Monto" textAlign="center" 
-                  style={stylePresupuesto.mediumInput}
-                  onChangeText={(comida) => this.setState({comida})}
-                  value={this.state.comida}
-                  ></TextInput>
-                </View>
-                <View style={stylePresupuesto.info}>
-                  <Text style={stylePresupuesto.infoRubro}>Entretenimiento</Text>
-                  <TextInput placeholder="Monto" textAlign="center" style={stylePresupuesto.mediumInput}
-                                    onChangeText={(entretenimiento) => this.setState({entrenimiento})}
-                                    value={this.state.entretenimiento}
-                  ></TextInput>
-                </View>
-              </View>
             </View>
             <View style={stylePresupuesto.infoContainer}>
-              <TouchableHighlight 
-              onPress={() =>this.buttonPressed() }
-              >
-              <Text style={{fontSize: 40, color: 'white', textAlign:'center', backgroundColor:'green'}}>Guardar</Text>
+              <TouchableHighlight onPress={() => this.buttonPressed() } >
+                <Text style={{fontSize: 40, color: 'white', textAlign:'center', backgroundColor:'green'}}>Guardar</Text>
               </TouchableHighlight>
-             {/* <SaveCardButton
-               onPress={() => {
-                 //let ingredients = item.ingredients;
-                 let title = 'Guardar';
-                 //navigation.navigate('IngredientsDetails', { ingredients, title });
-               }}
-             /> */}
             </View>
-           </View>
+        </View>
       </ScrollView>
     );
   }
@@ -212,7 +157,7 @@ const stylePresupuesto = StyleSheet.create({
       justifyContent: 'flex-start',
       alignItems: 'stretch',
       height: 500,
-      width: 300,
+      width: 360,
       borderColor: '#cccccc',
       borderWidth: 0.5,
       borderRadius: 20,
@@ -228,14 +173,21 @@ const stylePresupuesto = StyleSheet.create({
 info: {
     flex: 1,
     flexDirection: 'row',
-    height: 30,
-    padding:10,
+    height: 40,
+    padding: 5,
+    marginLeft: 4
 },
 infoRubro: {
   fontSize: 14,
+  fontWeight: 'normal',
+  marginLeft: 10,
+  width: 120,
+},
+infoRubroTitle: {
+  fontSize: 14,
   fontWeight: 'bold',
-  marginLeft: 5,
-  width: 150,
+  marginLeft: 10,
+  width: 110,
 },
 smallInput: {
   height: 25,
