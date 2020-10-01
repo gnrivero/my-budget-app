@@ -13,6 +13,7 @@ import styles from './styles';
 import SaveCardButton from '../../components/CardButton/SaveCardButton';
 import DatePicker from 'react-native-datepicker';
 import BudgetService from '../../service/BudgetService';
+import {toView} from '../../utils/BudgetConverter';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
@@ -39,22 +40,22 @@ export default class PresupuestoScreen extends React.Component {
      this.budgetService.existsBudget(id)
      .then((exists) => {
         if (!exists) {
-          console.log("Creating new budget");
+
           this.budgetService.createMonthlyBudget(id)
           .then((result) => {
                  this.budgetService.getBudgetById(id)
                  .then((budget) => {
                       this.setState({
-                          monthlyBudget: budget
+                          monthlyBudget: toView(budget)
                       });
                   });
           });
         } else {
-          console.log("Reading existing budget");
+
           this.budgetService.getBudgetById(id)
           .then((budget) => {
                 this.setState({
-                    monthlyBudget: budget
+                    monthlyBudget: toView(budget)
                 });
           });
         }
@@ -62,7 +63,6 @@ export default class PresupuestoScreen extends React.Component {
   }
 
   buttonPressed() {
-      console.log(this.state.monthlyBudget);
       this.budgetService.updateMonthlyBudget(this.state.monthlyBudget);
   }
 
@@ -84,21 +84,21 @@ export default class PresupuestoScreen extends React.Component {
      <View style={stylePresupuesto.info}>
         <Text style={stylePresupuesto.infoRubro}>{item.name}</Text>
         <TextInput
-             placeholder="Monto"
+             placeholder={String(item.amount)}
              textAlign="center"
              keyboardType="numeric"
              style={stylePresupuesto.mediumInput}
              onChangeText={(amount) => this.updateBudgetAmount(item.transactionTypeId, amount)}
              value={item.amount}
          />
-         <Text style={stylePresupuesto.infoRubro}>{(item.total == null)? 0 : item.total}</Text>
+         <Text style={stylePresupuesto.infoRubroAccrued}>{item.total}</Text>
       </View>
   );
 
   FlatListItemSeparator = () => {
       return (
         //Item Separator
-        <View style={{height: 0.1, width: '100%', backgroundColor: '#C8C8C8'}}/>
+        <View style={{width: '100%', backgroundColor: '#C8C8C8'}}/>
       );
   };
 
@@ -111,7 +111,7 @@ export default class PresupuestoScreen extends React.Component {
                     <View style={stylePresupuesto.info}>
                         <Text style={stylePresupuesto.infoRubroTitle}>Rubro</Text>
                         <Text style={stylePresupuesto.infoRubroTitle}>Monto</Text>
-                        <Text style={stylePresupuesto.infoRubroTitle}>Total</Text>
+                        <Text style={stylePresupuesto.infoRubroTitle}>Acumulado</Text>
                     </View>
                     <FlatList
                       data={this.state.monthlyBudget}
@@ -133,12 +133,6 @@ export default class PresupuestoScreen extends React.Component {
 }
 
 const stylePresupuesto = StyleSheet.create({
-    addBox: {
-        marginBottom: 40,
-        justifyContent:'space-around',
-        flexDirection:'row',
-        padding: 30,
-    },
     textInput: {
         width:'25%',
         borderColor: 'black',
@@ -153,15 +147,11 @@ const stylePresupuesto = StyleSheet.create({
     },
     itemContainer: {
       flex: 1,
-      margin: 10,
       justifyContent: 'flex-start',
       alignItems: 'stretch',
       height: 500,
-      width: 360,
-      borderColor: '#cccccc',
-      borderWidth: 0.5,
-      borderRadius: 20,
-      padding: 10,
+      width: 365,
+      borderColor: '#cccccc'
   },
   infoContainer: {
     flex: 1,
@@ -174,7 +164,7 @@ info: {
     flex: 1,
     flexDirection: 'row',
     height: 40,
-    padding: 5,
+    padding: 0,
     marginLeft: 4
 },
 infoRubro: {
@@ -182,12 +172,21 @@ infoRubro: {
   fontWeight: 'normal',
   marginLeft: 10,
   width: 120,
+  textAlign: 'left'
+},
+infoRubroAccrued: {
+  fontSize: 14,
+  fontWeight: 'normal',
+  marginLeft: 10,
+  width: 120,
+  textAlign: 'center'
 },
 infoRubroTitle: {
   fontSize: 14,
   fontWeight: 'bold',
   marginLeft: 10,
   width: 110,
+  textAlign: 'left'
 },
 smallInput: {
   height: 25,
