@@ -156,6 +156,37 @@ export default class CardService {
         });
      }
 
+    getCardCurrentPeriodConsumption(cardId){
+         const conn = this.db;
+         return new Promise((resolve) => {
+           this.db.transaction(
+               (txn) => {
+                  txn.executeSql(
+                       "SELECT " +
+                       " transactions.detail, " +
+                       " transactions.amount, " +
+                       " transactions.currencyCode, " +
+                       " transactions.date " +
+                       "FROM transactions " +
+                       " INNER JOIN card ON card.id = transactions.cardId " +
+                       " WHERE card.id = ? " +
+                       "  AND transactions.date BETWEEN date(card.closeDate,'start of month') AND card.closeDate"
+                       ,
+                       [cardId],
+                       (txn, res) => {
+                         let consumptions = [];
+                         for (let i = 0; i < res.rows.length; ++i) {
+                             consumptions.push(res.rows.item(i));
+                         }
+                         resolve(consumptions);
+                       },
+                       (txn, err) => { console.log("Error: " + err)}
+                  )
+               }
+           );
+     });
+    }
+
     initDB(resetData, populate, runTests){
 
         if(resetData === true){
