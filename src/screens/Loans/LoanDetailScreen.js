@@ -52,18 +52,18 @@ export default class LoanDetailScreen extends React.Component {
               :
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansItemIcon} /> )
             }
-              <Text style={styles.infoText}>{inversion.detail}</Text>
+              <Text style={styles.infoText}>{loan.detail}</Text>
             </View>
             <View style={styles.info}>
-              <Text style={styles.infoTextDetail}>{toView(inversion.date)}</Text>
+              <Text style={styles.infoTextDetail}>{toView(loan.date)}</Text>
               <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>{item.currencyCode} </Text><Text style={styles.infoText}>{item.amount}</Text>
+                <Text style={styles.infoTextDetail}>{loan.currencyCode} </Text><Text style={styles.infoText}>{loan.amount}</Text>
               </View>
             </View>
             {item.lender!=1?
             (
               <View style={styles.info}>
-                <Text style={styles.infoTextDetail}>1er vencimiento: </Text><Text style={styles.infoText}>{toView(item.expirationDate)}</Text>
+                <Text style={styles.infoTextDetail}>1er vencimiento: </Text><Text style={styles.infoText}>{toView(loan.expirationDate)}</Text>
                 <View style={styles.infoRight}>
                 {/*<Text style={styles.infoTextDetail}>cuota: </Text><Text style={styles.infoText}>{item.amountPaid}/{item.amountFees}</Text>*/}
                 

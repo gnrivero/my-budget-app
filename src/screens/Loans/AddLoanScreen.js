@@ -137,22 +137,30 @@ export default class AddLoanScreen extends React.Component {
  }
 
 buttonPressed(){
-  Alert.alert(this.state.detail +" - " + this.state.lender +" - "+ this.state.currency+" - " + this.state.amount +" - " +
+  /*Alert.alert(this.state.detail +" - " + this.state.lender +" - "+ this.state.currency+" - " + this.state.amount +" - " +
   this.state.amountFees +" - " +this.state.monthlyFee +" - " +this.state.debit + " - "+this.state.account+ " - "+this.state.expirationDate); 
-  
+  console.log("lender");
+  console.log(this.state.lender);
+  console.log(this.state.lender==true);
+  console.log(this.state.lender==false);
+  console.log("debit");
+  console.log(this.state.debit);
+  console.log(this.state.debit==false);
+  console.log(this.state.debit==true);
+  */
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.detail|| this.state.detail=='') || (!this.state.currency || this.state.currency=='') ||
   (!this.state.amount || this.state.amount=='') || (!this.state.date || this.state.date=='') )
   {
-    Alert.alert("Complete los campos faltantes del prestamo");
+    Alert.alert("Complete los campos faltantes del psestamo");
   }
   else{ 
-    if(this.state.lender!=1){
+    if(this.state.lender==false){
       if ((!this.state.amountFees || this.state.amountFees=='') || (!this.state.monthlyFee || this.state.monthlyFee=='') ||
-      (this.state.debit=='') || (!this.state.expirationDate || this.state.expirationDate=='')){
+      (!this.state.expirationDate || this.state.expirationDate=='')){
         Alert.alert("Complete los campos faltantes del prestamo")
-      }else if(this.state.debit){
+      }else if(this.state.debit==true){
         if( (!this.state.account || this.state.account=='')){
           Alert.alert("Complete los campos faltantes del prestamo")
         }
@@ -164,7 +172,7 @@ buttonPressed(){
 
           this.loanService.createLoan(
             this.state.detail,
-            this.state.lender,
+            (this.state.lender==true)?1:0,
             this.state.currency,
             toModel(this.state.date),
             this.state.amount,
@@ -177,13 +185,9 @@ buttonPressed(){
             () => { this.props.navigation.navigate('Loans',{name: 'Prestamos'}); },
             1000
           )
-
-
         }
       }else{
-        Alert.alert("3"); 
-
-        if(!numeroreg.test(this.state.amountFees))
+        if(!numeroreg.test(this.state.monthlyFee))
           Alert.alert("ingrese un valor valido en la cantidad de cuotas"); 
         else if(!decimalreg.test(this.state.amount))
           Alert.alert("ingrese un valor valido en el monto"); 
@@ -192,7 +196,7 @@ buttonPressed(){
         else{
           this.loanService.createLoan(
             this.state.detail,
-            this.state.lender,
+            (this.state.lender==true)?1:0,
             this.state.currency,
             toModel(this.state.date),
             this.state.amount,
@@ -213,7 +217,7 @@ buttonPressed(){
       else{
         this.loanService.createLoan(
           this.state.detail,
-          this.state.lender,
+          (this.state.lender==true)?1:0,
           this.state.currency,
           toModel(this.state.date),
           this.state.amount);
@@ -233,8 +237,8 @@ render() {
   const accountsArray = [];//getAccounts();
 
   const optionsLender = [
-    { label: 'Prestamista', value: 1},
-    { label: 'Prestatario', value: 0 }
+    { label: 'Prestamista', value: true},
+    { label: 'Prestatario', value: false }
   ];
   const optionsDebit = [
     { label: 'Si', value: true},
