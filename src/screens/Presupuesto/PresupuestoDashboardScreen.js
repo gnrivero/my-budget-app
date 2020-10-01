@@ -10,134 +10,73 @@ import {
   Dimensions,
   TouchableHighlight
 } from 'react-native';
-import styles from './styles';
-import BackButton from '../../components/BackButton/BackButton';
-import { presupuestos } from '../../data/presupuestos/presupuestosDataArray';
 import AddPresupuestoButton from '../../components/PresupuestoButton/AddPresupuestoButton';
 import AddCardButton from '../../components/CardButton/AddCardButton';
+import BackButton from '../../components/BackButton/BackButton';
+import DatePicker from 'react-native-datepicker';
+import { presupuestos } from '../../data/presupuestos/presupuestosDataArray';
+import styles from './styles';
 
 const { width: viewportWidth } = Dimensions.get('window');
 
 export default class PresupuestoDashboardScreen extends React.Component {
 
+  budgetService;
+
   static navigationOptions = {
-      title: 'Presupuesto Dashboard'
+      title: 'Presupuesto'
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      activeSlide: 0
+      date: '2020-01'
     };
   }
-
-  onPressCuenta = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('PresupuestoInfo');
-  };
-
-  onPressBudget = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('BudgetDetail',{name: 'Detalle Presupuesto', itemCuenta:  item});
-  };
-
-
-  renderPresupuesto = ({ item }) => (
-    <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressBudget(item)}>
-      <View style={styles.infoContainer}>
-        <View style={styles.infoHead}>
-          <Image source={require('../../../assets/icons/budgetIcon.png')} style={styles.CardsItemIcon} /> 
-          <Text style={styles.infoText}>{item.name}</Text>
-          <View style={styles.infoRight}>
-            <Text style={styles.infoTextDetail}>...</Text><Text style={styles.infoText}>{item.lastFourNumbers}</Text>
-          </View>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Presupuesto Total: </Text><Text style={styles.infoText}>{item.presupuestoTotal}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Presupuesto Consumido: </Text><Text style={styles.infoText}>{item.presupuestoConsumido}</Text>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Inicio Periodo: </Text><Text style={styles.infoText}>{item.startDate}</Text>
-          <View style={styles.infoRight}>
-            <Text style={styles.infoTextDetail}>Cierre Periodo: </Text><Text style={styles.infoText}>{item.closeDate}</Text>
-          </View>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTextDetail}>Balance: </Text><Text style={styles.infoText}>{item.balance}</Text>
-        </View>
-      </View>
-    </TouchableHighlight>
-  );
-
-  // renderPresupuesto = ({ item }) => (
-  //     <TouchableHighlight underlayColor='rgba(73,182,77,0.9)' onPress={() => this.onPressCard(item)}>
-  //       <View style={styles.cardItemContainer}>
-  //         <Text style={styles.infoHead}>{item.mes}</Text>
-  //         <View style={styles.info}>
-  //           {/* <View style={styles.info}>
-  //             <Text style={styles.infoCard}>{item.mes}</Text>
-  //           </View> */}
-  //           <View style={styles.info}>
-  //             <Text style={styles.infoCard}>Presupuesto Total:</Text><Text>{item.presupuestoTotal}</Text>
-  //           </View>
-  //           <View style={styles.info}>
-  //             <Text style={styles.infoCard}>Presupuesto Consumido:</Text><Text>{item.presupuestoConsumido}</Text>
-  //           </View>
-  //           <View style={styles.info}>
-  //             <Text style={styles.infoCard}>Inicio Periodo:</Text><Text>{item.startDate}</Text>
-  //           </View>
-  //           <View style={styles.info}>
-  //             <Text style={styles.infoCard}>Cierre Periodo:</Text><Text>{item.closeDate}</Text>
-  //           </View>
-  //           <View style={styles.info}>
-  //             <Text style={styles.infoCard}>Balance:</Text><Text>{item.balance}</Text>
-  //           </View>
-  //         </View>
-  //       </View>
-  //     </TouchableHighlight>
-  //   );
 
   render() {
 
     return (
       <ScrollView>
         <View style={styles.infoContainer}>
-         {/* <AddPresupuestoButton
-           onPress={() => {
-             let title = 'Agregar Presupuesto';
-             this.props.navigation.navigate('PresupuestoInfo', {title});
-           }}
-         /> */}
-         {/* <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'
-          onPress={() => this.onPressCuenta()}
-        >
-          <View style={Dashboardstyles.container}>
-          <Text style={Dashboardstyles.text}>Nuevo Presupuesto</Text>
+          <Image style={styles.photoCards} source={require('../../data/budget.jpg')} />
+          <View style={{position: 'absolute', top: 220,  left: 45}}>
+            <Text style={{fontWeight: 'bold'}}>Seleccioná un presupuesto para editarlo</Text>
           </View>
-        </TouchableHighlight> */}
+          <DatePicker
+              style={{position: 'absolute', top: 260, left: 40, width: 250}}
+              date={this.state.date} //initial date from state
+              mode="date" //The enum of date, datetime and time
+              placeholder="Fecha"
+              format="YYYY-MM"
+              minDate="2020-01"
 
-<Image style={styles.photoCards} source={require('../../data/budget.jpg')} />
-          <View style={{    position: 'absolute', bottom: 5,  right: 5}}>
-            <AddCardButton title = {'Nuevo Presupuesto'}
-              onPress={() => {
-                let title = 'Nuevo Presupuesto';
-                this.props.navigation.navigate('PresupuestoInfo', {title});
+              confirmBtnText="Confirmar"
+              cancelBtnText="Cancelar"
+              customStyles={{
+                dateIcon: {
+                  position: 'absolute',
+                  left: 0,
+                  top: 4,
+                  marginLeft: 0
+                },
+                dateInput: {
+                  marginLeft: 36
+                }
               }}
-            />
-         </View>
-
-        </View>
-        <FlatList
-           data={presupuestos}
-           renderItem={this.renderPresupuesto}
-           keyExtractor={item => `${item.id}`}
+              onDateChange={(date) => {this.setState({date: date})}}
           />
-        
+          <View style={{position: 'absolute', top: 300,  left: 65}}>
+            <AddCardButton title = {'Ver Presupuesto'}
+            onPress={() => {
+              let title = 'Editar Presupuesto';
+              let id = this.state.date;
+              this.props.navigation.navigate('PresupuestoInfo', {title: title, id: id});
+            }}
+            />
+          </View>
+        </View>
       </ScrollView>
-
-// <Text style={{fontSize: 30, color: 'white', textAlign:'center', backgroundColor:'rgba(73,182,77,0.9)'}}>+ Presupuesto</Text>
       
     );
   }
