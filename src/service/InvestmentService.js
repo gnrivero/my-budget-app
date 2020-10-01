@@ -63,6 +63,7 @@ export default class InvestmentService {
 
 
     getAllInvestment(){
+        console.log("getAllInvestment")
       const conn = this.db;
       return new Promise((resolve) => {
           conn.transaction(

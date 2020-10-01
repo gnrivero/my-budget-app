@@ -9,7 +9,7 @@ import {
   TouchableHighlight,
   Alert
 } from 'react-native';
-import {toModel} from '../../utils/DateConverter';
+import {toModel, toView} from '../../utils/DateConverter';
 import styles from './styles';
 
 
@@ -56,9 +56,12 @@ export default class AddInvestmentScreen extends React.Component {
   componentDidMount(){
     const { navigation } = this.props;
     const id = navigation.getParam('id');
+    console.log("id investment");
+    console.log(id);
     if( id != undefined ){
       this.investmentService.getInvestmentById(id)
       .then((investment) => {
+        console.log(investment);
             this.setState({
                   id:investment.id,
                   detail: investment.detail,
