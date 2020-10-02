@@ -35,16 +35,17 @@ export default class PresupuestoDashboardScreen extends React.Component {
   }
 
   render() {
-
     return (
-      <ScrollView>
-        <View style={styles.infoContainer}>
-          <Image style={styles.photoCards} source={require('../../data/budget.jpg')} />
-          <View style={{position: 'absolute', top: 220,  left: 45}}>
-            <Text style={{fontWeight: 'bold'}}>Seleccioná un presupuesto para editarlo</Text>
-          </View>
+      <ScrollView style={styles.mainContainer}>
+      <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
+        <Image style={styles.photoCards} source={require('../../data/budget.jpg')} />
+      </View>
+      <View style={{marginTop: 20, padding:40}}>
+            <Text style={{alignSelf: 'center',flex: 1,fontWeight: 'bold'}}>Seleccioná un presupuesto para editarlo</Text>
+          
+          
           <DatePicker
-              style={{position: 'absolute', top: 260, left: 40, width: 250}}
+              style={{alignSelf: 'center',flex: 1, width: 200}}
               date={this.state.date} //initial date from state
               mode="date" //The enum of date, datetime and time
               placeholder="Fecha"
@@ -66,8 +67,8 @@ export default class PresupuestoDashboardScreen extends React.Component {
               }}
               onDateChange={(date) => {this.setState({date: date})}}
           />
-          <View style={{position: 'absolute', top: 300,  left: 65}}>
-            <AddCardButton title = {'Ver Presupuesto'}
+          <View style={{alignSelf: 'center',flex: 1}}>
+            <AddCardButton title = {'Ver Presupuesto'} 
             onPress={() => {
               let title = 'Editar Presupuesto';
               let id = this.state.date;
