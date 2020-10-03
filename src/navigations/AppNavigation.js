@@ -34,7 +34,7 @@ const MainNavigator = createStackNavigator(
     Cuenta: CuentaScreen,
     Cards: CardScreen,
     ModifyCard: ModifyCardScreen,
-    Presupuesto: PresupuestoScreen,
+    //Presupuesto: PresupuestoScreen,
     Presupuesto: PresupuestoDashboardScreen,
     PresupuestoInfo: PresupuestoScreen,
     Investments: InvestmentScreen,
