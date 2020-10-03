@@ -2,7 +2,7 @@ import { Text } from 'react-native';
 import React, { Component } from 'react';
 import { cuentas } from '../../data/dataArrays';
 import { investments, investmentTypes } from './dataArrays';
-
+/*
 export function getAllInvestments() {
   const investmentsArray = [];
   investments.map(data => {
@@ -25,3 +25,4 @@ export function getAccounts() {
     });
   return accountArray;
 }
+*/

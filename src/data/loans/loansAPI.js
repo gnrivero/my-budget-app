@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { cuentas } from '../../data/dataArrays';
 import { loans } from './dataArray';
 //lastexpenses o all?
+/*
 export function getAllLoans() {
   const loansArray = [];
   loans.map(data => {
@@ -10,14 +11,15 @@ export function getAllLoans() {
     });
   return loansArray;
 }
-
+*/
+/*
 export function getAccounts() { //PASAR parametro para la moneda  
   const accountArray = [];
   cuentas.map(data => {
     accountArray.push({value:data.id, label:data.nombreCuenta});
     });
   return accountArray;
-}
+}*/
 /*
 export function getTypeExpenses() {
   const typeExpensesArray = [];

@@ -1,7 +1,7 @@
 import { Text } from 'react-native';
 import React, { Component } from 'react';
 import { cards, consumptions } from './dataArrays';
-
+/*
 export function getAllCards() {
   const cardsArray = [];
   cards.map(data => {
@@ -38,3 +38,4 @@ export function getCardId(id) {
   });
   return card;
 }
+*/

@@ -4,7 +4,7 @@ import AppContainer from './src/navigations/AppNavigation';
 import DBInit from './src/data/access/DBInit';
 
 export default function App() {
-  DBInit.run();
+  DBInit.run()
   return (
      <AppContainer />
   );

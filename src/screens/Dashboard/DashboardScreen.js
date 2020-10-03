@@ -5,8 +5,6 @@ import MenuImage from '../../components/MenuImage/MenuImage';
 
 import DashboardService from '../../service/DashboardService';
 
-import ButtonHome from './Buttons'
-
 import {
   BarChart,
   LineChart,
@@ -52,9 +50,10 @@ const data = {
 };
 
 
-export default class HomeScreen extends React.Component {
+export default class DashboardScreen extends React.Component {
+  
   static navigationOptions = ({ navigation }) => ({
-    title: 'Home',
+    title: 'Resumen',
     headerLeft: () => <MenuImage
       onPress={() => {
         navigation.openDrawer();
@@ -84,24 +83,7 @@ export default class HomeScreen extends React.Component {
 
  }
 
- 
- componentWillReceiveProps(nextProp){
-  this.dashboardService.getAccountBalance()
-  .then((accountsBalance) => {
-    this.setState({
-      accounts: accountsBalance.accounts,
-      balances: accountsBalance.balances,
-    })
-  });
 
-}
-
-
-
-  onPressBudget = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Presupuesto');
-  };
 
 
 
@@ -110,24 +92,11 @@ render() {
   return (
     <View style={{backgroundColor:"white"}} >
       <ScrollView style={styles.mainContainer}>
-      <TouchableHighlight             onPress={() => {
-             navigation.navigate('Cuentas',{name: 'Cuentas'});
-            }}>
-      <Image style={{width: 350, height:250 }}  source={require('../../data/bpayapp.jpeg')} />
-      </TouchableHighlight>
-      <View>
-      <Image style={{width: 400, height:100 }}  source={require('../../data/budgetbanner.jpeg')} />
-      <Text style={{fontWeight:"bold", fontSize: 15 }}>Gestiona tus productos </Text>
-      </View>
-      <View style={styles.buttonStyle}>
-    </View>
-      <ButtonHome></ButtonHome>
-
-        
+              
       <View style={styles.buttonStyle}>
 
       </View>
-      <Text>Tus cuentas</Text>
+      <Text>Cuentas</Text>
       <View>
 <BarChart
   style={graphStyle}
@@ -141,10 +110,12 @@ render() {
   ]
   }}
   width={screenWidth}
-  height={220}
-  yAxisLabel="$"
+  height={250}
+  //yAxisLabel="$"
+  withVerticalLabels= {false}
   chartConfig={chartConfig}
-  verticalLabelRotation={30}
+  verticalLabelRotation={0}
+  showValuesOnTopOfBars = {true}
 
 />
 </View>
