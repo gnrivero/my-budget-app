@@ -44,7 +44,7 @@ export default class DBInit {
         //investmentService.checkInvestments()
 
         const budgetService = new BudgetService();
-        budgetService.initDB(true,true,true);
+        budgetService.initDB(true,false,false);
 
         const loanService = new LoanService();
         loanService.initDB(true,true,true);

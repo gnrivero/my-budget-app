@@ -150,6 +150,8 @@ export default class AccountService {
       });
     }
 
+    
+
     getAccountById(id) {
         const conn = this.db;
         return new Promise((resolve) => {
