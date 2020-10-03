@@ -157,6 +157,7 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                 " transactions.accountId as accountId," +
                 " transactions.currencyCode as currencyCode," +
                 " transactions.monthly as monthly," +
+                " transactions.paymentMethod as paymentMethod," +
                 " transactions.transactionTypeId as transactionTypeId," +
                 " transactionType.name as transactionType, " +
                 " account.name as account, " +
@@ -197,7 +198,7 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
               " transactions.paymentMethod as paymentMethod" +
               " FROM transactions "+
               " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
-              " WHERE transactionType.type='E' and transactions.date BETWEEN datetime('now', 'start of month') AND datetime('now', 'localtime') "+
+              " WHERE transactionType.type='E' and transactions.date BETWEEN datetime('now', 'start of month') AND datetime('now','start of month','+1 month','-1 day') "+
               " GROUP BY paymentMethod",
                   [],
                   (txn, res) => {

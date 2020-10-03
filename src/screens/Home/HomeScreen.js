@@ -72,156 +72,25 @@ export default class HomeScreen extends React.Component {
   }
 
 
-  componentDidMount(){
-  
-    this.dashboardService.getAccountBalance()
-    .then((accountsBalance) => {
-      this.setState({
-        accounts: accountsBalance.accounts,
-        balances: accountsBalance.balances,
-      })
-    });
-
- }
-
- 
- componentWillReceiveProps(nextProp){
-  this.dashboardService.getAccountBalance()
-  .then((accountsBalance) => {
-    this.setState({
-      accounts: accountsBalance.accounts,
-      balances: accountsBalance.balances,
-    })
-  });
-
-}
-
-
-
-  onPressBudget = item => {
-    //lo llamo sin pasarle parametros
-    this.props.navigation.navigate('Presupuesto');
-  };
-
-
-
-render() {
-  const { navigation } = this.props;
-  return (
-    <View style={{backgroundColor:"white"}} >
-      <ScrollView style={styles.mainContainer}>
-      <TouchableHighlight             onPress={() => {
-             navigation.navigate('Cuentas',{name: 'Cuentas'});
-            }}>
-      <Image style={{width: 350, height:250 }}  source={require('../../data/bpayapp.jpeg')} />
-      </TouchableHighlight>
-      <View>
-      <Image style={{width: 400, height:100 }}  source={require('../../data/budgetbanner.jpeg')} />
-      <Text style={{fontWeight:"bold", fontSize: 15 }}>Gestiona tus productos </Text>
+  render() {
+    const { navigation } = this.props;
+    return (
+      <View style={{backgroundColor:"white"}} >
+        <ScrollView style={styles.mainContainer}>
+        <TouchableHighlight             onPress={() => {
+              navigation.navigate('Cuentas',{name: 'Cuentas'});
+              }}>
+        <Image style={{width: 350, height:250 }}  source={require('../../data/bpayapp.jpeg')} />
+        </TouchableHighlight>
+        <View>
+        <Image style={{width: 400, height:100 }}  source={require('../../data/budgetbanner.jpeg')} />
+        <Text style={{fontWeight:"bold", fontSize: 15 }}>Gestiona tus productos </Text>
+        </View>
+        <View style={styles.buttonStyle}>
       </View>
-      <View style={styles.buttonStyle}>
-    </View>
       <ButtonHome></ButtonHome>
-
-        
-      <View style={styles.buttonStyle}>
-
+      </ScrollView>
       </View>
-      <Text>Tus cuentas</Text>
-      <View>
-<BarChart
-  style={graphStyle}
-  //data={data}
-  data={{
-    labels: this.state.accounts,
-  datasets: [
-    {
-      data: this.state.balances
-    }
-  ]
-  }}
-  width={screenWidth}
-  height={220}
-  yAxisLabel="$"
-  chartConfig={chartConfig}
-  verticalLabelRotation={30}
-
-/>
-</View>
-    <Text>Tus consumos</Text>
-    <View>
-    <LineChart
-      data={{
-        labels: ["January", "February", "March", "April", "May", "June"],
-        datasets: [
-          {
-            data: [
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100,
-              Math.random() * 100
-            ]
-          }
-        ]
-      }}
-      width={Dimensions.get("window").width} // from react-native
-      height={110}
-      yAxisLabel="$"
-      yAxisSuffix="k"
-      yAxisInterval={1} // optional, defaults to 1
-      chartConfig={{
-        // backgroundColor: "#e26a00",
-        backgroundColor: "green",
-        // backgroundGradientFrom: "#fb8c00",
-        backgroundGradientFrom: "green",
-        backgroundGradientTo: "#ffa726",
-        decimalPlaces: 2, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16
-        },
-        propsForDots: {
-          r: "6",
-          strokeWidth: "2",
-          stroke: "#ffa726"
-        }
-      }}
-      bezier
-      style={{
-        marginVertical: 8,
-        borderRadius: 16
-      }}
-    />
-    </View>
-    <View>
-    <LineChart
-      data={data}
-      width={screenWidth}
-      height={220}
-      chartConfig={chartConfig1}
-    />
-    </View>
-
-</ScrollView>
-</View>
-
-/*
-<PieChart
-  dataPie={dataPie}
-  // width={screenWidth}
-  height={220}
-  chartConfig={chartConfig}
-  accessor="population"
-  backgroundColor="transparent"
-  paddingLeft="15"
-  absolute
-/>
-
-  </View>
-*/
-  )
-}
+    )
+  }
 }

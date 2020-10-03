@@ -53,15 +53,13 @@ const data = {
 
 export default class DashboardScreen extends React.Component {
   
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Resumen',
-    headerLeft: () => <MenuImage
-      onPress={() => {
-        navigation.openDrawer();
-      }}
-    />
-  });
-
+   
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Resumen'
+    };
+  };
+  
   constructor(props) {
     super(props);
     this.dashboardService = new DashboardService();
@@ -104,7 +102,7 @@ export default class DashboardScreen extends React.Component {
 
 render() {
   const { navigation } = this.props;
-  
+  /*
 let pieChartData = [
   { name: 'Seoul', population: this.state.amountCash, color: 'rgba(131, 167, 234, 1)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
   { name: 'Toronto', population: this.state.amountCC, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
@@ -112,15 +110,15 @@ let pieChartData = [
   { name: 'New York', population: this.state.amountAutoDebit, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
   { name: 'Moscow', population: this.state.amountother, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 }
 ];
-
+*/
 
   let pieData  = [
-    { name: 'Efectivo', amount: this.state.amountCash, color: 'skyblue', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Tarjeta Debito', amount: this.state.amountDC, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Tarjeta Credito', amount: this.state.amountCC,color: 'red', legendFontColor: '#7F7F7F',      legendFontSize: 15 },
-    { name: 'Debito automatico', amount: this.state.amountAutoDebit, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Transferencia', amount: this.state.amountTransfer, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
-    { name: 'Otro', amount: this.state.amountother, color: 'blue', legendFontColor: '#7F7F7F', legendFontSize: 15 }
+    { name: 'Efectivo', amount: this.state.amountCash, color: '#00bfff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Tarjeta Debito', amount: this.state.amountDC, color: '#0040ff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Tarjeta Credito', amount: this.state.amountCC,color: '#00ffc0', legendFontColor: '#7F7F7F',      legendFontSize: 15 },
+    { name: 'Debito automatico', amount: this.state.amountAutoDebit, color: '#00ff40', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Transferencia', amount: this.state.amountTransfer, color: '#00b386', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Otro', amount: this.state.amountother, color: '#', legendFontColor: '#7F7F7F', legendFontSize: 15 }
   ];
  
   return (
@@ -150,30 +148,19 @@ let pieChartData = [
     <Text>Gastos del mes</Text>
     
     <View>
-    <Text >Pie Chart</Text>
-              <PieChart
-                data={pieChartData}
-                height={250}
-                width={screenWidth}
-                chartConfig={chartConfig}
-                accessor="population"
-                style={graphStyle}
-              />
-              
-
-              </View>
-              <View>
-   <PieChart
-      dataPie={pieData}
-      width={250}
-      height={220}
-      chartConfig={chartConfig}
-      accessor="amount"
-      style={graphStyle}
-      backgroundColor={"#ff4040"}
-    />
+      <PieChart
+        data={pieData}
+        height={250}
+        width={screenWidth}
+        chartConfig={chartConfig}
+        accessor="amount"
+        style={graphStyle}
+        backgroundColor={"#ff7373"}
+      />
+  </View>
+  <View>
   
-    </View>
+  </View>
     
     
     <View>
