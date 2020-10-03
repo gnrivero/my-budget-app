@@ -29,6 +29,7 @@ export default class LoanDetailScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const loan = navigation.getParam('itemLoan');
+    console.log(loan)
     return (
       <ScrollView>
         <View style={{ borderBottomWidth: 0.4, marginBottom: 10, borderBottomColor: 'grey' }}>
@@ -39,7 +40,7 @@ export default class LoanDetailScreen extends React.Component {
               <AddCardButton title = {'Editar Prestamo'}
                 onPress={() => {
                   let title = 'Editar Prestamo';
-                  // TODO: Ver que onda this.props.navigation.navigate('Cuenta', {title: title, id: cuenta.id});
+                  this.props.navigation.navigate('AddLoan', {title: title, id: loan.id});
                 }}
               />
          </View>
@@ -47,7 +48,7 @@ export default class LoanDetailScreen extends React.Component {
         <TouchableHighlight underlayColor='rgba(73,182,77,0.9)'>
           <View style={styles.infoContainer}>
             <View style={styles.infoHead}>
-            {item.lender==1?
+            {loan.lender==1?
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansLenderItemIcon} /> )
               :
               (<Image source={require('../../../assets/icons/loan.png')} style={styles.loansItemIcon} /> )
@@ -60,7 +61,7 @@ export default class LoanDetailScreen extends React.Component {
                 <Text style={styles.infoTextDetail}>{loan.currencyCode} </Text><Text style={styles.infoText}>{loan.amount}</Text>
               </View>
             </View>
-            {item.lender!=1?
+            {loan.lender!=1?
             (
               <View style={styles.info}>
                 <Text style={styles.infoTextDetail}>1er vencimiento: </Text><Text style={styles.infoText}>{toView(loan.expirationDate)}</Text>
@@ -71,12 +72,12 @@ export default class LoanDetailScreen extends React.Component {
               </View>
           )  
           :null}
-            {item.lender!=1?
+            {loan.lender!=1?
             (
               <View style={styles.info}>
                 <Text style={styles.infoTextDetail}></Text>
                 <View style={styles.infoRight}>
-                <Text style={styles.infoTextDetail}>Valor cuota: {item.currencyCode} </Text><Text style={styles.infoText}>{item.amountFees}</Text>
+                <Text style={styles.infoTextDetail}>Valor cuota: {loan.currencyCode} </Text><Text style={styles.infoText}>{loan.amountFees}</Text>
                 </View>
               </View>
             )  

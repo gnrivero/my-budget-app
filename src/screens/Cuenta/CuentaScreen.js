@@ -7,11 +7,11 @@ import {
   TouchableHighlight,
   TextInput,
   Alert,
+  Switch
 } from 'react-native';
 import styles from './styles';
 
 import { Dropdown } from 'react-native-material-dropdown';
-import SwitchSelector from 'react-native-switch-selector';
 import AccountService from '../../service/AccountService';
 import BankService from '../../service/BankService';
 import { searchStateError } from './validator/AccountScreenValidator';
@@ -31,6 +31,7 @@ export default class CuentaScreen extends React.Component {
     super(props);
     this.accountService = new AccountService();
     this.bankService = new BankService();
+    this.optionCurrency =false;
     this.state = {
         //Accounts
         id:'',
@@ -41,8 +42,7 @@ export default class CuentaScreen extends React.Component {
         vencimientoTarjeta:'',
         entidad: '',
         currency: 'ARS',
-        opcionCurrency:0,
-        agregarTarjeta: false,
+        optionCurrency:false,
         //Banks
         allBanks: []
     };
@@ -54,6 +54,7 @@ export default class CuentaScreen extends React.Component {
      if( id != undefined ){
        this.accountService.getAccountById(id)
        .then((account) => {
+        this.optionCurrency = account.currencyCode == "ARS"? false:true;
              this.setState({
                  id: account.id,
                  nombreCuenta: account.name,
@@ -63,8 +64,7 @@ export default class CuentaScreen extends React.Component {
                  currency: account.currencyCode,
                  numerosTarjeta: account.cardLastFourNumbers,
                  vencimientoTarjeta: account.cardExpiryDate,
-                 opcionCurrency: account.currencyCode == 'ARS' ? 0:1,
-                 agregarTarjeta: account.cardLastFourNumbers != '' ? true : false
+                 optionCurrency:this.optionCurrency,
              });
          }
        );
@@ -79,17 +79,11 @@ export default class CuentaScreen extends React.Component {
      });
   }
 
-  onChangeCard = ({ value }) =>{
-    let agregarTarjeta = value
-    this.setState({agregarTarjeta});
-    if(agregarTarjeta){
-      this.setState({vencimientoTarjeta:'', numerosTarjeta:''});
-    }
-  }
-
   onChangeCurrency = ({ value }) => {
-    let currency = value
-    this.setState({currency});
+    let currency = value?'USD':'ARS';
+    this.setState({currency: currency,
+                   optionCurrency: value});
+    
   }
 
 buttonPressed() {
@@ -139,16 +133,6 @@ buttonPressed() {
     const { navigation } = this.props;
     const categoryName = navigation.getParam('title');
 
-    const options = [
-      { label: 'SI', value: true},
-      { label: 'NO', value: false }
-    ];
-
-    const optionsCurrency = [
-      { label: 'Pesos', value: 'ARS' },
-      { label: 'Dólares', value: 'USD' }
-    ];
-
     let banksList = this.state.allBanks.map( (v,k) => {
       return {value:v.id, label:v.name};
     });
@@ -191,8 +175,20 @@ buttonPressed() {
               value={String(this.state.saldo)}
               editable={this.state.id==''?true:false}
             />
-            {/*<SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />*/}
-            <SwitchSelector disabled={this.state.id!=''?true:false} options={optionsCurrency} initial={this.state.opcionCurrency} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+
+            <View style={{flexDirection:'row'}}>
+              <Text>Pesos</Text>
+              <Switch
+                disabled={this.state.id!=''?true:false}
+                trackColor={{ false: "#565656;", true: "#565656;" }}
+                thumbColor={this.state.optionCurrency ? "#2cd18a" : "#2cd18a"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={value => this.onChangeCurrency({value})}
+                value={this.state.optionCurrency}
+              />
+              <Text>Dolares</Text>
+            </View>
+
             <View style={{padding:5}}></View>
 
             <Text style={{height:30}}>Tarjeta de debito</Text>

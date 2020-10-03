@@ -27,6 +27,23 @@ export default class InvestmentService {
            }
        );
     }
+
+    updateInvestment(id, detail, type, currencyCode, date, amount, symbol, dueDate=null, amountCredited=null, accountId=null) {
+        console.log(detail + ' - ' + type + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
+        console.log( symbol + ' - ' + dueDate + ' - ' + amountCredited + ' - ' + accountId)
+        this.db.transaction(
+           (txn) => {
+              txn.executeSql(
+                   "UPDATE investment SET detail = ?, investmentTypeId = ?, currencyCode = ?, date = ?, amount = ?, symbol = ?, dueDate = ? , amountCredited = ? , accountId = ? " +
+                   "WHERE id = ?",
+                   [detail, type, currencyCode, date, amount, symbol, dueDate, amountCredited, accountId, id],
+                   (txn, res) => { console.log("updateInvestment: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("updateInvestment: failed " + err); }
+              )
+           }
+       );
+    }
+
 /*
     updateAccount(id, name, currencyCode, bankId, identificationNumber, balance) {
         this.db.transaction(

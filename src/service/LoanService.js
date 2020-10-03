@@ -27,26 +27,23 @@ export default class LoanService {
            }
        );
     }
-/*
-    updateAccount(id, name, currencyCode, bankId, identificationNumber, balance) {
+
+    updateLoan(id, detail, lender, currencyCode, date, amount, expirationDate=null, monthlyFee=null,amountFees=null, accountId=null) {
+        console.log(detail + ' - ' + lender + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
+        console.log( expirationDate + ' - ' + monthlyFee + ' - ' + amountFees + ' - ' + accountId)
         this.db.transaction(
            (txn) => {
               txn.executeSql(
-                   "UPDATE account SET " +
-                   "name = ?, " +
-                   "currencyCode = ?, " +
-                   "bankId = ?, " +
-                   "identificationNumber = ?, " +
-                   "balance = ? " +
+                   "UPDATE loan SET detail = ?, lender = ?, currencyCode = ?, date = ?, amount = ?, expirationDate = ?, monthlyFee = ? , amountFees = ? , accountId = ? " +
                    "WHERE id = ?",
-                   [name, currencyCode, bankId, identificationNumber, balance, id],
-                   (txn, res) => { console.log("updateAccount with ID: " + id); },
-                   (txn, err) => { console.log("updateAccount: " + err); }
+                   [detail, lender, currencyCode, date, amount, expirationDate, monthlyFee, amountFees, accountId, id],
+                   (txn, res) => { console.log("updateInvestment: Affected Rows " + res.rowsAffected); },
+                   (txn, err) => { console.log("updateInvestment: failed " + err); }
               )
            }
        );
     }
-*/
+
 
     updateActive(id, active) {
         this.db.transaction(

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ScrollView,
+  Switch,
   Text,
   View,
   TextInput,
@@ -14,7 +15,6 @@ import styles from './styles';
 
 
 import { Dropdown } from 'react-native-material-dropdown';
-import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
 
 import InvestmentService from '../../service/InvestmentService';
@@ -36,10 +36,11 @@ export default class AddInvestmentScreen extends React.Component {
     this.investmentService = new InvestmentService();
     this.investmentTypeService = new InvestmentTypeService();
     this.accountService = new AccountService();
+    this.optionCurrency =false;
     this.state =  {id:'',
                   detail: '',
                   type: '',
-                  opcionCurrency:0,
+                  optionCurrency:false,
                   currency:'ARS',
                   amount:'',
                   amountCredited:'',
@@ -53,7 +54,7 @@ export default class AddInvestmentScreen extends React.Component {
   }
 
   
-  componentDidMount(){
+  componentWillMount(){
     const { navigation } = this.props;
     const id = navigation.getParam('id');
     console.log("id investment");
@@ -62,11 +63,13 @@ export default class AddInvestmentScreen extends React.Component {
       this.investmentService.getInvestmentById(id)
       .then((investment) => {
         console.log(investment);
+        this.optionCurrency = investment.currencyCode == "ARS"? false:true;
+        console.log(this.optionCurrency);
             this.setState({
                   id:investment.id,
                   detail: investment.detail,
                   type: investment.investmentTypeId,
-                  opcionCurrency:investment.currencyCode == 'ARS' ? 0:1,
+                  optionCurrency:this.optionCurrency,
                   currency: investment.currencyCode,
                   amount:investment.amount,
                   amountCredited:investment.amountCredited,
@@ -75,6 +78,9 @@ export default class AddInvestmentScreen extends React.Component {
                   account:investment.accountId,
                   symbol: investment.symbol
             });
+            
+      console.log("state")
+      console.log(this.state);
         }
       );
     }
@@ -97,12 +103,14 @@ export default class AddInvestmentScreen extends React.Component {
  }
 
   onChangeCurrency = ({ value }) =>{
-    let currency = value
-    this.setState({currency});
+    let currency = value?'USD':'ARS';
+    this.setState({currency: currency,
+                   optionCurrency: value});
     this.accountService.getAccountBycurrencyCodeCombo(currency)
     .then((accounts) => {
       this.setState({
-        allAccount: accounts
+        allAccount: accounts,
+        account: ''
       })
     });
   }
@@ -115,17 +123,15 @@ export default class AddInvestmentScreen extends React.Component {
                       dueDate:'',
                       account:'',
                     });
-      
     }
   }
 
   buttonPressed(){
-    Alert.alert(this.state.detail +" - "+this.state.type +" - " +this.state.currency +" - " +this.state.amount 
+    /*Alert.alert(this.state.detail +" - "+this.state.type +" - " +this.state.currency +" - " +this.state.amount 
     +" - " + this.state.amountCredited+" - " + this.state.dueDate+" - " + this.state.account ); 
-    
+    */
     let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
-    //let numeroreg=/^[0-9]*$/;
-  
+      
     if ((!this.state.detail|| this.state.detail=='') || (!this.state.type|| this.state.type=='') 
       || (!this.state.currency || this.state.currency=='') || (!this.state.amount || this.state.amount==''))
     {
@@ -138,15 +144,26 @@ export default class AddInvestmentScreen extends React.Component {
         }else if (!this.state.symbol || this.state.symbol==''){
           Alert.alert("ingrese una sigla");   
         }else{
-          Alert.alert("Grabo inversion distinta a plazo fijo"); 
-          this.investmentService.createInvestment(
-          this.state.detail,
-          this.state.type,
-          this.state.currencyCode,
-          toModel(this.state.date),
-          this.state.amount,
-          this.state.symbol);
-
+          if(!this.state.id || this.state.id==''){
+            this.investmentService.createInvestment(
+            this.state.detail,
+            this.state.type,
+            this.state.currency,
+            toModel(this.state.date),
+            this.state.amount,
+            this.state.symbol);
+          }
+          else
+          {
+            this.investmentService.updateInvestment(
+              this.state.id,
+              this.state.detail,
+              this.state.type,
+              this.state.currency,
+              toModel(this.state.date),
+              this.state.amount,
+              this.state.symbol);
+          }
           setTimeout(
             () => { this.props.navigation.navigate('Investments',{name: 'Inverisones'}); },
             1000
@@ -164,19 +181,32 @@ export default class AddInvestmentScreen extends React.Component {
             Alert.alert("ingrese un valor valido para el monto recuperado");   
           }else
           {  
-            Alert.alert("Grabo inversion en plazo fijo"); 
+            if(!this.state.id || this.state.id==''){
 
             this.investmentService.createInvestment(
               this.state.detail,
               this.state.type,
-              this.state.currencyCode,
+              this.state.currency,
               toModel(this.state.date),
               this.state.amount,
               null,
               toModel(this.state.dueDate),
               this.state.amountCredited,
               this.state.account);
-
+            }else
+            {
+            this.investmentService.updateInvestment(
+              this.state.id,
+              this.state.detail,
+              this.state.type,
+              this.state.currency,
+              toModel(this.state.date),
+              this.state.amount,
+              null,
+              toModel(this.state.dueDate),
+              this.state.amountCredited,
+              this.state.account);
+            }
               setTimeout(
                 () => { this.props.navigation.navigate('Investments',{name: 'Inversiones'}); },
                 1000
@@ -189,14 +219,11 @@ export default class AddInvestmentScreen extends React.Component {
   
 
   render() {
-    const optionsCurrency = [
-      { label: 'Pesos', value: 'ARS'},
-      { label: 'Dolares', value: 'USD' }
-    ];
-
+    
     let typeList = this.state.allType.map( (v,k) => {
       return {value:v.id, label:v.name};
     });
+    
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
@@ -244,14 +271,25 @@ export default class AddInvestmentScreen extends React.Component {
                   onDateChange={(date) => {this.setState({date: date})}}
                 />
               </View>
-            <SwitchSelector /*disabled={this.state.id!=''?true:false} */options={optionsCurrency} initial={this.state.opcionCurrency} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+              <View style={{flexDirection:'row'}}>
+                <Text>Pesos</Text>
+                  <Switch
+                    trackColor={{ false: "#565656;", true: "#565656;" }}
+                    thumbColor={this.state.optionCurrency ? "#2cd18a" : "#2cd18a"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => this.onChangeCurrency({value})}
+                    value={this.state.optionCurrency}
+                  />
+                      <Text>Dolares</Text>
+                </View>
             <View style={{padding:5}}></View>
             <TextInput keyboardType='decimal-pad'
               style ={styles.input}
-              placeholder="Monto"
+              placeholder={(String(this.state.amount))==''?("Monto"):(String(this.state.amount))}
+
               onChangeText={(amount) => this.setState({amount})}
               value={this.state.amount}
-              //editable={this.state.id==''?true:false}
+
             />
             {(this.state.type==1)?(
               <View>

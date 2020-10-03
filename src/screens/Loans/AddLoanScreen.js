@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FlatList,
+  Switch,
   ScrollView,
   Text,
   View,
@@ -13,9 +13,7 @@ import {toModel, toView} from '../../utils/DateConverter';
 import styles from './styles';
 
 import { Dropdown } from 'react-native-material-dropdown';
-import SwitchSelector from 'react-native-switch-selector';
 import DatePicker from 'react-native-datepicker';
-
 
 import LoanService from '../../service/LoanService';
 import AccountService from '../../service/AccountService';
@@ -31,29 +29,73 @@ export default class AddLoanScreen extends React.Component {
     super(props);
     this.loanService = new LoanService();
     this.accountService = new AccountService();
+    this.optionCurrency =false;
+    this.optionLender =false;
+    this.optionDebit =false;
     this.state = {
                   detail:'',            
                   lender:false,
+                  optionLender:false,
                   date: '',
-                  opcionCurrency:0,
+                  optionCurrency:false,
                   currency:'ARS',
                   amount: '',
                   monthlyFee: '',
                   amountFees: '',
                   debit:false,
+                  optionDebit:false,
                   account:'',
                   expirationDate:''
                 };
   }
-/*
-  onPressRecipe = item => {
-    this.props.navigation.navigate('Recipe', { item });
-  };
-  */
+
+  componentWillMount(){
+    const { navigation } = this.props;
+    const id = navigation.getParam('id');
+    console.log("id Loan");
+    console.log(id);
+    if( id != undefined ){
+      this.loanService.getLoanById(id)
+      .then((loan) => {
+        console.log(loan);
+        this.optionCurrency = loan.currencyCode == "ARS"? false:true;
+        this.optionLender = loan.lender == 0? false:true;
+        this.optionDebit = loan.accountId == null? false:true;
+        console.log(this.optionCurrency);
+            this.setState({
+                  id:loan.id,    
+                  detail:loan.detail, 
+                  lender:this.optionLender,
+                  optionLender:this.optionLender,
+                  optionCurrency:this.optionCurrency,
+                  date:toView(loan.date),
+                  amount:loan.amount,
+                  currency: loan.currencyCode,
+                  monthlyFee: loan.monthlyFee,
+                  amountFees: loan.amountFees,
+                  optionDebit:this.optionDebit,
+                  debit:this.optionDebit,
+
+                  account:loan.accountId,
+                  expirationDate:toView(loan.expirationDate)
+            });
+
+        this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
+          .then((accounts) => {
+            this.setState({
+            allAccount: accounts
+            })
+          });
+        }
+      );
+    }
+  }
+
   onChangeLender = ({ value }) =>{
-    let lender = value
-    this.setState({lender});
-    if(lender==0){
+    let lender = value;
+    this.setState({lender:lender,
+                  optionLender:value});
+    if(lender){
       
     this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
     .then((accounts) => {
@@ -69,11 +111,13 @@ export default class AddLoanScreen extends React.Component {
           amountFees:'',
           expirationDate:''});
     }
+    console.log(this.state)
   }
 
   onChangeCurrency = ({ value }) =>{
-    let currency = value
-    this.setState({currency});
+    let currency = value?'USD':'ARS';
+    this.setState({currency: currency,
+                   optionCurrency: value});
     this.accountService.getAccountBycurrencyCodeCombo(currency)
     .then((accounts) => {
       this.setState({
@@ -84,8 +128,9 @@ export default class AddLoanScreen extends React.Component {
   }
 
   onChangeDebit = ({ value }) =>{
-    let debit = value
-    this.setState({debit});
+    let debit = value;
+    this.setState({debit: debit,
+                  optionDebit: debit});
     if(debit){
       this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
       .then((accounts) => {
@@ -97,57 +142,8 @@ export default class AddLoanScreen extends React.Component {
     }
   }
 
-  
-  componentDidMount(){
-    const { navigation } = this.props;
-    const id = navigation.getParam('id');
-    console.log("id investment");
-    console.log(id);
-    if( id != undefined ){
-      /*
-      this.investmentService.getInvestmentById(id)
-      .then((investment) => {
-        console.log(investment);
-            this.setState({
-                  id:investment.id,
-                  detail: investment.detail,
-                  type: investment.investmentTypeId,
-                  opcionCurrency:investment.currencyCode == 'ARS' ? 0:1,
-                  currency: investment.currencyCode,
-                  amount:investment.amount,
-                  amountCredited:investment.amountCredited,
-                  dueDate:toView(investment.dueDate),
-                  date:toView(investment.date),
-                  account:investment.accountId,
-                  symbol: investment.symbol
-            });
-        }
-      );
-      modificar
-       */
-    }
-
-    this.accountService.getAccountBycurrencyCodeCombo(this.state.currency)
-    .then((accounts) => {
-      this.setState({
-        allAccount: accounts
-      })
-    });
-
- }
-
 buttonPressed(){
-  /*Alert.alert(this.state.detail +" - " + this.state.lender +" - "+ this.state.currency+" - " + this.state.amount +" - " +
-  this.state.amountFees +" - " +this.state.monthlyFee +" - " +this.state.debit + " - "+this.state.account+ " - "+this.state.expirationDate); 
-  console.log("lender");
-  console.log(this.state.lender);
-  console.log(this.state.lender==true);
-  console.log(this.state.lender==false);
-  console.log("debit");
-  console.log(this.state.debit);
-  console.log(this.state.debit==false);
-  console.log(this.state.debit==true);
-  */
+  
   let decimalreg=/^[-+]?[0-9]*\.?[0-9]{0,2}$/;
   let numeroreg=/^[0-9]*$/;
   if ((!this.state.detail|| this.state.detail=='') || (!this.state.currency || this.state.currency=='') ||
@@ -169,7 +165,7 @@ buttonPressed(){
         else if(!decimalreg.test(this.state.amountFees))
           Alert.alert("ingrese un valor valido en la cuota");
          else{
-
+          if(!this.state.id || this.state.id==''){
           this.loanService.createLoan(
             this.state.detail,
             (this.state.lender==true)?1:0,
@@ -180,7 +176,19 @@ buttonPressed(){
             this.state.monthlyFee,
             this.state.amountFees,
             this.state.account);
-
+          }else{
+            this.loanService.updateLoan(
+              this.state.id,
+              this.state.detail,
+              (this.state.lender==true)?1:0,
+              this.state.currency,
+              toModel(this.state.date),
+              this.state.amount,
+              toModel(this.state.expirationDate),
+              this.state.monthlyFee,
+              this.state.amountFees,
+              this.state.account);
+          }
           setTimeout(
             () => { this.props.navigation.navigate('Loans',{name: 'Prestamos'}); },
             1000
@@ -194,6 +202,7 @@ buttonPressed(){
         else if(!decimalreg.test(this.state.amountFees))
           Alert.alert("ingrese un valor valido en la cuota");
         else{
+          if(!this.state.id || this.state.id==''){
           this.loanService.createLoan(
             this.state.detail,
             (this.state.lender==true)?1:0,
@@ -203,7 +212,18 @@ buttonPressed(){
             toModel(this.state.expirationDate),
             this.state.monthlyFee,
             this.state.amountFees);
-
+          }else{
+            this.loanService.updateLoan(
+              this.state.id,
+              this.state.detail,
+              (this.state.lender==true)?1:0,
+              this.state.currency,
+              toModel(this.state.date),
+              this.state.amount,
+              toModel(this.state.expirationDate),
+              this.state.monthlyFee,
+              this.state.amountFees);
+          }
           setTimeout(
             () => { this.props.navigation.navigate('Loans',{name: 'Prestamos'}); },
             1000
@@ -234,22 +254,6 @@ buttonPressed(){
 render() {
   const { navigation } = this.props;
   const item = navigation.getParam('category');
-  const accountsArray = [];//getAccounts();
-
-  const optionsLender = [
-    { label: 'Prestamista', value: true},
-    { label: 'Prestatario', value: false }
-  ];
-  const optionsDebit = [
-    { label: 'Si', value: true},
-    { label: 'No', value: false }
-  ];
-
-  const optionsCurrency = [
-    { label: 'Pesos', value: 1},
-    { label: 'Dolares', value: 2 }
-  ];
-
     return (
       <View>
         <ScrollView style={styles.mainContainer}>
@@ -290,13 +294,35 @@ render() {
               onDateChange={(date) => {this.setState({date: date})}}
             />
           </View>
-          <SwitchSelector options={optionsLender} initial={1} onPress={value => this.onChangeLender({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+          <View style={{flexDirection:'row'}}>
+                <Text>Prestatario</Text>
+                
+                  <Switch
+                    trackColor={{ false: "#565656;", true: "#565656;" }}
+                    thumbColor={this.state.optionLender ? "#2cd18a" : "#2cd18a"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => this.onChangeLender({value})}
+                    value={this.state.optionLender}
+                  />
+                      <Text>Prestamista</Text>
+                </View>
           <View style={{padding:5}}></View>
-          <SwitchSelector options={optionsCurrency} initial={0} onPress={value => this.onChangeCurrency({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+          <View style={{flexDirection:'row'}}>
+                <Text>Pesos</Text>
+                  <Switch
+                    trackColor={{ false: "#565656;", true: "#565656;" }}
+                    thumbColor={this.state.optionCurrency ? "#2cd18a" : "#2cd18a"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => this.onChangeCurrency({value})}
+                    value={this.state.optionCurrency}
+                  />
+                      <Text>Dolares</Text>
+                </View>
+          
 
           <TextInput keyboardType='decimal-pad'
               style ={styles.input}
-              placeholder="Importe total"
+              placeholder={(String(this.state.amount))==''?("Importe total"):(String(this.state.amount))}
               onChangeText={(amount) => this.setState({amount})}
               value={this.state.amount}
           />
@@ -305,13 +331,13 @@ render() {
             <View>
               <TextInput keyboardType='decimal-pad'
                 style ={styles.input}
-                placeholder="Cantidad de cuotas"
+                placeholder={(String(this.state.monthlyFee))==''?("Cantidad de cuotas"):(String(this.state.monthlyFee))}
                 onChangeText={(monthlyFee) => this.setState({monthlyFee})}
                 value={this.state.monthlyFee}
               />
               <TextInput keyboardType='decimal-pad'
                 style ={styles.input}
-                placeholder="Importe Cuota"
+                placeholder={(String(this.state.amountFees))==''?("Importe Cuota"):(String(this.state.amountFees))}
                 onChangeText={(amountFees) => this.setState({amountFees})}
                 value={this.state.amountFees}
               />
@@ -345,7 +371,18 @@ render() {
               </View>
               <View style={{padding:10}}>
                 <Text style={styles.cuentasInfo}>Debito en cuenta</Text>
-                <SwitchSelector options={optionsDebit} initial={1} onPress={value => this.onChangeDebit({value})} buttonColor='#2cd18a' backgroundColor='#cccccc' />
+                
+                <View style={{flexDirection:'row'}}>
+                <Text>No</Text>
+                  <Switch
+                    trackColor={{ false: "#565656;", true: "#565656;" }}
+                    thumbColor={this.state.optionDebit ? "#2cd18a" : "#2cd18a"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={value => this.onChangeDebit({value})}
+                    value={this.state.optionDebit}
+                  />
+                      <Text>Si</Text>
+                </View>
                 {this.state.debit ? (
                   <View style={{padding:10}}>
                     <Dropdown
