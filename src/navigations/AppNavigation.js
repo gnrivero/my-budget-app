@@ -1,14 +1,9 @@
 import { createAppContainer } from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer'
 import {createStackNavigator} from 'react-navigation-stack'
-/* import React from 'react'
-import {createStackNavigator} from '@react-navigation/stack'
-import {NavigationContainer} from '@react-navigation/native'
-import {createDrawerNavigator} from '@react-navigation/drawer' */
+
 import HomeScreen from '../screens/Home/HomeScreen';
 import CategoriesScreen from '../screens/Categories/CategoriesScreen';
-import RecipeScreen from '../screens/Recipe/RecipeScreen';
-import RecipesListScreen from '../screens/RecipesList/RecipesListScreen';
 import DrawerContainer from '../screens/DrawerContainer/DrawerContainer';
 import CardScreen from '../screens/Cards/CardScreen';
 import ModifyCardScreen from '../screens/Cards/ModifyCardScreen';
@@ -29,13 +24,12 @@ import LoanDetailScreen from '../screens/Loans/LoanDetailScreen';
 import CardDetailScreen from '../screens/Cards/CardDetail';
 import CuentaDetailScreen from '../screens/Cuenta/CuentaDetailScreen';
 import BudgetDetailScreen from '../screens/Presupuesto/BudgetDetailScreen';
+import DashboardScreen from '../screens/Dashboard/DashboardScreen';
 
 const MainNavigator = createStackNavigator(
   {
     Home: HomeScreen,
     Categories: CategoriesScreen,
-    Recipe: RecipeScreen,
-    RecipesList: RecipesListScreen,
     Cuentas: CuentasScreen,
     Cuenta: CuentaScreen,
     Cards: CardScreen,
@@ -56,6 +50,7 @@ const MainNavigator = createStackNavigator(
     CardDetail: CardDetailScreen,
     CuentaDetail: CuentaDetailScreen,
     BudgetDetail: BudgetDetailScreen,
+    Dashboard: DashboardScreen,
   },
   {
     initialRouteName: 'Home',

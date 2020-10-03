@@ -82,3 +82,14 @@ export const presupuestos = [
      },
         
    ]
+
+   
+   export const budgetDetailMock = [
+    {
+        id: 500,
+        presupuestoTotal: 55000,
+        presupuestoConsumido: 48000,
+        comidaTotal: 16000,
+        comidaActual: 12000,
+     },        
+   ]
