@@ -128,7 +128,7 @@ buttonPressed(){
       
         setTimeout(
           () => { this.props.navigation.navigate('Income',{name: 'Ingresos'}); },
-          2000
+          1000
         )
     }
   } else {

@@ -50,6 +50,7 @@ const data = {
 };
 
 
+
 export default class DashboardScreen extends React.Component {
   
   static navigationOptions = ({ navigation }) => ({
@@ -66,7 +67,13 @@ export default class DashboardScreen extends React.Component {
     this.dashboardService = new DashboardService();
     this.state =  {
                   accounts:[],
-                  balances:[]
+                  balances:[],
+                  amountCash:0,
+                  amountDC:0,
+                  amountCC:0,
+                  amountother:0,
+                  amountTransfer:0,
+                  amountAutoDebit:0
     };
   }
 
@@ -81,45 +88,94 @@ export default class DashboardScreen extends React.Component {
       })
     });
 
+    this.dashboardService.getExpensesByPaymentMethodMonth()
+    .then((expenses) => {
+      this.setState({
+        amountCash: expenses.amountCash,
+        amountDC: expenses.amountDC,
+        amountCC: expenses.amountCC,
+        amountother: expenses.amountother,
+        amountTransfer: expenses.amountTransfer,
+        amountAutoDebit: expenses.amountAutoDebit
+      })
+    });
+
  }
-
-
-
-
 
 render() {
   const { navigation } = this.props;
+  
+let pieChartData = [
+  { name: 'Seoul', population: this.state.amountCash, color: 'rgba(131, 167, 234, 1)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Toronto', population: this.state.amountCC, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Beijing', population: this.state.amountDC, color: 'red', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'New York', population: this.state.amountAutoDebit, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+  { name: 'Moscow', population: this.state.amountother, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 }
+];
+
+
+  let pieData  = [
+    { name: 'Efectivo', amount: this.state.amountCash, color: 'skyblue', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Tarjeta Debito', amount: this.state.amountDC, color: '#F00', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Tarjeta Credito', amount: this.state.amountCC,color: 'red', legendFontColor: '#7F7F7F',      legendFontSize: 15 },
+    { name: 'Debito automatico', amount: this.state.amountAutoDebit, color: '#ffffff', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Transferencia', amount: this.state.amountTransfer, color: 'rgb(0, 0, 255)', legendFontColor: '#7F7F7F', legendFontSize: 15 },
+    { name: 'Otro', amount: this.state.amountother, color: 'blue', legendFontColor: '#7F7F7F', legendFontSize: 15 }
+  ];
+ 
   return (
     <View style={{backgroundColor:"white"}} >
       <ScrollView style={styles.mainContainer}>
-              
-      <View style={styles.buttonStyle}>
-
-      </View>
-      <Text>Cuentas</Text>
+      <Text>Estado Cuentas</Text>
       <View>
-<BarChart
-  style={graphStyle}
-  //data={data}
-  data={{
-    labels: this.state.accounts,
-  datasets: [
-    {
-      data: this.state.balances
-    }
-  ]
-  }}
-  width={screenWidth}
-  height={250}
-  //yAxisLabel="$"
-  withVerticalLabels= {false}
-  chartConfig={chartConfig}
-  verticalLabelRotation={0}
-  showValuesOnTopOfBars = {true}
+        <BarChart
+          style={graphStyle}
+          data={{
+            labels: this.state.accounts,
+          datasets: [
+            {
+              data: this.state.balances
+            }
+          ]
+          }}
+          width={screenWidth}
+          height={250}
+          //yAxisLabel="$"
+          withHorizontalLabels= {false}
+          chartConfig={chartConfig}
+          verticalLabelRotation={0}
+          showValuesOnTopOfBars = {true}
+        />
+      </View>
+    <Text>Gastos del mes</Text>
+    
+    <View>
+    <Text >Pie Chart</Text>
+              <PieChart
+                data={pieChartData}
+                height={250}
+                width={screenWidth}
+                chartConfig={chartConfig}
+                accessor="population"
+                style={graphStyle}
+              />
+              
 
-/>
-</View>
-    <Text>Tus consumos</Text>
+              </View>
+              <View>
+   <PieChart
+      dataPie={pieData}
+      width={250}
+      height={220}
+      chartConfig={chartConfig}
+      accessor="amount"
+      style={graphStyle}
+      backgroundColor={"#ff4040"}
+    />
+  
+    </View>
+    
+    
     <View>
     <LineChart
       data={{

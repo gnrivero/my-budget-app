@@ -177,9 +177,7 @@ export default class AddExpensesScreen extends React.Component {
     }
 
     if(this.state.paymentMethod=="CC"){
-      //Compra con Credito
-      Alert.alert("Grabar egreso con tarjeta Credito");
-      
+      //Compra con Credito      
       this.transactionService.createTransaction(
         'E',
         this.state.detail,
@@ -197,12 +195,10 @@ export default class AddExpensesScreen extends React.Component {
     
       setTimeout(
         () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
-        2000
+        1000
       )
     }else if (this.state.paymentMethod=='DC'){
       //Compra con Debito
-      console.log("Compra debito")
-      Alert.alert("Grabar egreso con tarjeta Debito");
       //busco el id de la cuenta para hacer el insert
       this.accountService.getAccountByCardId(this.state.debitCard)
       .then((account) => {
@@ -221,18 +217,16 @@ export default class AddExpensesScreen extends React.Component {
       
         setTimeout(
           () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
-          2000
+          1000
         )
       });
     }
     else if(this.state.paymentMethod!='CC' && this.state.paymentMethod!='DC'){
       //Compra con otro medio/// asumimos que va a una cuenta
-      console.log("EFECTIVO/OTRO");
       var account = this.state.account;
       if(this.state.paymentMethod=="CASH")
         account=-1;
 
-      Alert.alert("Grabar egreso con medio distinto a Debito / credito");
       this.transactionService.createTransaction(
         'E',
         this.state.detail,
@@ -247,7 +241,7 @@ export default class AddExpensesScreen extends React.Component {
     
       setTimeout(
         () => { this.props.navigation.navigate('Expenses',{name: 'Egresos'}); },
-        2000
+        1000
       )
     }
   }

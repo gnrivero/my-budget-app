@@ -31,9 +31,9 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
       this.db.transaction(
         (txn) => {
           txn.executeSql(
-                "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly,cardId)" +
-                "VALUES (?,?,?,?,?,?,?,?)",
-                [detailAux,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId],
+                "INSERT INTO transactions(detail,currencyCode, transactionTypeId, date, amount, accountId, monthly,cardId,paymentMethod)" +
+                "VALUES (?,?,?,?,?,?,?,?,?)",
+                [detailAux,currencyCode,transactionTypeId,date,amount,accountId,monthly,cardId,paymentMethod],
                 (txn, res) => { 
                   console.log("TransactionService: Affected Rows " + res.rowsAffected); 
                   if(type=='I'){
@@ -185,6 +185,38 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
     }
 
 
+    
+    getExpensesByPaymentMethodMonth(){
+      const conn = this.db;
+      return new Promise((resolve) => {
+        conn.transaction(
+          (txn) => {
+             txn.executeSql(
+              "SELECT " +
+              " SUM(transactions.amount) as amount," +
+              " transactions.paymentMethod as paymentMethod" +
+              " FROM transactions "+
+              " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
+              " WHERE transactionType.type='E' and transactions.date BETWEEN datetime('now', 'start of month') AND datetime('now', 'localtime') "+
+              " GROUP BY paymentMethod",
+                  [],
+                  (txn, res) => {
+                     let transaction = new Array();
+                     console.log(res.rows);
+                     for(var i = 0; i < res.rows.length; ++i){
+                      transaction.push(res.rows.item(i));
+                     }
+                     resolve(transaction);
+                  },
+                  (txn, err) => { console.log("TransactionService: getExpensesByPaymentMethodMonth failed " + err); }
+                  
+             )
+          }
+        );
+      });
+  }
+
+
   /*
         Este método debe ser llamado desde DBInit.js
     */
@@ -224,6 +256,7 @@ console.log(date +"-"+ amount +"-"+ accountId +"-"+ monthly +"-"+ paymentMethod 
                             "date DATE," +
                             "accountId INTEGER," +
                             "transactiontypeId INTEGER, "+
+                            "paymentMethod VARCHAR(10), "+
                             "cardId INTEGER"+
                             ")",
                         [],
