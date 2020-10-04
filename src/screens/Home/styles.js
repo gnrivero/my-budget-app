@@ -20,16 +20,43 @@ const styles = StyleSheet.create({
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  buttonStyle: {
-    // backgroundColor:"darkorange",
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    color:"black",
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 25,
+  homeButtonLargeImage: {
+    borderRadius: 10,
+    height: 80,
+    width: 334
   },
-  
+  homeButtonText: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 5
+  },
+  buttonContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      margin: 10
+  },
+  squareButton: {
+    flex: 1,
+    height: 110,
+    width: '100%',
+    marginHorizontal: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    borderColor: '#d2d6d2',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  largeButton: {
+      flex: 1,
+      height: 110,
+      marginHorizontal: 10,
+      backgroundColor: 'white',
+      borderRadius: 10,
+      borderColor: '#d2d6d2',
+      borderWidth: 1,
+      textAlign: 'center'
+  },
   photo: RecipeCard.photo,
   category: RecipeCard.category
 });
