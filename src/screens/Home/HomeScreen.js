@@ -50,7 +50,7 @@ export default class HomeScreen extends React.Component {
                 <View style={styles.squareButton}>
                     <TouchableHighlight
                         onPress={ () => {
-                            navigation.navigate('Income');
+                            navigation.navigate('Income',{name: 'Ingresos'});
                         } }>
                         <View>
                             <Image source={require('../../../assets/icons/home-button-income.png')} style={{height:64, width: 64}} />
@@ -61,7 +61,7 @@ export default class HomeScreen extends React.Component {
                 <View style={styles.squareButton}>
                     <TouchableHighlight
                         onPress={ () => {
-                            navigation.navigate('Expenses');
+                            navigation.navigate('Expenses',{name: 'Egresos'});
                         } }>
                         <View>
                             <Image source={require('../../../assets/icons/home-button-expense.png')} style={{height:64, width: 64}} />

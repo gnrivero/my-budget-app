@@ -21,12 +21,82 @@ export default class LoanService {
                    "INSERT INTO loan (detail, lender, currencyCode, date, amount, expirationDate, monthlyFee, amountFees, accountId, active) " +
                    "VALUES (?,?,?,?,?,?,?,?,?,1)",
                    [detail, lender, currencyCode, date, amount, expirationDate, monthlyFee, amountFees, accountId],
-                   (txn, res) => { console.log("createLoan: Affected Rows " + res.rowsAffected); },
-                   (txn, err) => { console.log("createLoan: " + err); }
+                   (txn, res) => {
+                        console.log("createLoan: Affected Rows " + res.rowsAffected); 
+                        //Create Fee
+                        console.log(lender==0);
+                        if(lender==0){
+                            console.log("PRESTAMO");
+                            console.log(res.insertId);
+                            this.createFee(res.insertId,expirationDate,amountFees,monthlyFee,1)
+                        }
+                    },
+                    (txn, err) => { console.log("createLoan: " + err); }
               )
            }
        );
     }
+
+    createFee(LoanId, expirationDate, amountFees, monthlyFee, count){
+        //armar el campo fecha
+    console.log(LoanId +"-"+ expirationDate +"-"+ amountFees +"-"+ monthlyFee +"-"+ count);
+      this.db.transaction(
+        (txn) => {
+          txn.executeSql(
+                "INSERT INTO loanFee (LoanId,expirationDate, amountFees, monthlyFee) " +
+                " VALUES (?,?,?,?)",
+                [LoanId, expirationDate,amountFees,count],
+                (txn, res) => { 
+                  console.log("createFree: Affected Rows " + res.rowsAffected); 
+                    if(monthlyFee > count){
+                        count++;
+                        dt= new Date(expirationDate);
+                        //console.log(dt);
+                        n=1;
+                        newDate=new Date(dt.setMonth(dt.getMonth() + n)).toISOString().split('T')[0];
+                        //console.log(newDate);
+                        this.createFee(LoanId, newDate, amountFees, monthlyFee, count);
+                    }
+                },
+                (txn, err) => { console.log("createFree: failed " + err); }
+          )
+        }
+      );
+    }
+    getAllFee(){
+        //console.log("getAllInvestment")
+      const conn = this.db;
+      return new Promise((resolve) => {
+          conn.transaction(
+            (txn) => {
+               txn.executeSql(
+                    "SELECT " +
+                    " loanFee.id as id," +
+                    " loanFee.loanId as loanId," +
+                    " loanFee.amountFees as amountFees," +
+                    " loanFee.monthlyFee as monthlyFee," +
+                    " loanFee.expirationDate as expirationDate " +
+                    " FROM loanFee ",
+                    [],
+                    (txn, res) => {
+                       let loans = new Array();
+                       console.log("cuotas")
+                       console.log(res.rows)
+                       for(var i = 0; i < res.rows.length; ++i){
+                        loans.push(res.rows.item(i));
+                       }
+                       resolve(loans);
+                    },
+                    (txn, err) => {
+                        console.log("getAllFee:" + err);
+                    }
+               )
+            }
+          );
+      });
+    }
+
+    
 
     updateLoan(id, detail, lender, currencyCode, date, amount, expirationDate=null, monthlyFee=null,amountFees=null, accountId=null) {
         console.log(detail + ' - ' + lender + ' - ' + currencyCode+ ' - ' + date + ' - ' + amount  );
@@ -178,7 +248,7 @@ export default class LoanService {
         this.db.transaction(
             (txn) => {
                 txn.executeSql(
-                    "DROP TABLE IF EXISTS loan",
+                    "DROP TABLE IF EXISTS loan ",
                     [],
                     (txn, res) => {
                         console.log("LoanService: Table Dropped");
@@ -190,7 +260,7 @@ export default class LoanService {
                                 "lender INTEGER," + // 1 prestamista 0 prestatario
                                 "currencyCode VARCHAR(3)," +
                                 "amount DECIMAL(10,2)," +
-                                "monthlyFee DECIMAL(10,2)," +
+                                "monthlyFee INTEGER," +
                                 "amountFees DECIMAL(10,2)," +
                                 "date DATE," +
                                 "expirationDate DATE," +
@@ -200,7 +270,35 @@ export default class LoanService {
                             [],
                             (txn, res) => { console.log("LoanService: Table loan created " + res); },
                             (txn, err) => {
-                                console.log("LoanService: create table" + err);
+                                console.log("LoanService: create table Loan" + err);
+                            }
+                       )
+                    }
+                )
+            }
+        );
+
+        console.log("LoanService: Dropping table loanFee");
+        this.db.transaction(
+            (txn) => {
+                txn.executeSql(
+                    "DROP TABLE IF EXISTS loanFee ",
+                    [],
+                    (txn, res) => {
+                        console.log("LoanService: Table Dropped");
+                        console.log("LoanService: Creating Table loanFee");
+                        txn.executeSql(
+                            " CREATE TABLE IF NOT EXISTS loanFee (" +
+                            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            "loanId INTEGER," +
+                            "monthlyFee INTEGER," +
+                            "expirationDate DATE, " +
+                            "amountFees DECIMAL(10,2)" +
+                                ")",
+                            [],
+                            (txn, res) => { console.log("LoanService: Table loanFee created " + res); },
+                            (txn, err) => {
+                                console.log("LoanService: create table loan Fee" + err);
                             }
                        )
                     }
@@ -230,6 +328,8 @@ export default class LoanService {
                console.log(loan);
             });
 
+            console.log("GETALLFEE")
+            this.getAllFee();
        /*
          this.updateAccount(3, 'Caixa de Ahorrao','ARS', 3, '0040000001111000000001', 0);
 */

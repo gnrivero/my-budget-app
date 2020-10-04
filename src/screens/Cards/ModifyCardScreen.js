@@ -10,7 +10,6 @@ import {
   Alert
 } from 'react-native';
 import styles from './styles';
-import {getCardId} from '../../data/cards/cardsAPI';
 
 import DatePicker from 'react-native-datepicker';
 import { Dropdown } from 'react-native-material-dropdown';
