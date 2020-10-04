@@ -90,4 +90,101 @@ export default class DashboardService {
 
         });
     }
+    nextMaturities(){
+        const conn = this.db;
+        return new Promise((resolve) => {
+          conn.transaction(
+            (txn) => {
+               txn.executeSql(
+                "SELECT " +
+                " SUM(transactions.amount) as amount," +
+                " COUNT(*) as count," +
+                " 'EgresosARS' as type" +
+                " FROM transactions "+
+                " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
+                " WHERE transactionType.type='E' and transactions.date BETWEEN datetime('now') AND datetime('now','+7 day') AND transactions.currencyCode='ARS' "+
+                "  UNION "+
+                " SELECT " +
+                " SUM(transactions.amount) as amount," +
+                " COUNT(*) as count," +
+                " 'EgresosUSD' as type" +
+                " FROM transactions "+
+                " INNER JOIN transactionType ON transactions.transactionTypeId = transactionType.id"+
+                " WHERE transactionType.type='E' and transactions.date BETWEEN datetime('now') AND datetime('now','+7 day') AND transactions.currencyCode='USD' "+
+                "  UNION "+
+                "SELECT " +
+                " SUM(investment.amountCredited) as amount," +
+                " COUNT(*) as count," +
+                " 'InverARS' as type" +
+                " FROM investment "+
+                " WHERE investment.currencyCode='ARS' and investment.dueDate IS NOT NULL and investment.dueDate BETWEEN datetime('now') AND datetime('now','+7 day') "+
+                "  UNION "+
+                "SELECT " +
+                " SUM(investment.amountCredited) as amount," +
+                " COUNT(*) as count," +
+                " 'InverUSD' as type" +
+                " FROM investment "+
+                " WHERE investment.currencyCode='USD' and investment.dueDate IS NOT NULL and investment.dueDate BETWEEN datetime('now') AND datetime('now','+7 day') "+
+                "  UNION "+
+                "SELECT " +
+                " SUM(loanFee.amountFees) as amount," +
+                " COUNT(*) as count," +
+                " 'PresARS' as type" +
+                " FROM loanFee "+
+                " INNER JOIN loan ON loan.id = loanFee.loanId "+
+                " WHERE loan.currencyCode='ARS' and loanFee.expirationDate BETWEEN datetime('now') AND datetime('now','+7 day') "+
+                "  UNION "+
+                "SELECT " +
+                " SUM(loanFee.amountFees) as amount," +
+                " COUNT(*) as count," +
+                " 'PresUSD' as type" +
+                " FROM loanFee "+
+                " INNER JOIN loan ON loan.id = loanFee.loanId "+
+                " WHERE loan.currencyCode='USD' and loanFee.expirationDate BETWEEN datetime('now') AND datetime('now','+7 day') "
+                ,
+                    [],
+                    (txn, res) => {
+                        categoriesArray=[];
+                        amountArray=[];
+                       console.log(res.rows);
+                       var categorie = '';
+                       for(var i = 0; i < res.rows.length; ++i){
+                            switch (res.rows.item(i).type) {
+                                case 'EgresosARS':
+                                    categorie = 'Egresos ARS' ;
+                                    break;
+                                case 'EgresosUSD':
+                                    categorie = 'Egresos USD' ;
+                                    break;
+                                case 'InverUSD':
+                                    categorie = 'Inversiones USD' ;
+                                    break;
+                                case 'InverARS':
+                                    categorie = 'Inversiones ARS' ;
+                                    break;
+                                case 'PresUSD':
+                                    categorie = 'Prestamos USD' ;
+                                break;
+                                case 'PresARS':
+                                    categorie = 'Prestamos ARS' ;
+                                break;
+                            }
+                            categoriesArray.push(categorie);
+                            amountArray.push(res.rows.item(i).amount);
+                        }
+                        var result ={
+                            categories: categoriesArray,
+                            amount: amountArray
+                        }
+        
+                       resolve(result);
+                    },
+                    (txn, err) => { console.log("TransactionService: getExpensesByPaymentMethodMonth failed " + err); }
+                    
+               )
+            }
+          );
+        });
+    }
+  
 }
