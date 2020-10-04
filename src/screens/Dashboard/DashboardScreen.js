@@ -125,6 +125,7 @@ render() {
             }
           ]
           }}
+          fromZero= {true}
           width={screenWidth}
           height={250}
           //yAxisLabel="$"

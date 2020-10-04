@@ -28,8 +28,11 @@ export default class DashboardService {
                 for(var i = 0; i < balance.length; ++i){
                     
                     console.log(balance[i]);
+                    if(balance[i].id<=2)
+                        accountsArray.push(balance[i].name + "-"+balance[i].currencyCode);
+                    else
+                        accountsArray.push(balance[i].name);
                     
-                    accountsArray.push(balance[i].currencyCode + "-"+balance[i].name);
                     balanceArray.push(balance[i].balance);
                   }
                   console.log("resultado Get AccountBalance");
@@ -151,22 +154,22 @@ export default class DashboardService {
                        for(var i = 0; i < res.rows.length; ++i){
                             switch (res.rows.item(i).type) {
                                 case 'EgresosARS':
-                                    categorie = 'Egresos ARS' ;
+                                    categorie = 'Egr-ARS' ;
                                     break;
                                 case 'EgresosUSD':
-                                    categorie = 'Egresos USD' ;
+                                    categorie = 'Egr-USD' ;
                                     break;
                                 case 'InverUSD':
-                                    categorie = 'Inversiones USD' ;
+                                    categorie = 'Inv-USD' ;
                                     break;
                                 case 'InverARS':
-                                    categorie = 'Inversiones ARS' ;
+                                    categorie = 'Inv-ARS' ;
                                     break;
                                 case 'PresUSD':
-                                    categorie = 'Prestamos USD' ;
+                                    categorie = 'Pres-USD' ;
                                 break;
                                 case 'PresARS':
-                                    categorie = 'Prestamos ARS' ;
+                                    categorie = 'Pres-ARS' ;
                                 break;
                             }
                             categoriesArray.push(categorie);
