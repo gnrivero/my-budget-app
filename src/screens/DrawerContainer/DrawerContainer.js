@@ -28,7 +28,7 @@ export default class DrawerContainer extends React.Component {
           />
             <MenuButton
             title="RESUMEN"
-            source={require('../../../assets/icons/home.png')}
+            source={require('../../../assets/icons/chart.png')}
             onPress={() => {
               navigation.navigate('Dashboard');
               navigation.closeDrawer();
